@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="paytpv_payment_section" translate="label" type="text" sortOrder="101" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>PAYTPV</label>
+                <comment>
+                    <![CDATA[]]>
+                </comment>
+                <attribute type="expanded">1</attribute>
+                <fieldset_css>complex</fieldset_css>
+                
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>payment/paytpv_payment/active</config_path>
+                </field>
+                <group id="paytpv_payment" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>
+                        <![CDATA[PAYTPV Payment Gateway]]>
+                    </label>
+                    
+                    <group id="paytpv_payment_paytpv" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="1">
+                        <comment>
+                            <![CDATA[Reduce the cost of PCI Compliance and risk of chargebacks with our fully customisable Hosted Checkout, Card Storage and Fraud Management solution with Magento 2. If you need a sandbox account please click <a href='https://www.paytpv.com/es/alta-empresa'>here</a>.]]>
+                        </comment>
+                        <label>PAYTPV Settings</label>
+                        <attribute type="expanded">0</attribute>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paytpv_payment/title</config_path>
+                        </field>
+                        <field id="integration" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Integration</label>
+                            <source_model>Paytpv\Payment\Model\Config\Source\Integration</source_model>
+                            <config_path>payment/paytpv_payment/integration</config_path>
+                        </field>
+                        <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Payment Action</label>
+                            <source_model>Paytpv\Payment\Model\Config\Source\PaymentAction</source_model>
+                            <config_path>payment/paytpv_payment/payment_action</config_path>
+                        </field>
+
+                        <field id="merchant_code" translate="label" type="text" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Client Code</label>
+                            <config_path>payment/paytpv_payment/merchant_code</config_path>
+                        </field>
+                        <field id="merchant_terminal" translate="label" type="text" sortOrder="32" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Terminal number</label>
+                            <frontend_class>validate-number</frontend_class>
+                            <config_path>payment/paytpv_payment/merchant_terminal</config_path>
+                        </field>
+                        <field id="merchant_pass" translate="label" type="obscure" sortOrder="33" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Password</label>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <config_path>payment/paytpv_payment/merchant_pass</config_path>
+                        </field>
+                        <field id="jetid" translate="label" type="obscure" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>JET ID</label>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <depends>
+                                <field id="integration">1</field>
+                            </depends>
+                            <config_path>payment/paytpv_payment/jetid</config_path>
+                        </field>
+                        <field id="merchant_terminales" type="select" translate="label" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Terminals available</label>
+                            <source_model>Paytpv\Payment\Model\Config\Source\Terminales</source_model>
+                            <config_path>payment/paytpv_payment/merchant_terminales</config_path>
+                        </field>
+                        <field id="secure_first" type="select" translate="label" sortOrder="36" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Use 3D Secure first purchase</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/paytpv_payment/secure_first</config_path>
+                            <depends>
+                                <field id="merchant_terminales">2</field>
+                            </depends>
+                        </field>
+                        <field id="secure_amount" translate="label" sortOrder="37" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Use 3D Secure in purchases above</label>
+                            <frontend_class>validate-number</frontend_class>
+                            <depends>
+                                <field id="merchant_terminales">2</field>
+                            </depends>
+                            <config_path>payment/paytpv_payment/secure_amount</config_path>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="38" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paytpv_payment/currency</config_path>
+                        </field>
+                        
+                    </group>
+
+                    <group id="paytpv_payment_advanced" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="2">
+                        <comment>
+                            <![CDATA[These settings allow you to configure various options.]]>
+                        </comment>
+                        <label>Advanced Settings</label>
+                        <attribute type="expanded">0</attribute>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        
+                        <field id="card_offer_save" translate="label" type="select" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Offer to save card</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/paytpv_payment/card_offer_save</config_path>
+                        </field>
+                        <field id="remembercardselected" translate="label" type="select" sortOrder="17" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Remember Card (Selected)</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/paytpv_payment/remembercardselected</config_path>
+                            <depends>
+                                <field id="card_offer_save">1</field>
+                            </depends>
+                        </field>
+                        <field id="card_manage" translate="label" type="select" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Manage cards in My Account</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/paytpv_payment/card_manage</config_path>
+                        </field>
+                        <field id="order_status" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>New order status</label>
+                            <tooltip>Status given to newly created orders before payment result is returned.</tooltip>
+                            <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                            <config_path>payment/paytpv_payment/order_status</config_path>
+                        </field>
+                        <field id="payment_cancelled" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Cancelled order status</label>
+                            <tooltip>Status given to orders when payment fails.</tooltip>
+                            <source_model>Paytpv\Payment\Model\Config\Source\Cancelled</source_model>
+                            <config_path>payment/paytpv_payment/payment_cancelled</config_path>
+                        </field>
+                        <field id="iframe_enabled" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Iframe Enabled</label>
+                            <tooltip><![CDATA[Iframe is displayed on the checkout page and contains the Paytpv Payments page. Otherwise it will redirect to the Paytpv Payments page for payment and return afterwards.]]></tooltip>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/paytpv_payment/iframe_enabled</config_path>
+                        </field>
+                        <field id="iframe_mode" translate="label" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Iframe Mode</label>
+                            <tooltip>Lightbox is a popup on the checkout page which contains the Paytpv Payments page in the box. Embedded is part of the checkout page.</tooltip>
+                            <source_model>Paytpv\Payment\Model\Config\Source\IframeMode</source_model>
+                            <config_path>payment/paytpv_payment/iframe_mode</config_path>
+                            <depends>
+                                <field id="iframe_enabled">1</field>
+                            </depends>
+                        </field>
+                                                                       
+                        <field id="debug_log" translate="label" type="select" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Enable debug logging</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/paytpv_payment/debug_log</config_path>
+                        </field>
+                    </group>
+                    <group id="paytpv_payment_fraad_advanced" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="3">
+                        <comment>
+                            <![CDATA[If you want to activate the Scoring you should contact PAYTPV.]]>
+                        </comment>
+                        <label>Scoring</label>
+                        <attribute type="expanded">0</attribute>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        <field id="merchantdata" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Send Merchant Data</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/paytpv_payment/merchantdata</config_path>
+                            <tooltip>If you activate this option, you must contact PAYTPV to enable the Advanced Signature VHASH.</tooltip>
+                        </field>
+                    </group>
+                    <group id="paytpv_payment_country_specific" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="4">
+                        <label>Country Specific Settings</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paytpv_payment/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paytpv_payment/specificcountry</config_path>
+                        </field>
+                    </group>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

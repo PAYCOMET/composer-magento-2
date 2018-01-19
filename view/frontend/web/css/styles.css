@@ -1,0 +1,41 @@
+.modal-popup._show .modal-inner-wrap {
+    margin: auto;
+}
+.modal-popup.modal-slide{
+  left:0px;
+}
+
+
+.footer_paytpv {
+    padding: 30px 10px;
+    clear: both;
+}
+
+.footer_paytpv .footer_logo {
+    display: inline-block;
+    width: 130px;
+}
+
+
+.footer_paytpv ul {
+    float: left;
+    font-size: 14px;
+    border-right: none;
+    float: right;
+}
+
+.payment_icons {
+    display: inline-block;
+    float: right;
+    width: auto;
+}
+
+.payment_icons li {
+    display: inline-block;
+    margin: 0 5px 10px;
+}
+
+.payment_icons li img {
+    display: block;
+    height: 22px;
+}

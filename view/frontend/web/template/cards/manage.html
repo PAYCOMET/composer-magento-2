@@ -1,0 +1,21 @@
+<div id="storingStep" class="alert alert-info" style="display: block;">
+    <h4 data-bind="i18n: 'NEW CARD'"></h4>
+    <p data-bind="text: $t('Link a card to your account to make all procedures easily and quickly.')"></p>
+          
+    <input type="checkbox" id="paytpv_showcarddata" data-bind="checked: displayMessage" />
+    <span for="savecard" data-bind="text: $t('When you link a Tarjet accepts')"></span> <a id="paytpv_open_conditions" href="#"><span class="terminos" data-bind="text: $t('terms and conditions of service')"></span></a>.
+    
+
+    <div data-bind="if: displayMessage">
+
+        <iframe id="paytpv-iframe"
+        class="paytpv_iframe"
+        scrolling="no"
+        frameborder="0"
+        border="0"
+        data-bind="attr: {src: iframeUrl()}, style: {width: iframeWidth(), height: iframeHeight()}"
+        onload="jQuery('body').trigger('processStop');"
+        >
+		</iframe>
+    </div>
+</div>

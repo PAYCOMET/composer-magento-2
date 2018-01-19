@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <paytpv_payment>
+                <active>0</active>
+                <model>Paytpv\Payment\Model\PaymentMethod</model>
+                <title>Paytpv Payments</title>
+                <environment>sandbox</environment>
+                <card_offer_save>1</card_offer_save>
+                <card_manage>1</card_manage>
+                <payment_action>order</payment_action>
+                <order_status>pending</order_status>
+                <payment_cancelled>canceled</payment_cancelled>
+                <iframe_enabled>1</iframe_enabled>
+                <iframe_mode>lightbox</iframe_mode>
+                <lang></lang>
+                <payment_desc></payment_desc>
+                <debug_log>0</debug_log>
+                <place_order_url>paytpv_payment/process/process</place_order_url>
+                <order_place_redirect_url>paytpv_payment/process/process</order_place_redirect_url>
+                <can_authorize>1</can_authorize>
+                <can_capture>1</can_capture>
+                <can_capture_partial>1</can_capture_partial>
+                <can_void>1</can_void>
+                <can_refund>1</can_refund>
+                <payment_action>authorize_capture</payment_action>
+                <secure_first>1</secure_first>
+                <remembercardselected>1</remembercardselected>
+                <title>PAYTPV</title>
+                <currency>EUR</currency>
+                <environment>production</environment>
+            </paytpv_payment>
+        </payment>
+    </default>
+</config>

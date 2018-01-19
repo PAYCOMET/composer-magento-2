@@ -1,0 +1,14 @@
+<?php if ($block->escapeHtml($block->getisPaytpv())) :?>
+    <p><?php echo $block->escapeHtml(__('Your payment was successful.'));?></p>
+    <?php if ($block->getNewPayer()) :?>
+      <p><?php echo $block->escapeHtml(__('Card details successfully and securely stored.'));?></p>
+    <?php endif ?>
+<?php endif ?>
+
+
+<?php $params = $block->getParams(); ?>
+<script>
+    <?php if (isset($params['returnUrl'])) :?>
+        window.top.location = "<?php echo $block->escapeXssInUrl($params['returnUrl']); ?>";
+    <?php endif; ?>
+</script>
