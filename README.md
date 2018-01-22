@@ -26,8 +26,11 @@ Integrates the PAYTPV platform in Magento2
 ### Setup the extension and refresh cache
 
 ```bin/magento setup:upgrade```
+
 ```bin/magento cache:flush```
+
 ```bin/magento setup:di:compile```
+
 ```bin/magento setup:static-content:deploy```
 
 
