@@ -14,19 +14,29 @@ Integrates the PAYTPV platform in Magento2
 * PAYPV account ([Account registration](https://www.paytpv.com/es/alta-empresa))
 
 ## Installation
-```
-bin/composer require paytpv/payment
-bin/magento module:enable Paytpv_Payment
-bin/magento setup:upgrade
-```
+
+### Install the PAYTPV Magento 2 composer package
+
+```composer require paytpv/payment```
+
+### Enable the extension in Magento 2
+
+```bin/magento module:enable Paytpv_Payment --clear-static-content```
+
+### Setup the extension and refresh cache
+
+```bin/magento setup:upgrade```
+```bin/magento cache:flush```
+```bin/magento setup:di:compile```
+```bin/magento setup:static-content:deploy```
+
 
 ## Configuration
 
-```
-Once installed, this module can be configured in the usual way by logging into
-the Magento admin area and navigating to:
+Once installed, this module can be configured in the usual way by logging into the Magento admin area and navigating to:
+
 Stores > Configuration > Sales > Payment Methods > PAYTPV
 
 More details are available in the PAYTPV:
+
 http://developers.paytpv.com/es/modulos-de-pago/magento2
-```
