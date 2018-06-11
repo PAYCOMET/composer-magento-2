@@ -39,10 +39,9 @@
         </div>
         <br/>
 
-
         <div data-bind="visible: isOfferSave()">
             <input type="checkbox" name="payment[' + getCode() + '][paytpv_card]" id="paytpv_savecard" data-bind="checked: paytpv_save_card">
-            <label data-bind="text: $t('Save card for future payment')"> </label>. <span for="paytpv_savecard" data-bind="text: $t('When you link a Tarjet accepts')"></span> <a id="paytpv_open_conditions" href="#"><span class="terminos" data-bind="text: $t('terms and conditions of service')"></span></a>.
+            <label for="paytpv_savecard" data-bind="text: $t('Save card for future payment')"></label>. <span for="paytpv_savecard" data-bind="text: $t('When you link a Tarjet accepts')"></span> <a id="paytpv_open_conditions" href="#"><span class="terminos" data-bind="text: $t('terms and conditions of service')"></span></a>.
         </div>
                    
         <div data-bind="visible: isInAction()">
