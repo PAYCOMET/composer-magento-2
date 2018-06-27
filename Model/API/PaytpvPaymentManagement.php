@@ -1,12 +1,12 @@
 <?php
 
-namespace Paytpv\Payment\Model\API;
+namespace Paytpv\Payment\Model\Api;
 
 use Paytpv\Payment\Model\Config\Source\PaymentAction;
 use Paytpv\Bankstore\Client;
 use Paytpv\Payment\Observer\DataAssignObserver;
 
-class PaytpvPaymentManagement implements \Paytpv\Payment\API\PaytpvPaymentManagementInterface
+class PaytpvPaymentManagement implements \Paytpv\Payment\Api\PaytpvPaymentManagementInterface
 {
     const FRAUD_ACTIVE = 'ACTIVE';
     const FRAUD_HOLD = 'HOLD';

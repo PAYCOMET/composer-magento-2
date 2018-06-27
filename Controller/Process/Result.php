@@ -37,7 +37,7 @@ class Result extends \Magento\Framework\App\Action\Action
     private $_logger;
 
     /**
-     * @var \Paytpv\Payment\API\PaytpvPaymentManagementInterface
+     * @var \Paytpv\Payment\Api\PaytpvPaymentManagementInterface
      */
     private $_paymentManagement;
 
@@ -49,7 +49,7 @@ class Result extends \Magento\Framework\App\Action\Action
      * @param \Magento\Sales\Model\OrderFactory                    $orderFactory
      * @param \Magento\Framework\Registry                          $coreRegistry
      * @param \Paytpv\Payment\Logger\Logger                        $logger
-     * @param \Paytpv\Payment\API\PaytpvPaymentManagementInterface $paymentManagement
+     * @param \Paytpv\Payment\Api\PaytpvPaymentManagementInterface $paymentManagement
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -57,7 +57,7 @@ class Result extends \Magento\Framework\App\Action\Action
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\Registry $coreRegistry,
         \Paytpv\Payment\Logger\Logger $logger,
-        \Paytpv\Payment\API\PaytpvPaymentManagementInterface $paymentManagement
+        \Paytpv\Payment\Api\PaytpvPaymentManagementInterface $paymentManagement
     ) {
         $this->_helper = $helper;
         $this->_orderFactory = $orderFactory;

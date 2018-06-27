@@ -19,7 +19,7 @@ class Process extends \Magento\Framework\App\Action\Action
      * @param \Magento\Sales\Model\OrderFactory                    $orderFactory
      * @param \Magento\Framework\Registry                          $coreRegistry
      * @param \Paytpv\Payment\Logger\Logger                        $logger
-     * @param \Paytpv\Payment\API\PaytpvPaymentManagementInterface $paymentManagement
+     * @param \Paytpv\Payment\Api\PaytpvPaymentManagementInterface $paymentManagement
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,

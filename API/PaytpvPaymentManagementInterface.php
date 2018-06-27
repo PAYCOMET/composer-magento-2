@@ -1,6 +1,6 @@
 <?php
 
-namespace Paytpv\Payment\API;
+namespace Paytpv\Payment\Api;
 
 /**
  * Interface PaytpvPaymentManagementInterface.
