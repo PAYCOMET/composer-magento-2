@@ -2,7 +2,7 @@
     "name": "paytpv/payment",
     "description": "A Magento 2 module for PAYTPV payments",
     "type": "magento2-module",
-    "version": "2.1.8",
+    "version": "2.1.9",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
