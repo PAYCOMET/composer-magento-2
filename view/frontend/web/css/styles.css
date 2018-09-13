@@ -39,3 +39,7 @@
     display: block;
     height: 22px;
 }
+
+.form_footer {
+    font-weight: bold;
+}

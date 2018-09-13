@@ -93,6 +93,14 @@ define(
                 return this.isInAction() ? window.checkoutConfig.payment["paytpv_payment"].redirectUrl : '';
             },
 
+            /**
+             * Get action url for payment method iframe.
+             * @returns {String}
+             */
+            getFormFooter: function() {
+                return window.checkoutConfig.payment["paytpv_payment"].form_footer;
+            },
+
             /** Redirect */
             continueToPayment: function(){
                 

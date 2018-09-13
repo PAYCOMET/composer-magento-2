@@ -29,18 +29,29 @@ class PaytpvConfigProvider implements ConfigProviderInterface
      */
     private $methods = [];
 
+     /**
+     * Escaper
+     *
+     * @var \Magento\Framework\Escaper
+     */
+    protected $_escaper;
+
+
     /**
      * PaytpvConfigProvider constructor.
      *
      * @param PaymentHelper                   $paymentHelper
-     * @param \Paytpv\Payment\Helper\Data $helper
+     * @param \Paytpv\Payment\Helper\Data     $helper
+     * @param \Magento\Framework\Escaper    $escaper
      */
     public function __construct(
         PaymentHelper $paymentHelper,
-        \Paytpv\Payment\Helper\Data $helper
+        \Paytpv\Payment\Helper\Data $helper,
+        \Magento\Framework\Escaper $escaper
     ) {
         $this->_paymentHelper = $paymentHelper;
         $this->_helper = $helper;
+        $this->_escaper = $escaper;
 
         foreach ($this->_methodCodes as $code) {
             $this->methods[$code] = $this->_paymentHelper->getMethodInstance($code);
@@ -69,6 +80,9 @@ class PaytpvConfigProvider implements ConfigProviderInterface
                 $config['payment'] [$code]['remembercardselected'] = $this->_helper->getConfigData('remembercardselected');
                 $config['payment'] [$code]['card_offer_save'] = ($this->_helper->getConfigData('card_offer_save') && $this->_helper->getCustomerId());
                 $config['payment'] [$code]['paytpvCards'] = $this->getPaytpvToken($code);
+                $config['payment'] [$code]['form_footer'] = nl2br($this->_escaper->escapeHtml($this->_helper->getConfigData('form_footer')));
+
+                
             }
         }
 
