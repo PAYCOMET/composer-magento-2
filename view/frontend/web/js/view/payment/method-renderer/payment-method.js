@@ -168,15 +168,19 @@ define(
              * Show / Hide Save card check
              */
             showSaveCard: function(){
-                if ($("#paytpv_card").val()!=""){
+
+                /* Ocultar select de tarjetas cuando no tiene ninguna almacenada*/
+                if ( $("#paytpv_card > option").length==1) {
+                    isVisibleCards(false);
+                }
+                if ($("#paytpv_card").val()!="") {
                     isOfferSave(false);
                     paytpv_save_card(false);
-                }else{
+                } else {                
                     isOfferSave(window.checkoutConfig.payment["paytpv_payment"].card_offer_save==1);
                     paytpv_save_card(window.checkoutConfig.payment["paytpv_payment"].remembercardselected==1);
                 }
             }
-            
             
 
             

@@ -509,9 +509,12 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $TokenUser = $payment->getAdditionalInformation('TokenUser');
         $AuthCode = $payment->getTransactionId();
 
-        $merchant_code = trim($this->_helper->getConfigData('merchant_code'));
-        $merchant_terminal = trim($this->_helper->getConfigData('merchant_terminal'));
-        $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass');
+        $storeId = $order->getStoreId();
+
+        $merchant_code = trim($this->_helper->getConfigData('merchant_code',$storeId));
+        $merchant_terminal = trim($this->_helper->getConfigData('merchant_terminal',$storeId));
+        $merchant_pass = trim($this->_helper->getEncryptedConfigData('merchant_pass',$storeId));  
+
         $ClientPaytpv = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
 
         $AuthCode = str_replace("-refund","",$AuthCode);
@@ -563,9 +566,13 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $TokenUser = $payment->getAdditionalInformation('TokenUser');
         $AuthCode = $payment->getTransactionId();
 
-        $merchant_code = trim($this->_helper->getConfigData('merchant_code'));
-        $merchant_terminal = trim($this->_helper->getConfigData('merchant_terminal'));
-        $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass');
+
+        $storeId = $order->getStoreId();
+
+        $merchant_code = $this->_helper->getConfigData('merchant_code',$storeId);
+        $merchant_terminal = $this->_helper->getConfigData('merchant_terminal',$storeId);
+        $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass',$storeId);  
+        
         $ClientPaytpv = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
 
 
