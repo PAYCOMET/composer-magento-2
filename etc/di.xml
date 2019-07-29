@@ -16,5 +16,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Request\CsrfValidator">
+        <plugin name="csrf_validator_skip" type="Paytpv\Payment\Plugin\Csrf" />
+    </type>
     <preference for="Magento\Sales\Model\Order" type="Paytpv\Payment\Model\Order" />
 </config>
