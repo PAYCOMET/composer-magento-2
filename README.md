@@ -1,23 +1,23 @@
-# PAYTPV Magento 2 Module
+# PAYCOMET Magento 2 Module
 
-Accept payments with PAYTPV using Magento2. Suports Magento2 version 2.1 and higher.
+Accept payments with PAYCOMET using Magento2. Suports Magento2 version 2.1 and higher.
 
 ## Description
 
-Integrates the PAYTPV platform in Magento2
+Integrates the PAYCOMET platform in Magento2
 
 ## Requirements
 
 * Magento 2.*
 * PHP >= 5.6.0
 * Magento version as specified in composer.json of this project
-* PAYPV account ([Account registration](https://www.paytpv.com/es/alta-empresa))
+* PAYCOMET account ([Account registration](https://www.paycomet.com/crear-una-cuenta))
 
 ## Installation
 
-### Install the PAYTPV Magento 2 composer package
+### Install the PAYCOMET Magento 2 composer package
 
-```composer require paytpv/payment```
+```composer require paycomet/payment```
 
 ### Enable the extension in Magento 2
 
@@ -38,8 +38,8 @@ Integrates the PAYTPV platform in Magento2
 
 Once installed, this module can be configured in the usual way by logging into the Magento admin area and navigating to:
 
-Stores > Configuration > Sales > Payment Methods > PAYTPV
+Stores > Configuration > Sales > Payment Methods > PAYCOMET
 
-More details are available in the PAYTPV:
+More details are available in the PAYCOMET:
 
-http://developers.paytpv.com/es/modulos-de-pago/magento2
+https://docs.paycomet.com/es/modulos-de-pago/magento2
