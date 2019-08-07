@@ -1,8 +1,8 @@
 {
-    "name": "paycomet/payment",
-    "description": "A Magento 2 module for PAYCOMET payments",
+    "name": "paytpv/payment",
+    "description": "A Magento 2 module for PAYTPV payments",
     "type": "magento2-module",
-    "version": "2.1.16",
+    "version": "2.1.15",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
