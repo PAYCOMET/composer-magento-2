@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Paytpv\Payment\Observer;
+namespace Paycomet\Payment\Observer;
 
 
 use Magento\Framework\Event\Observer;
@@ -15,15 +15,15 @@ use Magento\Quote\Api\Data\PaymentInterface;
  */
 class DataAssignObserver extends AbstractDataAssignObserver
 {
-    const PAYTPV_SAVECARD = 'saveCard';
-    const PAYTPV_TOKENCARD = 'paytpvCard';
+    const PAYCOMET_SAVECARD = 'saveCard';
+    const PAYCOMET_TOKENCARD = 'paycometCard';
 
     /**
      * @var array
      */
     protected $additionalInformationList = [
-        self::PAYTPV_SAVECARD,
-        self::PAYTPV_TOKENCARD
+        self::PAYCOMET_SAVECARD,
+        self::PAYCOMET_TOKENCARD
     ];
 
     /**

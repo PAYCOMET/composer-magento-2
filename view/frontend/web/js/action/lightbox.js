@@ -1,12 +1,12 @@
 define(
     [
         'jquery',
-        'Paytpv_Payment/js/action/restore-cart',
-        'Paytpv_Payment/js/model/paytpv-payment-service',
+        'Paycomet_Payment/js/action/restore-cart',
+        'Paycomet_Payment/js/model/paycomet-payment-service',
         'Magento_Ui/js/modal/modal',
         'mage/translate'
     ],
-    function($, restoreCartAction, paytpvPaymentService, modal, $t) {
+    function($, restoreCartAction, paycometPaymentService, modal, $t) {
         'use strict';
 
         return function() {
@@ -24,12 +24,12 @@ define(
                 closed: function() {
                     this.remove();
                     restoreCartAction();
-                    paytpvPaymentService.isInAction(false);
-                    paytpvPaymentService.isLightboxReady(false);
+                    paycometPaymentService.isInAction(false);
+                    paycometPaymentService.isLightboxReady(false);
                 }
             };
 
-            $("#paytpv-iframe-container").modal(options).modal('openModal');
+            $("#paycomet-iframe-container").modal(options).modal('openModal');
         };
     }
 );

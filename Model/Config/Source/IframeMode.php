@@ -1,6 +1,6 @@
 <?php
 
-namespace Paytpv\Payment\Model\Config\Source;
+namespace Paycomet\Payment\Model\Config\Source;
 
 class IframeMode implements \Magento\Framework\Option\ArrayInterface
 {

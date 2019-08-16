@@ -1,11 +1,11 @@
 <?php
 
-namespace Paytpv\Payment\Controller\Process;
+namespace Paycomet\Payment\Controller\Process;
 
 class Result extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Paytpv\Payment\Helper\Data
+     * @var \Paycomet\Payment\Helper\Data
      */
     private $_helper;
 
@@ -32,12 +32,12 @@ class Result extends \Magento\Framework\App\Action\Action
     private $coreRegistry;
 
     /**
-     * @var \Paytpv\Payment\Logger\Logger
+     * @var \Paycomet\Payment\Logger\Logger
      */
     private $_logger;
 
     /**
-     * @var \Paytpv\Payment\Api\PaytpvPaymentManagementInterface
+     * @var \Paycomet\Payment\Api\PaycometPaymentManagementInterface
      */
     private $_paymentManagement;
 
@@ -45,20 +45,21 @@ class Result extends \Magento\Framework\App\Action\Action
      * Result constructor.
      *
      * @param \Magento\Framework\App\Action\Context                $context
-     * @param \Paytpv\Payment\Helper\Data                          $helper
+     * @param \Paycomet\Payment\Helper\Data                          $helper
      * @param \Magento\Sales\Model\OrderFactory                    $orderFactory
      * @param \Magento\Framework\Registry                          $coreRegistry
-     * @param \Paytpv\Payment\Logger\Logger                        $logger
-     * @param \Paytpv\Payment\Api\PaytpvPaymentManagementInterface $paymentManagement
+     * @param \Paycomet\Payment\Logger\Logger                        $logger
+     * @param \Paycomet\Payment\Api\PaycometPaymentManagementInterface $paymentManagement
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Paytpv\Payment\Helper\Data $helper,
+        \Paycomet\Payment\Helper\Data $helper,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\Registry $coreRegistry,
-        \Paytpv\Payment\Logger\Logger $logger,
-        \Paytpv\Payment\Api\PaytpvPaymentManagementInterface $paymentManagement
+        \Paycomet\Payment\Logger\Logger $logger,
+        \Paycomet\Payment\Api\PaycometPaymentManagementInterface $paymentManagement
     ) {
+        
         $this->_helper = $helper;
         $this->_orderFactory = $orderFactory;
         $this->_url = $context->getUrl();
@@ -73,8 +74,10 @@ class Result extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
+        print "sdk";
         try{
             $response = $this->getRequest()->getParams();
+            unset($response["TransactionName"]);
 
             if ($response) {
                 //the default
@@ -90,8 +93,8 @@ class Result extends \Magento\Framework\App\Action\Action
                 }else{
                     $sessionParams = $response;
                     // Process URL OK/KO
-                    $params['returnUrl'] = $this->_url->getUrl('paytpv_payment/process/sessionresult', $sessionParams);
-                    $this->coreRegistry->register(\Paytpv\Payment\Block\Process\Result::REGISTRY_KEY, $params);
+                    $params['returnUrl'] = $this->_url->getUrl('paycomet_payment/process/sessionresult', $sessionParams);
+                    $this->coreRegistry->register(\Paycomet\Payment\Block\Process\Result::REGISTRY_KEY, $params);
 
                     $this->_view->loadLayout();
                     $this->_view->getLayout()->initMessages();
@@ -112,11 +115,13 @@ class Result extends \Magento\Framework\App\Action\Action
      */
     private function _handleResponse($response)
     {
+        
         if (empty($response)) {
             $this->_logger->critical(__('Empty response received from gateway'));
 
             return false;
         }
+
 
         $this->_helper->logDebug(__('Gateway response:').print_r($this->_helper->stripTrimFields($response), true));
 
@@ -125,15 +130,15 @@ class Result extends \Magento\Framework\App\Action\Action
         if (!$authStatus) {
 
             $this->_logger->critical(__('Invalid response received from gateway.'));
-
+            
             return false;
         }
 
+        
         $transaction_type = $response['TransactionType'];
         switch ($transaction_type){
             // add_user
-            case 107:
-
+            case 107:               
                 // process the response
                 return $this->_paymentManagement->processResponseAddUser($response);
                                 
@@ -146,7 +151,7 @@ class Result extends \Magento\Framework\App\Action\Action
 
                 if ($incrementId) {
                     $order = $this->_getOrder($incrementId);
-                    if ($order->getId()) {
+                    if ($order->getId()) {                        
                         // process the response
                         return $this->_paymentManagement->processResponse($order, $response);
                     } else {
@@ -191,10 +196,9 @@ class Result extends \Magento\Framework\App\Action\Action
                 $merchant_terminal = $this->_helper->getConfigData('merchant_terminal',$storeId);
                 $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass',$storeId);
 
-                $sign = $response['Signature'];
+                $sign = $response['NotificationHash'];
                 $datetime = $response['DateTime'];
-
-                $local_sign = md5($merchant_code.$merchant_terminal.$transaction_type.$ref.$datetime. md5($merchant_pass));
+                $local_sign = hash('sha512',$merchant_code.$merchant_terminal.$transaction_type.$ref.$datetime. md5($merchant_pass));
 
                 break;
 
@@ -206,12 +210,12 @@ class Result extends \Magento\Framework\App\Action\Action
                 $merchant_terminal = $this->_helper->getConfigData('merchant_terminal',$storeId);
                 $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass',$storeId);     
             
-                $sign = $response['ExtendedSignature'];
+                $sign = $response['NotificationHash'];
                 $amount = $response['Amount'];
                 $currency = $response['Currency'];
                 $bankdatetime = $response['BankDateTime'];
 
-                $local_sign = md5($merchant_code.$merchant_terminal.$transaction_type.$ref.$amount.$currency.md5($merchant_pass).$bankdatetime.$resp);
+                $local_sign = hash('sha512',$merchant_code.$merchant_terminal.$transaction_type.$ref.$amount.$currency.md5($merchant_pass).$bankdatetime.$resp);
 
                 break;
             
@@ -219,7 +223,7 @@ class Result extends \Magento\Framework\App\Action\Action
         
        
         //Check to see if hashes match or not
-        if (strcmp($sign, $local_sign) != 0) {
+        if (strcmp($sign, $local_sign) != 0) {            
             return false;
         }
 

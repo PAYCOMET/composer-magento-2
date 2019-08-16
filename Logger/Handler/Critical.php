@@ -1,6 +1,6 @@
 <?php
 
-namespace Paytpv\Payment\Logger\Handler;
+namespace Paycomet\Payment\Logger\Handler;
 
 use Monolog\Logger;
 
@@ -18,5 +18,5 @@ class Critical extends \Magento\Framework\Logger\Handler\Base
      *
      * @var string
      */
-    protected $fileName = '/var/log/paytpv/error.log';
+    protected $fileName = '/var/log/paycomet/error.log';
 }

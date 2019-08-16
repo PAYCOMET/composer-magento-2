@@ -1,6 +1,6 @@
 <?php
 
-namespace Paytpv\Payment\Controller\Cards;
+namespace Paycomet\Payment\Controller\Cards;
 
 class Redirect extends \Magento\Framework\App\Action\Action
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Paytpv\Payment\Block\Cards;
+namespace Paycomet\Payment\Block\Cards;
 
 class View extends \Magento\Framework\View\Element\Template
 {
@@ -46,7 +46,7 @@ class View extends \Magento\Framework\View\Element\Template
     public function getIframeUrl()
     {
         return $this->_urlBuilder->getUrl(
-            'paytpv_payment/cards/redirect',
+            'paycomet_payment/cards/redirect',
             ['_secure' => true]
         );
     }
@@ -54,7 +54,7 @@ class View extends \Magento\Framework\View\Element\Template
 
     public function getUpdateParams($hash)
     {
-        $url = $this->_urlBuilder->getUrl('paytpv_payment/cards/update');
+        $url = $this->_urlBuilder->getUrl('paycomet_payment/cards/update');
         $params = ['item' => $hash];
         
         return $this->_postDataHelper->getPostData($url, $params);
@@ -62,7 +62,7 @@ class View extends \Magento\Framework\View\Element\Template
 
     public function getRemoveParams($hash)
     {
-        $url = $this->_urlBuilder->getUrl('paytpv_payment/cards/remove');
+        $url = $this->_urlBuilder->getUrl('paycomet_payment/cards/remove');
         $params = ['item' => $hash];
         
         return $this->_postDataHelper->getPostData($url, $params);
@@ -70,14 +70,14 @@ class View extends \Magento\Framework\View\Element\Template
 
 
    
-    public function getPaytpvCards()
+    public function getPaycometCards()
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
         $connection = $resource->getConnection();
         $select = $connection->select()
             ->from(
-                ['token' => 'paytpv_token'],
+                ['token' => 'paycomet_token'],
                 ['token_id', 'customer_id', 'hash', 'iduser', 'tokenuser', 'cc', 'brand' , 'expiry' , 'desc']
             )
             ->where('customer_id = ?', $this->_customerSession->getCustomerId());

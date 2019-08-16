@@ -1,12 +1,12 @@
 <?php
 
-namespace Paytpv\Payment\Controller\Process;
+namespace Paycomet\Payment\Controller\Process;
 
 
 class SessionResult extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Paytpv\Payment\Helper\Data
+     * @var \Paycomet\Payment\Helper\Data
      */
     private $_helper;
 
@@ -26,7 +26,7 @@ class SessionResult extends \Magento\Framework\App\Action\Action
     protected $_url;
 
     /**
-     * @var \Paytpv\Payment\Logger\Logger
+     * @var \Paycomet\Payment\Logger\Logger
      */
     private $_logger;
 
@@ -39,16 +39,16 @@ class SessionResult extends \Magento\Framework\App\Action\Action
      * Result constructor.
      *
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Paytpv\Payment\Helper\Data       $helper
+     * @param \Paycomet\Payment\Helper\Data       $helper
      * @param \Magento\Sales\Model\OrderFactory     $orderFactory
-     * @param \Paytpv\Payment\Logger\Logger     $logger
+     * @param \Paycomet\Payment\Logger\Logger     $logger
      * @param \Magento\Checkout\Model\Session       $session
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Paytpv\Payment\Helper\Data $helper,
+        \Paycomet\Payment\Helper\Data $helper,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Paytpv\Payment\Logger\Logger $logger,
+        \Paycomet\Payment\Logger\Logger $logger,
         \Magento\Checkout\Model\Session $session
     ) {
         $this->_helper = $helper;
@@ -69,7 +69,7 @@ class SessionResult extends \Magento\Framework\App\Action\Action
         if (!$this->_validateResponse($response)) {
             $this->messageManager->addError(
                 __('Your payment was unsuccessful. Please try again or use a different card / payment method.'),
-                'PAYTPV_messages'
+                'PAYCOMET_messages'
             );
             $this->_redirect('checkout/cart');
             return;
@@ -83,10 +83,10 @@ class SessionResult extends \Magento\Framework\App\Action\Action
             $this->_redirect('checkout/onepage/success');
         } else {
             $this->_cancel();
-            $this->_session->setData(\Paytpv\Payment\Block\Process\Result\Observe::OBSERVE_KEY, '1');
+            $this->_session->setData(\Paycomet\Payment\Block\Process\Result\Observe::OBSERVE_KEY, '1');
             $this->messageManager->addError(
                 __('Your payment was unsuccessful. Please try again or use a different card / payment method.'),
-                'PAYTPV_messages'
+                'PAYCOMET_messages'
             );
             $this->_redirect('checkout/cart'); 
         }

@@ -1,11 +1,11 @@
 <?php
 
-namespace Paytpv\Payment\Block\Cards;
+namespace Paycomet\Payment\Block\Cards;
 
 class Redirect extends \Magento\Payment\Block\Form
 {
     /**
-     * @var \Paytpv\Payment\Helper\Data
+     * @var \Paycomet\Payment\Helper\Data
      */
     private $_helper;
 
@@ -13,12 +13,12 @@ class Redirect extends \Magento\Payment\Block\Form
      * Redirect constructor.
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Paytpv\Payment\Helper\Data                  $helper
+     * @param \Paycomet\Payment\Helper\Data                  $helper
      * @param array                                            $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Paytpv\Payment\Helper\Data $helper,
+        \Paycomet\Payment\Helper\Data $helper,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -28,11 +28,11 @@ class Redirect extends \Magento\Payment\Block\Form
     /**
      * @return string
      */
-    public function getFormPaytpvUrl()
+    public function getFormPaycometUrl()
     {
         $result = '';
         try {
-            $result = $this->_helper->getPaytpvAddUserUrl();
+            $result = $this->_helper->getPaycometAddUserUrl();
         } catch (\Exception $e) {
             // do nothing for now
             $this->_helper->logDebug($e);

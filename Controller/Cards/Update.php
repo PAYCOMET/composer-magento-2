@@ -1,6 +1,6 @@
 <?php
 
-namespace Paytpv\Payment\Controller\Cards;
+namespace Paycomet\Payment\Controller\Cards;
 
 use Magento\Framework\App\RequestInterface;
 
@@ -55,15 +55,15 @@ class Update extends \Magento\Framework\App\Action\Action
         $customer_id = $this->_customerSession->getCustomerId();
         $card_desc = $response["card_desc"];
 
-        $this->updatePaytpvCard($hash,$customer_id,$card_desc);
+        $this->updatePaycometCard($hash,$customer_id,$card_desc);
 
-        $this->_redirect('paytpv_payment/cards/view');
+        $this->_redirect('paycomet_payment/cards/view');
         
         
     }
 
 
-    public function updatePaytpvCard($hash,$customer_id,$card_desc)
+    public function updatePaycometCard($hash,$customer_id,$card_desc)
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
@@ -77,6 +77,6 @@ class Update extends \Magento\Framework\App\Action\Action
 
         $where = implode(' AND ', $conds);
 
-        $connection->update("paytpv_token", $data, $where);
+        $connection->update("paycomet_token", $data, $where);
     }
 }

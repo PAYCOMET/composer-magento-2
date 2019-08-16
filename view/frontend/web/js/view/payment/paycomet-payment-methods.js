@@ -11,15 +11,15 @@ define(
 
         rendererList.push(
             {
-                type: 'paytpv_payment',
-                component: 'Paytpv_Payment/js/view/payment/method-renderer/payment-method'
+                type: 'paycomet_payment',
+                component: 'Paycomet_Payment/js/view/payment/method-renderer/payment-method'
             }
         );
         /** Add view logic here if needed */
         return Component.extend({
            
             getCustomerCards: function () {
-                return window.checkoutConfig.payment[quote.paymentMethod().method].paytpvCards;
+                return window.checkoutConfig.payment[quote.paymentMethod().method].paycometCards;
             }
 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Paytpv\Payment\Model;
+namespace Paycomet\Payment\Model;
 
 use Magento\Sales\Model\Order as parentOrder;
 
@@ -12,7 +12,7 @@ class Order extends parentOrder
     public function hold()
     {
         $method = $this->getPayment()->getMethodInstance();
-        if ($method->getCode() == 'paytpv_payment') {
+        if ($method->getCode() == 'paycomet_payment') {
             $method->hold($this->getPayment());
         }
         return parent::hold();
@@ -25,7 +25,7 @@ class Order extends parentOrder
     {
         $method = $this->getPayment()->getMethodInstance();
 
-        if ($method->getCode() == 'paytpv_payment') {
+        if ($method->getCode() == 'paycomet_payment') {
             $method->acceptPayment($this->getPayment());
         }
 

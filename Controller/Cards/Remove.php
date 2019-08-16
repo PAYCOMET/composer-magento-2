@@ -1,6 +1,6 @@
 <?php
 
-namespace Paytpv\Payment\Controller\Cards;
+namespace Paycomet\Payment\Controller\Cards;
 
 use Magento\Framework\App\RequestInterface;
 
@@ -54,13 +54,13 @@ class Remove extends \Magento\Framework\App\Action\Action
         $customer_id = $this->_customerSession->getCustomerId();
         
 
-        $this->deletePaytpvCard($hash,$customer_id);
+        $this->deletePaycometCard($hash,$customer_id);
         
-        $this->_redirect('paytpv_payment/cards/view');
+        $this->_redirect('paycomet_payment/cards/view');
     }
 
 
-    public function deletePaytpvCard($hash,$customer_id)
+    public function deletePaycometCard($hash,$customer_id)
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
@@ -71,6 +71,6 @@ class Remove extends \Magento\Framework\App\Action\Action
 
         $where = implode(' AND ', $conds);
 
-        return $connection->delete("paytpv_token", $where);
+        return $connection->delete("paycomet_token", $where);
     }
 }

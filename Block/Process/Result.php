@@ -1,10 +1,10 @@
 <?php
 
-namespace Paytpv\Payment\Block\Process;
+namespace Paycomet\Payment\Block\Process;
 
 class Result extends \Magento\Framework\View\Element\Template
 {
-    const REGISTRY_KEY = 'paytpv_payment_params';
+    const REGISTRY_KEY = 'paycomet_payment_params';
 
     /**
      * Core registry.

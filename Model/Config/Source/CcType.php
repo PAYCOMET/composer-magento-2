@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Paytpv\Payment\Model\Config\Source;
+namespace Paycomet\Payment\Model\Config\Source;
 
 /**
  * Class CcType

@@ -1,19 +1,19 @@
 <?php
 
-namespace Paytpv\Payment\Helper;
+namespace Paycomet\Payment\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
-use Paytpv\Payment\Model\Config\Source\Environment;
-use Paytpv\Payment\Observer\DataAssignObserver;
-use Paytpv\Payment\Model\Config\Source\PaymentAction;
-use Paytpv\Bankstore\Client;
+use Paycomet\Payment\Model\Config\Source\Environment;
+use Paycomet\Payment\Observer\DataAssignObserver;
+use Paycomet\Payment\Model\Config\Source\PaymentAction;
+use Paycomet\Bankstore\Client;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
  */
 class Data extends AbstractHelper
 {
-    const METHOD_CODE = 'paytpv_payment';
+    const METHOD_CODE = 'paycomet_payment';
     const CUSTOMER_ID = 'customer';
 
     /**
@@ -47,9 +47,9 @@ class Data extends AbstractHelper
     private $_storeManager;
 
     /**
-     * @var \Paytpv\Payment\Logger\Logger
+     * @var \Paycomet\Payment\Logger\Logger
      */
-    private $_paytpvLogger;
+    private $_paycometLogger;
 
     /**
      * @var \Magento\Framework\App\ProductMetadataInterface
@@ -97,7 +97,7 @@ class Data extends AbstractHelper
     private $_searchCriteriaBuilder;
 
     /**
-     * @var \Paytpv\Payment\Logger\Logger
+     * @var \Paycomet\Payment\Logger\Logger
      */
     protected $_logger;
 
@@ -105,6 +105,9 @@ class Data extends AbstractHelper
      * @var \Magento\Sales\Model\Order\Email\Sender\OrderSender
      */
     private $_orderSender;
+
+    /** @var  CustomerInterfaceFactory */
+    private $_customerFactory;
 
 
     /**
@@ -124,6 +127,7 @@ class Data extends AbstractHelper
      * @param \Magento\Framework\Api\SearchCriteriaBuilder      $searchCriteriaBuilder
      * @param \Magento\Sales\Model\Order\Email\Sender\OrderSender             $orderSender
      * @param \Magento\Customer\Model\Session                   $session
+     * @param \Magento\Customer\Model\CustomerFactory           $customerFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -132,7 +136,7 @@ class Data extends AbstractHelper
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Paytpv\Payment\Logger\Logger $paytpvLogger,
+        \Paycomet\Payment\Logger\Logger $paycometLogger,
         \Magento\Framework\App\ProductMetadataInterface $productMetadata,
         \Magento\Framework\Module\ResourceInterface $resourceInterface,
         \Magento\Framework\Locale\ResolverInterface $resolver,
@@ -141,9 +145,10 @@ class Data extends AbstractHelper
         \Magento\Sales\Model\Order\Status\HistoryFactory $orderHistoryFactory,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
-        \Paytpv\Payment\Logger\Logger $logger,
+        \Paycomet\Payment\Logger\Logger $logger,
         \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender,
-        \Magento\Customer\Model\Session $session
+        \Magento\Customer\Model\Session $session,
+        \Magento\Customer\Model\CustomerFactory $customerFactory
     ) {
         parent::__construct($context);
         $this->_encryptor = $encryptor;
@@ -151,7 +156,7 @@ class Data extends AbstractHelper
         $this->_moduleList = $moduleList;
         $this->_quoteRepository = $quoteRepository;
         $this->_storeManager = $storeManager;
-        $this->_paytpvLogger = $paytpvLogger;
+        $this->_paycometLogger = $paycometLogger;
         $this->_productMetadata = $productMetadata;
         $this->_resourceInterface = $resourceInterface;
         $this->_resolver = $resolver;
@@ -164,6 +169,7 @@ class Data extends AbstractHelper
         $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->_orderSender = $orderSender;
         $this->_logger = $logger;
+        $this->_customerFactory = $customerFactory;
     }
 
     /**
@@ -229,7 +235,7 @@ class Data extends AbstractHelper
     {
         
         return $this->_urlBuilder->getUrl(
-            'paytpv_payment/cards/view',$this->_buildSessionParams(true,$orderid)
+            'paycomet_payment/cards/view',$this->_buildSessionParams(true,$orderid)
         );
     }
 
@@ -244,7 +250,7 @@ class Data extends AbstractHelper
     private function getURLKO($orderid)
     {
         return $this->_urlBuilder->getUrl(
-            'paytpv_payment/cards/view',$this->_buildSessionParams(false,$orderid)
+            'paycomet_payment/cards/view',$this->_buildSessionParams(false,$orderid)
         );
     }
 
@@ -256,7 +262,8 @@ class Data extends AbstractHelper
      *
      * @return array
      */
-    public function _buildSessionParams($result,$orderid){
+    public function _buildSessionParams($result,$orderid)
+    {
         $result = ($result) ? '1' : '0';
         $timestamp = strftime('%Y%m%d%H%M%S');
         $merchant_code = $this->getConfigData('merchant_code');
@@ -268,11 +275,11 @@ class Data extends AbstractHelper
 
     /**
      * 
-     * @return string paytpv adduser url
+     * @return string paycomet adduser url
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getPaytpvAddUserUrl()
+    public function getPaycometAddUserUrl()
     {
         if (!$this->_session->isLoggedIn()) {
             return [];
@@ -289,19 +296,20 @@ class Data extends AbstractHelper
         $language_data = explode("_",$shopperLocale);
         $language = $language_data[0];
 
-        $ClientPaytpv = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
-        $response = $ClientPaytpv->AddUserUrl($fieldOrderId, $language, $this->getURLOK($fieldOrderId), $this->getURLKO($fieldOrderId));
+        $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
+        $response = $ClientPaycomet->AddUserUrl($fieldOrderId, $language, $this->getURLOK($fieldOrderId), $this->getURLKO($fieldOrderId));
 
        
           
-        if ($response->DS_ERROR_ID==0){
+        if ($response->DS_ERROR_ID==0) {
             $url = $response->URL_REDIRECT;
         }
         return $url;
     }
 
 
-    public function customerIsLogged(){
+    public function customerIsLogged()
+    {
         return $this->_session->isLoggedIn();
     }
 
@@ -314,7 +322,7 @@ class Data extends AbstractHelper
     public function logDebug($message)
     {
         if ($this->getConfigData('debug_log') == '1') {
-            $this->_paytpvLogger->debug($message);
+            $this->_paycometLogger->debug($message);
         }
     }
 
@@ -420,7 +428,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @desc Converts the magento decimal amount into a int one used by Paytpv
+     * @desc Converts the magento decimal amount into a int one used by Paycomet
      *
      * @param float  $amount
      * @param string $currencyCode
@@ -435,14 +443,14 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @desc Converts the paytpv int amount into a decimal one used by Paytpv
+     * @desc Converts the paycomet int amount into a decimal one used by Paycomet
      *
      * @param string $amount
      * @param string $currencyCode
      *
      * @return float
      */
-    public function amountFromPaytpv($amount, $currencyCode)
+    public function amountFromPaycomet($amount, $currencyCode)
     {
         $minor = $this->_getCurrencyMinorUnit($currencyCode);
 
@@ -561,13 +569,16 @@ class Data extends AbstractHelper
     }
 
     public function getCustomerId(){
-        return $this->_session->getCustomer()->getId(); 
+        return $this->_session->getCustomer()->getId();
     }
 
-
-    public function createTransaction($type, $transactionid, $order = null, $paymentData = array()){
-        
-        try{
+    public function getCustomerById($id) {
+        return $this->_customerFactory->create()->load($id);
+    }
+    
+    public function createTransaction($type, $transactionid, $order = null, $paymentData = array())
+    {
+        try {
             //get payment object from order object
             $payment = $order->getPayment();
             $payment->setLastTransId($transactionid);
@@ -577,7 +588,7 @@ class Data extends AbstractHelper
             $this->setAdditionalInfo($payment, $paymentData);
 
 
-            switch ($type){
+            switch ($type) {
                 case \Magento\Sales\Model\Order\Payment\Transaction::TYPE_CAPTURE:
                     $message = __('Captured amount of %1',$order->getBaseCurrency()->formatTxt($order->getGrandTotal()));
                 break;
@@ -609,7 +620,7 @@ class Data extends AbstractHelper
             $this->_addHistoryComment($order, $message);
 
             return $transaction->save()->getTransactionId();
-        }catch (Exception $e){
+        } catch (Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Create Transaction error'));
         }
     }
@@ -662,9 +673,10 @@ class Data extends AbstractHelper
     }
 
 
-    public function getTokenData($payment){
+    public function getTokenData($payment)
+    {
 
-        $hash = $payment->getAdditionalInformation(DataAssignObserver::PAYTPV_TOKENCARD);
+        $hash = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_TOKENCARD);
 
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
@@ -676,7 +688,7 @@ class Data extends AbstractHelper
        
         $select = $connection->select()
             ->from(
-                ['token' => 'paytpv_token'],
+                ['token' => 'paycomet_token'],
                 ['iduser', 'tokenuser']
             )
             ->where($where);
@@ -689,7 +701,8 @@ class Data extends AbstractHelper
     /*
     @@ TODO
     */
-    public function getFirstOrder($order){
+    public function getFirstOrder($order)
+    {
         
         $searchCriteria = $this->_searchCriteriaBuilder
         ->addFilter('customer_id', $this->getCustomerId())
@@ -698,32 +711,28 @@ class Data extends AbstractHelper
 
         $orders = $this->_orderRepository->getList($searchCriteria);
 
-        if (sizeof($orders)>0){
+        if (sizeof($orders)>0) {
             return 0;
         }
         return 1;
     }
 
-
-    /** 
-    @@TODO
-    **/
     public function isFirstPurchaseToken($payment)
     {
 
 
         $token = $this->getTokenData($payment);
-        $paytpv_token = $token["iduser"] . "|" . $token["tokenuser"];
+        $paycomet_token = $token["iduser"] . "|" . $token["tokenuser"];
 
         $searchCriteria = $this->_searchCriteriaBuilder
         ->addFilter('customer_id', $this->getCustomerId())
-        ->addFilter('paytpv_token', $paytpv_token)
+        ->addFilter('paycomet_token', $paycomet_token)
         ->addFilter('status', array('pending','cancel','canceled','refund'), 'nin')
         ->create();  
 
         $orders = $this->_orderRepository->getList($searchCriteria);
 
-        if (sizeof($orders)>0){
+        if (sizeof($orders)>0) {
             return false;
         }
         return true;
@@ -731,20 +740,21 @@ class Data extends AbstractHelper
     }
 
 
-    public function CreateTransInvoice($order,$response){
+    public function CreateTransInvoice($order,$response)
+    {
 
         $payment = $order->getPayment();
 
         // Gateway Response
-        if (isset($response['AuthCode'])){
+        if (isset($response['AuthCode'])) {
             $transactionid = $response['AuthCode'];
             $amount = $response['Amount'];
         // Webservice Response
-        }else{
+        } else {
             $transactionid = $response['DS_MERCHANT_AUTHCODE'];
             $amount = $response['DS_MERCHANT_AMOUNT'];
         }
-        $amount = $this->amountFromPaytpv($amount, $order->getBaseCurrencyCode());
+        $amount = $this->amountFromPaycomet($amount, $order->getBaseCurrencyCode());
 
         
         $payment_action = $this->getConfigData('payment_action', $order->getStoreId());
@@ -762,7 +772,7 @@ class Data extends AbstractHelper
         $this->createTransaction($type, $transactionid, $order, $response);
 
         //Should we invoice
-        if ($isAutoSettle){
+        if ($isAutoSettle) {
             $this->createInvoice($order, $transactionid, $amount);
         }
 
@@ -771,22 +781,22 @@ class Data extends AbstractHelper
             $this->_orderSender->send($order);
         }
 
-        // Set PAYTPV iduser|tokenuser to order
-        if ( isset($response['IdUser']) && isset($response['TokenUser']) ){
+        // Set PAYCOMET iduser|tokenuser to order
+        if ( isset($response['IdUser']) && isset($response['TokenUser']) ) {
             $IdUser = $response['IdUser'];
             $TokenUser = $response['TokenUser'];
-        }else{
+        } else {
             $data = $this->getTokenData($payment);
             $IdUser = $data["iduser"];
             $TokenUser = $data["tokenuser"];
         }
-        $order->setPaytpvToken($IdUser."|".$TokenUser);
+        $order->setPaycometToken($IdUser."|".$TokenUser);
         $order->save();
 
         // Save Customer Card Token for future purchase
-        $savecard = $payment->getAdditionalInformation(DataAssignObserver::PAYTPV_SAVECARD);
-        $token = $payment->getAdditionalInformation(DataAssignObserver::PAYTPV_TOKENCARD);
-        if ($savecard && $token==""){
+        $savecard = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_SAVECARD);
+        $token = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_TOKENCARD);
+        if ($savecard && $token=="") {
             $customerId = $order->getCustomerId();
             if (!empty($customerId)) {
                 $this->_handleCardStorage($response, $customerId);
@@ -813,16 +823,16 @@ class Data extends AbstractHelper
             $merchant_code = trim($this->getConfigData('merchant_code',$storeId));
             $merchant_terminal = trim($this->getConfigData('merchant_terminal',$storeId));
             $merchant_pass = $this->getEncryptedConfigData('merchant_pass',$storeId);
-            $ClientPaytpv = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
+            $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
 
 
-            $resp = $ClientPaytpv->InfoUser($IdUser, $TokenUser);
+            $resp = $ClientPaycomet->InfoUser($IdUser, $TokenUser);
 
             $resp = (array) $resp;
 
             if ('' == $resp['DS_ERROR_ID'] || 0 == $resp['DS_ERROR_ID']) {
                 return $this->addCustomerCard($customerId,$IdUser,$TokenUser,$resp);
-            }else{
+            } else{
                 return false;
             }
         } catch (\Exception $e) {
@@ -852,7 +862,7 @@ class Data extends AbstractHelper
             $hash = hash('sha256', $IdUser . $TokenUser);
 
             $connection->insert(
-                $resource->getTableName('paytpv_token'),
+                $resource->getTableName('paycomet_token'),
                 ['customer_id' => $customerId, 'hash' => $hash, 'iduser' => $IdUser, 'tokenuser' => $TokenUser, 'cc' => $card , 'brand' => $card_brand, 'expiry' => $expiryDate, 'date' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)]
             );
             return true;
@@ -914,7 +924,7 @@ class Data extends AbstractHelper
             case 142: return __("Operation canceled"); break;
             case 143: return __("Authentification error"); break;
             case 144: return __("Denegation by security level"); break;
-            case 145: return __("Error in PUC message. Please contact PayTPV"); break;
+            case 145: return __("Error in PUC message. Please contact PAYCOMET"); break;
             case 146: return __("System error"); break;
             case 147: return __("Duplicated transaction"); break;
             case 148: return __("MAC error"); break;
@@ -1021,8 +1031,8 @@ class Data extends AbstractHelper
             case 1025: return __("Cannot register available resources to complete current operation"); break;
             case 1026: return __("Duplicated external reference"); break;
             case 1027: return __("Total refunds cannot exceed original payment"); break;
-            case 1028: return __("Account not active. Please contact PayTPV"); break;
-            case 1029: return __("Account still not certified. Please contact PayTPV"); break;
+            case 1028: return __("Account not active. Please contact PAYCOMET"); break;
+            case 1029: return __("Account still not certified. Please contact PAYCOMET"); break;
             case 1030: return __("Product is marked for deletion and cannot be used"); break;
             case 1031: return __("Insufficient rights"); break;
             case 1032: return __("Product cannot be used under test environment"); break;
@@ -1056,7 +1066,7 @@ class Data extends AbstractHelper
             case 1110: return __("SIGNATURE field error"); break;
             case 1120: return __("Operation unavailable"); break;
             case 1121: return __("Client not found"); break;
-            case 1122: return __("User not found. Contact PayTPV"); break;
+            case 1122: return __("User not found. Contact PAYCOMET"); break;
             case 1123: return __("Invalid signature. Please check your configuration"); break;
             case 1124: return __("Operation not available with the specified user"); break;
             case 1125: return __("Invalid operation in a currency other than Euro"); break;
@@ -1069,18 +1079,18 @@ class Data extends AbstractHelper
             case 1133: return __("Info button corrupt"); break;
             case 1134: return __("The subscription may not exceed the expiration date of the card"); break;
             case 1135: return __("DS_EXECUTE can not be true if DS_SUBSCRIPTION_STARTDATE is different from today."); break;
-            case 1136: return __("PAYTPV_OPERATIONS_MERCHANTCODE field error"); break;
-            case 1137: return __("PAYTPV_OPERATIONS_TERMINAL must be Array"); break;
-            case 1138: return __("PAYTPV_OPERATIONS_OPERATIONS must be Array"); break;
-            case 1139: return __("PAYTPV_OPERATIONS_SIGNATURE field error"); break;
-            case 1140: return __("Can not find any of the PAYTPV_OPERATIONS_TERMINAL"); break;
+            case 1136: return __("PAYCOMET_OPERATIONS_MERCHANTCODE field error"); break;
+            case 1137: return __("PAYCOMET_OPERATIONS_TERMINAL must be Array"); break;
+            case 1138: return __("PAYCOMET_OPERATIONS_OPERATIONS must be Array"); break;
+            case 1139: return __("PAYCOMET_OPERATIONS_SIGNATURE field error"); break;
+            case 1140: return __("Can not find any of the PAYCOMET_OPERATIONS_TERMINAL"); break;
             case 1141: return __("Error in the date range requested"); break;
             case 1142: return __("The application can not have a length greater than 2 years"); break;
             case 1143: return __("The operation state is incorrect"); break;
             case 1144: return __("Error in the amounts of the search"); break;
             case 1145: return __("The type of operation requested does not exist"); break;
             case 1146: return __("Sort Order unrecognized"); break;
-            case 1147: return __("PAYTPV_OPERATIONS_SORTORDER unrecognized"); break;
+            case 1147: return __("PAYCOMET_OPERATIONS_SORTORDER unrecognized"); break;
             case 1148: return __("Subscription start date wrong"); break;
             case 1149: return __("Subscription end date wrong"); break;
             case 1150: return __("Frequency error in the subscription"); break;
@@ -1136,7 +1146,7 @@ class Data extends AbstractHelper
             case 1205: return __("Can not perform the operation"); break;
             case 1206: return __("ProviderID not available"); break;
             case 1207: return __("Operations parameter missing or not in a correct format"); break;
-            case 1208: return __("PaytpvMerchant parameter missing"); break;
+            case 1208: return __("PaycometMerchant parameter missing"); break;
             case 1209: return __("MerchatID parameter missing"); break;
             case 1210: return __("TerminalID parameter missing"); break;
             case 1211: return __("TpvID parameter missing"); break;

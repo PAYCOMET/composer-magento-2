@@ -17,14 +17,14 @@ define(
 
             /** Restore cart for guest and registered customer. */
             if (!customer.isLoggedIn()) {
-                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/paytpv-restore-cart', {
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/paycomet-restore-cart', {
                     quoteId: quote.getQuoteId()
                 });
                 payload = {
                     cartId: quote.getQuoteId()
                 };
             } else {
-                serviceUrl = urlBuilder.createUrl('/carts/mine/paytpv-restore-cart', {});
+                serviceUrl = urlBuilder.createUrl('/carts/mine/paycomet-restore-cart', {});
                 payload = {
                     cart_id: quote.getQuoteId()
                 };

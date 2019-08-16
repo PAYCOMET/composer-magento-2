@@ -1,13 +1,13 @@
 <?php
 
-namespace Paytpv\Payment\Controller\Cards;
+namespace Paycomet\Payment\Controller\Cards;
 
-use Paytpv\Payment\Block\Process;
+use Paycomet\Payment\Block\Process;
 
 class Result extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Paytpv\Payment\Helper\Data
+     * @var \Paycomet\Payment\Helper\Data
      */
     private $_helper;
 
@@ -24,7 +24,7 @@ class Result extends \Magento\Framework\App\Action\Action
     private $coreRegistry;
 
     /**
-     * @var \Paytpv\Payment\Logger\Logger
+     * @var \Paycomet\Payment\Logger\Logger
      */
     private $_logger;
 
@@ -32,15 +32,15 @@ class Result extends \Magento\Framework\App\Action\Action
      * Result constructor.
      *
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Paytpv\Payment\Helper\Data       $helper
+     * @param \Paycomet\Payment\Helper\Data       $helper
      * @param \Magento\Framework\Registry           $coreRegistry
-     * @param \Paytpv\Payment\Logger\Logger     $logger
+     * @param \Paycomet\Payment\Logger\Logger     $logger
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Paytpv\Payment\Helper\Data $helper,
+        \Paycomet\Payment\Helper\Data $helper,
         \Magento\Framework\Registry $coreRegistry,
-        \Paytpv\Payment\Logger\Logger $logger
+        \Paycomet\Payment\Logger\Logger $logger
     ) {
         $this->_helper = $helper;
         $this->_url = $context->getUrl();
@@ -62,7 +62,7 @@ class Result extends \Magento\Framework\App\Action\Action
 
             if ($response) {
                 $result = $this->_handleResponse($response);
-                $params['returnUrl'] = $this->_url->getUrl('paytpv_payment/cards/success');
+                $params['returnUrl'] = $this->_url->getUrl('paycomet_payment/cards/success');
             }
         } catch (\Exception $e) {
             $this->_logger->critical($e);
@@ -115,14 +115,14 @@ class Result extends \Magento\Framework\App\Action\Action
         $message = $response['MESSAGE'];
         $authcode = $response['AUTHCODE'];
         $pasref = $response['PASREF'];
-        $paytpvsha1 = $response['SHA1HASH'];
+        $paycometsha1 = $response['SHA1HASH'];
 
         $merchantid = $this->_helper->getConfigData('merchant_id');
 
         $sha1hash = $this->_helper->signFields("$timestamp.$merchantid.$orderid.$result.$message.$pasref.$authcode");
 
         //Check to see if hashes match or not
-        if (strcmp($sha1hash, $paytpvsha1) != 0) {
+        if (strcmp($sha1hash, $paycometsha1) != 0) {
             return false;
         }
 

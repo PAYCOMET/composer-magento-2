@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
     <head>
-        <css src="Paytpv_Payment::css/styles.css"/>
+        <css src="Paycomet_Payment::css/styles.css"/>
     </head>
     <body>
         <referenceBlock name="checkout.root">
@@ -20,10 +20,10 @@
                                                         <item name="renders" xsi:type="array">
                                                             <!-- merge payment method renders here -->
                                                             <item name="children" xsi:type="array">
-                                                                <item name="paytpv" xsi:type="array">
-                                                                    <item name="component" xsi:type="string">Paytpv_Payment/js/view/payment/paytpv-payment-methods</item>
+                                                                <item name="paycomet" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Paycomet_Payment/js/view/payment/paycomet-payment-methods</item>
                                                                     <item name="methods" xsi:type="array">
-                                                                        <item name="paytpv_payment" xsi:type="array">
+                                                                        <item name="paycomet_payment" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                     </item>

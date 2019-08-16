@@ -1,6 +1,6 @@
 <?php
 
-namespace Paytpv\Payment\Block\Cards;
+namespace Paycomet\Payment\Block\Cards;
 
 class Success extends \Magento\Framework\View\Element\Template
 {

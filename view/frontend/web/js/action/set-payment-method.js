@@ -23,10 +23,10 @@ define(
                 delete paymentData.title;
             }
             
-            // PAYTPV additional_data
+            // PAYCOMET additional_data
             paymentData.additional_data = {
-                saveCard: $("#paytpv_savecard").is(':checked')?1:0,
-                paytpvCard: $("#paytpv_card").val()
+                saveCard: $("#paycomet_savecard").is(':checked')?1:0,
+                paycometCard: $("#paycomet_card").val()
             }
 
 

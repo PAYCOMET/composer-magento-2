@@ -8,7 +8,7 @@ define(
         'use strict';
         var iframeHeight = ko.observable('640px');
         var iframeWidth = ko.observable('100%');
-        var iframeUrl = ko.observable($('#paytpv-iframe').val());
+        var iframeUrl = ko.observable($('#paycomet-iframe').val());
         var displayMessage =  ko.observable(false);
        
         

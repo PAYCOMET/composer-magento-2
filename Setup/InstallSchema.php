@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Paytpv\Payment\Setup;
+namespace Paycomet\Payment\Setup;
 
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -28,11 +28,9 @@ class InstallSchema implements InstallSchemaInterface
          */
         $installer->startSetup();
 
-        /**
-         * Create table 'paypal_billing_agreement'
-         */
+       
         $table = $installer->getConnection()->newTable(
-            $installer->getTable('paytpv_token')
+            $installer->getTable('paycomet_token')
         )->addColumn(
             'token_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -94,10 +92,10 @@ class InstallSchema implements InstallSchemaInterface
             ['nullable' => true],
             'description'
         )->addIndex(
-            $installer->getIdxName('paytpv_token', ['customer_id']),
+            $installer->getIdxName('paycomet_token', ['customer_id']),
             ['customer_id']
         )->setComment(
-            'PAYTPV Tokens'
+            'PAYCOMET Tokens'
         );
         $installer->getConnection()->createTable($table);
 

@@ -5,11 +5,11 @@ define(
         'ko',
         'jquery',
         'Magento_Checkout/js/view/payment/default',
-        'Paytpv_Payment/js/action/set-payment-method',
-        'Paytpv_Payment/js/action/lightbox',
+        'Paycomet_Payment/js/action/set-payment-method',
+        'Paycomet_Payment/js/action/lightbox',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/payment/additional-validators',
-        'Paytpv_Payment/js/model/paytpv-payment-service',
+        'Paycomet_Payment/js/model/paycomet-payment-service',
         'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer',
@@ -18,15 +18,15 @@ define(
 
     ],
     function(ko, $, Component, setPaymentMethodAction, lightboxAction, quote,
-        additionalValidators, paytpvPaymentService, fullScreenLoader, errorProcessor, customer, $t,url) {
+        additionalValidators, paycometPaymentService, fullScreenLoader, errorProcessor, customer, $t,url) {
         'use strict';
         var paymentMethod = ko.observable(null);
-        var paytpv_save_card = ko.observable(false);
+        var paycomet_save_card = ko.observable(false);
         var isOfferSave = ko.observable(false);
         var isVisibleCards = ko.observable(customer.isLoggedIn());
         var place = false;
 
-        $("body").on('click','#paytpv_open_conditions',function(){
+        $("body").on('click','#paycomet_open_conditions',function(){
                         
             var options = {
                 
@@ -40,7 +40,7 @@ define(
                     }
                 }]
             };
-            $("#paytpv-conditions").modal(options).modal('openModal');
+            $("#paycomet-conditions").modal(options).modal('openModal');
 
 
         });
@@ -50,14 +50,14 @@ define(
         return Component.extend({
             self: this,
             defaults: {
-                template: 'Paytpv_Payment/payment/paytpv-form'
+                template: 'Paycomet_Payment/payment/paycomet-form'
             },
-            isInAction: paytpvPaymentService.isInAction,
-            isLightboxReady: paytpvPaymentService.isLightboxReady,
-            iframeHeight: paytpvPaymentService.iframeHeight,
-            iframeWidth: paytpvPaymentService.iframeWidth,
+            isInAction: paycometPaymentService.isInAction,
+            isLightboxReady: paycometPaymentService.isLightboxReady,
+            iframeHeight: paycometPaymentService.iframeHeight,
+            iframeWidth: paycometPaymentService.iframeWidth,
             
-            paytpv_save_card: paytpv_save_card,
+            paycomet_save_card: paycomet_save_card,
 
             isOfferSave: isOfferSave,
             isVisibleCards: isVisibleCards,
@@ -65,7 +65,7 @@ define(
             initialize: function() {
                 this._super();
                 $(window).bind('message', function(event) {
-                    paytpvPaymentService.iframeResize(event.originalEvent.data);
+                    paycometPaymentService.iframeResize(event.originalEvent.data);
                 });
             },
             resetIframe: function() {
@@ -77,8 +77,8 @@ define(
                 var data = {
                     'method': this.getCode(),
                     'additional_data': {
-                        'saveCard': $("#paytpv_savecard").is(':checked')?1:0,
-                        'paytpvCard': $("#paytpv_card").val()
+                        'saveCard': $("#paycomet_savecard").is(':checked')?1:0,
+                        'paycometCard': $("#paycomet_card").val()
                     }
                 };
 
@@ -90,7 +90,7 @@ define(
              * @returns {String}
              */
             getActionUrl: function() {
-                return this.isInAction() ? window.checkoutConfig.payment["paytpv_payment"].redirectUrl : '';
+                return this.isInAction() ? window.checkoutConfig.payment["paycomet_payment"].redirectUrl : '';
             },
 
             /**
@@ -98,7 +98,7 @@ define(
              * @returns {String}
              */
             getFormFooter: function() {
-                return window.checkoutConfig.payment["paytpv_payment"].form_footer;
+                return window.checkoutConfig.payment["paycomet_payment"].form_footer;
             },
 
             /** Redirect */
@@ -111,18 +111,18 @@ define(
                     setPaymentMethodAction() // Place Order
                         .done(
                             function(response){
-                                if (window.checkoutConfig.payment["paytpv_payment"].iframeEnabled === '1' && $("#paytpv_card").val()=="") {
-                                    paytpvPaymentService.isInAction(true);
-                                    paytpvPaymentService.isLightboxReady(true);
-                                    if (window.checkoutConfig.payment["paytpv_payment"].iframeMode === 'lightbox') {
+                                if (window.checkoutConfig.payment["paycomet_payment"].iframeEnabled === '1' && $("#paycomet_card").val()=="") {
+                                    paycometPaymentService.isInAction(true);
+                                    paycometPaymentService.isLightboxReady(true);
+                                    if (window.checkoutConfig.payment["paycomet_payment"].iframeMode === 'lightbox') {
                                         lightboxAction();
                                     }else {
                                         // capture all click events
-                                        document.addEventListener('click', paytpvPaymentService.leaveIframeForLinks, true);
+                                        document.addEventListener('click', paycometPaymentService.leaveIframeForLinks, true);
                                     }
                                 }else{
 
-                                    $.mage.redirect(window.checkoutConfig.payment["paytpv_payment"].redirectUrl);
+                                    $.mage.redirect(window.checkoutConfig.payment["paycomet_payment"].redirectUrl);
                                 }
                                 
                             }
@@ -148,11 +148,11 @@ define(
             },
             
             /**
-             * Load User PAYTPV cards
+             * Load User PAYCOMET cards
              */
-            getSelectorPaytpvCards: function () {
+            getSelectorPaycometCards: function () {
 
-                var Cards = window.checkoutConfig.payment["paytpv_payment"].paytpvCards;
+                var Cards = window.checkoutConfig.payment["paycomet_payment"].paycometCards;
                 return _.union(
                     _.map(Cards, function (card) {
                         return {
@@ -170,15 +170,15 @@ define(
             showSaveCard: function(){
 
                 /* Ocultar select de tarjetas cuando no tiene ninguna almacenada*/
-                if ( $("#paytpv_card > option").length==1) {
+                if ( $("#paycomet_card > option").length==1) {
                     isVisibleCards(false);
                 }
-                if ($("#paytpv_card").val()!="") {
+                if ($("#paycomet_card").val()!="") {
                     isOfferSave(false);
-                    paytpv_save_card(false);
+                    paycomet_save_card(false);
                 } else {                
-                    isOfferSave(window.checkoutConfig.payment["paytpv_payment"].card_offer_save==1);
-                    paytpv_save_card(window.checkoutConfig.payment["paytpv_payment"].remembercardselected==1);
+                    isOfferSave(window.checkoutConfig.payment["paycomet_payment"].card_offer_save==1);
+                    paycomet_save_card(window.checkoutConfig.payment["paycomet_payment"].remembercardselected==1);
                 }
             }
             

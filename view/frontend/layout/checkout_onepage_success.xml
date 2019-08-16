@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
   <referenceContainer name="order.success.additional.info">
-      <block class="Paytpv\Payment\Block\Checkout\Onepage\Success" name="onepage.success.paytpv_payment" template="checkout/onepage/success.phtml"/>
+      <block class="Paycomet\Payment\Block\Checkout\Onepage\Success" name="onepage.success.paycomet_payment" template="checkout/onepage/success.phtml"/>
   </referenceContainer>
 </page>

@@ -1,13 +1,13 @@
 <?php
 
-namespace Paytpv\Payment\Api;
+namespace Paycomet\Payment\Api;
 
 /**
- * Interface PaytpvPaymentManagementInterface.
+ * Interface PaycometPaymentManagementInterface.
  *
  * @api
  */
-interface PaytpvPaymentManagementInterface
+interface PaycometPaymentManagementInterface
 {
     /**
      * Processes the payment response from the gateway.

@@ -1,5 +1,5 @@
 <?php
-namespace Paytpv\Payment\Plugin;
+namespace Paycomet\Payment\Plugin;
 
 class Csrf
 {
@@ -16,7 +16,7 @@ class Csrf
         $action
     ) {
         
-        if ($request->getModuleName() == 'paytpv_payment') {
+        if ($request->getModuleName() == 'paycomet_payment') {
             return;
         }
         $proceed($request, $action); 

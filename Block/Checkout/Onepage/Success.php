@@ -1,6 +1,6 @@
 <?php
 
-namespace Paytpv\Payment\Block\Checkout\Onepage;
+namespace Paycomet\Payment\Block\Checkout\Onepage;
 
 class Success extends \Magento\Framework\View\Element\Template
 {
@@ -32,7 +32,7 @@ class Success extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Return success message if paytpv payment.
+     * Return success message if paycomet payment.
      *
      * @return string
      */
@@ -44,11 +44,11 @@ class Success extends \Magento\Framework\View\Element\Template
             return '';
         }
         if ($order->getId()) {
-            if ($order->getPayment()->getMethodInstance()->getCode() == 'paytpv_payment') {
+            if ($order->getPayment()->getMethodInstance()->getCode() == 'paycomet_payment') {
                 $fields = $order->getPayment()->getAdditionalInformation();
                 $this->addData(
                     [
-                    'is_paytpv' => true,
+                    'is_paycomet' => true,
                     ]
                 );
 

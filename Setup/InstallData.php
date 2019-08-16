@@ -1,6 +1,6 @@
 <?php
 
-namespace Paytpv\Payment\Setup;
+namespace Paycomet\Payment\Setup;
 
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -50,7 +50,7 @@ class InstallData implements InstallDataInterface
 
         $setup->startSetup();
 
-        $salesInstaller->addAttribute('order', 'paytpv_token', ['type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT, 'length'=> 100, 'visible' => false,'nullable' => true,]);
+        $salesInstaller->addAttribute('order', 'paycomet_token', ['type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT, 'length'=> 100, 'visible' => false,'nullable' => true,]);
         
 
         $setup->endSetup();

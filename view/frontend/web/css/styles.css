@@ -6,18 +6,18 @@
 }
 
 
-.footer_paytpv {
+.footer_paycomet {
     padding: 30px 10px;
     clear: both;
 }
 
-.footer_paytpv .footer_logo {
+.footer_paycomet .footer_logo {
     display: inline-block;
     width: 130px;
 }
 
 
-.footer_paytpv ul {
+.footer_paycomet ul {
     float: left;
     font-size: 14px;
     border-right: none;

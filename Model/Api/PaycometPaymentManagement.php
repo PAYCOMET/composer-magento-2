@@ -1,18 +1,18 @@
 <?php
 
-namespace Paytpv\Payment\Model\Api;
+namespace Paycomet\Payment\Model\Api;
 
-use Paytpv\Payment\Model\Config\Source\PaymentAction;
-use Paytpv\Bankstore\Client;
-use Paytpv\Payment\Observer\DataAssignObserver;
+use Paycomet\Payment\Model\Config\Source\PaymentAction;
+use Paycomet\Bankstore\Client;
+use Paycomet\Payment\Observer\DataAssignObserver;
 
-class PaytpvPaymentManagement implements \Paytpv\Payment\Api\PaytpvPaymentManagementInterface
+class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPaymentManagementInterface
 {
     const FRAUD_ACTIVE = 'ACTIVE';
     const FRAUD_HOLD = 'HOLD';
     const FRAUD_BLOCK = 'BLOCK';
     /**
-     * @var \Paytpv\Payment\Helper\Data
+     * @var \Paycomet\Payment\Helper\Data
      */
     private $_helper;
 
@@ -27,7 +27,7 @@ class PaytpvPaymentManagement implements \Paytpv\Payment\Api\PaytpvPaymentManage
     private $_transactionBuilder;
 
     /**
-     * @var \Paytpv\Payment\Logger\Logger
+     * @var \Paycomet\Payment\Logger\Logger
      */
     private $_logger;
 
@@ -47,21 +47,21 @@ class PaytpvPaymentManagement implements \Paytpv\Payment\Api\PaytpvPaymentManage
     private $_customerRepository;
 
     /**
-     * PaytpvManagement constructor.
+     * PaycometManagement constructor.
      *
-     * @param \Paytpv\Payment\Helper\Data                                 $helper
+     * @param \Paycomet\Payment\Helper\Data                                 $helper
      * @param \Magento\Checkout\Model\Session                                 $session
      * @param \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder
-     * @param \Paytpv\Payment\Logger\Logger                               $logger
+     * @param \Paycomet\Payment\Logger\Logger                               $logger
      * @param \Magento\Sales\Model\Order\Email\Sender\OrderSender             $orderSender
      * @param \Magento\Sales\Model\Order\Status\HistoryFactory                $orderHistoryFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface               $customerRepository
      */
     public function __construct(
-        \Paytpv\Payment\Helper\Data $helper,
+        \Paycomet\Payment\Helper\Data $helper,
         \Magento\Checkout\Model\Session $session,
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
-        \Paytpv\Payment\Logger\Logger $logger,
+        \Paycomet\Payment\Logger\Logger $logger,
         \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender,
         \Magento\Sales\Model\Order\Status\HistoryFactory $orderHistoryFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository

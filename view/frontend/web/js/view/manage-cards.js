@@ -3,7 +3,7 @@ define(
         'jquery',
         'Magento_Ui/js/form/form',
         'ko',
-        'Paytpv_Payment/js/model/manage-cards-service',
+        'Paycomet_Payment/js/model/manage-cards-service',
         'Magento_Ui/js/modal/modal',
         'mage/translate'
     ],
@@ -11,7 +11,7 @@ define(
         'use strict';
 
 
-        $( "#paytpvcards-view-form a").click(function() {
+        $( "#paycometcards-view-form a").click(function() {
             
             var data = $.parseJSON($(this).attr("data-post"));
 
@@ -20,18 +20,18 @@ define(
                 if (!confirm($t('Are you sure?')))
                     return false;
            
-            $("#paytpvcards-view-form").action = data['action'];
+            $("#paycometcards-view-form").action = data['action'];
 
             data['data']['card_desc'] = $("#card_desc_"+data['data']['item']).val();
 
-            $("#paytpvcards-view-form a").attr("data-post",JSON.stringify(data));
-            $("#paytpvcards-view-form").action = data['action'];
+            $("#paycometcards-view-form a").attr("data-post",JSON.stringify(data));
+            $("#paycometcards-view-form").action = data['action'];
 
 
         });
 
 
-        $("body").on('click','#paytpv_open_conditions',function() {
+        $("body").on('click','#paycomet_open_conditions',function() {
                         
             var options = {
                 
@@ -45,13 +45,13 @@ define(
                     }
                 }]
             };
-            $("#paytpv-conditions").modal(options).modal('openModal');
+            $("#paycomet-conditions").modal(options).modal('openModal');
 
 
         });
 
         // Show loading
-        $("body").on('click','#paytpv_showcarddata',function() {
+        $("body").on('click','#paycomet_showcarddata',function() {
             if ($(this).is(":checked"))
                 jQuery('body').trigger('processStart');         
         });
@@ -68,7 +68,7 @@ define(
             displayMessage: manageCards.displayMessage,
             
             defaults: {
-                template: 'Paytpv_Payment/cards/manage'
+                template: 'Paycomet_Payment/cards/manage'
             },
             initObservable: function() {
                 return this;

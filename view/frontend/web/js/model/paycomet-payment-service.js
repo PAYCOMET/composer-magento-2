@@ -2,7 +2,7 @@ define(
     [
         'underscore',
         'ko',
-        'Paytpv_Payment/js/action/restore-cart',
+        'Paycomet_Payment/js/action/restore-cart',
         'Magento_Checkout/js/model/quote',
         'jquery',
         'mage/translate'

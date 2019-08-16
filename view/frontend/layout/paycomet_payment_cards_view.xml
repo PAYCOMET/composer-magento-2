@@ -3,12 +3,12 @@
     <update handle="customer_account"/>
     <body>
         <referenceContainer name="content">
-            <block class="Paytpv\Payment\Block\Cards\View" name="customer.account.paytpv.cards" template="cards/view.phtml" cacheable="false">
+            <block class="Paycomet\Payment\Block\Cards\View" name="customer.account.paycomet.cards" template="cards/view.phtml" cacheable="false">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="components" xsi:type="array">
-                            <item name="paytpv-cards" xsi:type="array">
-                                <item name="component" xsi:type="string">Paytpv_Payment/js/view/manage-cards</item>
+                            <item name="paycomet-cards" xsi:type="array">
+                                <item name="component" xsi:type="string">Paycomet_Payment/js/view/manage-cards</item>
                             </item>
                         </item>
                     </argument>

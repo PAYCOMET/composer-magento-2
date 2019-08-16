@@ -1,0 +1,123 @@
+<div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
+    <div class="payment-method-title field choice">
+        <input type="radio"
+               name="payment[method]"
+               class="radio"
+               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+        <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text: getTitle()"></span></label>
+    </div>
+    <div class="payment-method-content">
+        <div class="payment-method-billing-address">
+            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <fieldset class="fieldset" data-bind='attr: {id: "payment_form_" + getCode()}'>
+            <div class="payment-method-note">
+            </div>
+        </fieldset>
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+
+
+        <div id="paycomet_cards" data-bind="visible: isVisibleCards()">
+            <p><label data-bind="text: $t('Payment Information')"></label></p>
+            <select class="select required-entry"
+                    data-bind="event:{change:showSaveCard},
+                               attr: {
+                                     name: 'payment[' + getCode() + '][paycomet_card]',
+                                     id: 'paycomet_card',
+                                     title: 'paycomet_card',
+                                     'data-validate': JSON.stringify({required:true})},
+                               options: getSelectorPaycometCards(),
+                               optionsValue: 'hash',
+                               optionsText: 'desc'">
+            </select>
+        </div>
+        <br/>
+
+        <div data-bind="visible: isOfferSave()">
+            <input type="checkbox" name="payment[' + getCode() + '][paycomet_card]" id="paycomet_savecard" data-bind="checked: paycomet_save_card">
+            <label for="paycomet_savecard" data-bind="text: $t('Save card for future payment')"></label>. <span for="paycomet_savecard" data-bind="text: $t('When you link a Tarjet accepts')"></span> <a id="paycomet_open_conditions" href="#"><span class="terminos" data-bind="text: $t('terms and conditions of service')"></span></a>.
+        </div>
+                   
+        <div data-bind="visible: isInAction()">
+            <!-- ko if: isLightboxReady() -->
+            <div id="paycomet-iframe-container">
+
+                <strong data-bind="text: $t('Enter your card')"></strong>
+
+                <iframe data-bind="attr: {id: getCode() + '-iframe', src: getActionUrl()}, event: {load: iframeLoaded}, style: {width: iframeWidth(), height: iframeHeight()}"
+                        data-container="paycomet-iframe"
+                        class="paycomet_iframe"
+                        scrolling="no"
+                        frameborder="0"
+                        border="0"
+                        >
+                </iframe>
+
+                <p class="form_footer" data-bind="html: getFormFooter()"></p>
+
+                <div class="footer_paycomet">
+
+                  <div class="paycomet_wrapper mobile">
+                    <div class="footer_line">
+                      <div class="footer_logo">
+                        <a href="https://paycomet.com" target="_blank">
+                          <img data-bind="attr: { src: require.toUrl('')+'Paycomet_Payment/img/paycomet_logo.svg' }" alt="PATYPV">
+                        </a>
+                      </div>
+                      <ul class="payment_icons">
+                        
+                        <li><img data-bind="attr: { src: require.toUrl('')+'Paycomet_Payment/img/veryfied_by_visa.png' }" alt="Veryfied by Visa"  ></li>
+                        <li><img data-bind="attr: { src: require.toUrl('')+'Paycomet_Payment/img/mastercard_secure_code.png' }" alt="Mastercard Secure code"  ></li>
+                        <li><img data-bind="attr: { src: require.toUrl('')+'Paycomet_Payment/img/pci.png' }" alt="PCI"  ></li>
+                        <li><img data-bind="attr: { src: require.toUrl('')+'Paycomet_Payment/img/thawte.png' }" alt="Thawte"  ></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                
+            </div>
+            <!-- /ko -->
+        </div>
+
+        <div class="actions-toolbar" data-bind="visible: !isInAction()">
+            <div class="primary">
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="click: continueToPayment, enable: (getCode() == isChecked())"
+                        disabled>
+                    <span data-bind="text: $t('Place Order')"></span>
+                </button>
+            </div>
+        </div>
+        
+
+        <div id="paycomet-conditions" style="display:none">
+            <h2 class="estilo-tit1">
+                <p data-bind="text: $t('This trade does not store or transmit data credit card or debit card. The data are sent via a secure, encrypted channel platform PAYCOMET')"></p>
+            </h2>
+            <h3 class="estilo-tit1" id="tarjetas" data-bind="text: $t('Related Cards')"></h3>
+            <p data-bind="text: $t('At any time, the user can add or remove data from your linked card. In the My Account section, you will see a section -My cards- where the cards will be stored and may be removed')"></p>
+            <h3 class="estilo-tit1" id="politica_seguridad" data-bind="text: $t('Security Policy')"></h3>
+            <p  data-bind="text: $t('All transaction information is transmitted between this site and PAYCOMET systems is encrypted using 256-bit SSL certificates. All cardholder information is transmitted encrypted and all messages sent to your servers from PAYCOMET signed using SHA hashing to prevent tampering. The information is transmitted to servers PAYCOMET can not probe, scan, used or modified by any external to gain access to confidential information')"></p>
+            <h3 class="estilo-tit1" id="politica_seguridad" data-bind="text: $t('Encryption and Data Storage')"></h3>
+            <p  data-bind="text: $t('Once PAYCOMET systems, confidential information is protected using standard 1024-bit encryption. Encryption keys are kept in high security systems with double authentication volatile and which precludes their extraction. Banks, security agents and banks perform regular audits to ensure data protection')">
+            </p>
+            <h3 class="estilo-tit1" id="politica_seguridad" data-bind="text: $t('System Safety')"></h3>
+            <p data-bind="text: $t('PAYCOMET systems are reviewed quarterly by specific tools ISO, a Qualified Qualified Security Assessor (QSA) and an independent approved scanning vendor (ASV) for the payment card brands')"></p>
+            <p data-bind="text: $t('PAYCOMET also subject to an annual audit by the standards of data security (PCI DSS) and Payment Card Industry is a provider of payment services fully approved Level 1, which is the highest level of compliance')"></p>
+            <h3 class="estilo-tit1" id="politica_seguridad" data-bind="text: $t('Links to banks')"></h3>
+            <p data-bind="text: $t('PAYCOMET has multiple private links to banking networks that are completely independent of the Internet and which do not cross any public access network. Any cardholder information sent to the banks and all messages sent in response authorization are protected and can not be manipulated')"></p>
+            <h3 class="estilo-tit1" id="politica_seguridad" data-bind="text: $t('Internal security')"></h3>
+            <p  data-bind="text: $t('PAYCOMET is audited access controls production environments. The CPD stay where systems operate according to the requirements for Tier III centers. This ensures that safety is not put at risk at any time. It has sophisticated alarm systems, surveillance and closed circuit TV security guards present 24 hours a day, 7 days a week on site, as well as monitoring and a rigorous maintenance. All transaction information and customer card is protected even our own employees')"></p>
+            <h3 class="estilo-tit1" id="politica_seguridad"  data-bind="text: $t('Disaster Recovery')">$t("Disaster Recovery")</h3>
+            <p  data-bind="text: $t('PAYCOMET has hosted Backup systems in different countries to ensure optimal safety systems and high availability. It also has a policy of commercial below and complete disaster recovery')"></p>
+            <p>&nbsp;</p>
+        </div>
+    </div>
+</div>

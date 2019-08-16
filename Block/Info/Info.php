@@ -1,16 +1,16 @@
 <?php
 
-namespace Paytpv\Payment\Block\Info;
+namespace Paycomet\Payment\Block\Info;
 
 class Info extends \Magento\Payment\Block\Info
 {
     /**
      * @var string
      */
-    protected $_template = 'Paytpv_Payment::info/info.phtml';
+    protected $_template = 'Paycomet_Payment::info/info.phtml';
 
     /**
-     * Prepare Paytpv related payment info.
+     * Prepare Paycomet related payment info.
      *
      * @param \Magento\Framework\DataObject|array $transport
      *

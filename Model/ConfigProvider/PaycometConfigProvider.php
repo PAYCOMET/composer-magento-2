@@ -1,11 +1,11 @@
 <?php
 
-namespace Paytpv\Payment\Model\ConfigProvider;
+namespace Paycomet\Payment\Model\ConfigProvider;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 
-class PaytpvConfigProvider implements ConfigProviderInterface
+class PaycometConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var PaymentHelper
@@ -13,7 +13,7 @@ class PaytpvConfigProvider implements ConfigProviderInterface
     private $_paymentHelper;
 
     /**
-     * @var \Paytpv\Payment\Helper\Data
+     * @var \Paycomet\Payment\Helper\Data
      */
     private $_helper;
 
@@ -21,7 +21,7 @@ class PaytpvConfigProvider implements ConfigProviderInterface
      * @var string[]
      */
     protected $_methodCodes = [
-        'paytpv_payment',
+        'paycomet_payment',
     ];
 
     /**
@@ -38,15 +38,15 @@ class PaytpvConfigProvider implements ConfigProviderInterface
 
 
     /**
-     * PaytpvConfigProvider constructor.
+     * PaycometConfigProvider constructor.
      *
      * @param PaymentHelper                   $paymentHelper
-     * @param \Paytpv\Payment\Helper\Data     $helper
+     * @param \Paycomet\Payment\Helper\Data     $helper
      * @param \Magento\Framework\Escaper    $escaper
      */
     public function __construct(
         PaymentHelper $paymentHelper,
-        \Paytpv\Payment\Helper\Data $helper,
+        \Paycomet\Payment\Helper\Data $helper,
         \Magento\Framework\Escaper $escaper
     ) {
         $this->_paymentHelper = $paymentHelper;
@@ -59,7 +59,7 @@ class PaytpvConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Set configuration for Paytpv Payment.
+     * Set configuration for Paycomet Payment.
      *
      * @return array
      */
@@ -67,7 +67,7 @@ class PaytpvConfigProvider implements ConfigProviderInterface
     {
         $config = [
             'payment' => [
-                'paytpv_payment' => [
+                'paycomet_payment' => [
                 ],
             ],
         ];
@@ -79,7 +79,7 @@ class PaytpvConfigProvider implements ConfigProviderInterface
                 $config['payment'] [$code]['iframeMode'] = $this->_helper->getConfigData('iframe_mode');
                 $config['payment'] [$code]['remembercardselected'] = $this->_helper->getConfigData('remembercardselected');
                 $config['payment'] [$code]['card_offer_save'] = ($this->_helper->getConfigData('card_offer_save') && $this->_helper->getCustomerId());
-                $config['payment'] [$code]['paytpvCards'] = $this->getPaytpvToken($code);
+                $config['payment'] [$code]['paycometCards'] = $this->getPaycometToken($code);
                 $config['payment'] [$code]['form_footer'] = nl2br($this->_escaper->escapeHtml($this->_helper->getConfigData('form_footer')));
 
                 
@@ -110,7 +110,7 @@ class PaytpvConfigProvider implements ConfigProviderInterface
      *
      * @return mixed
      */
-    private function getPaytpvToken($code)
+    private function getPaycometToken($code)
     {
         return $this->methods[$code]->getCheckoutCards();
     }

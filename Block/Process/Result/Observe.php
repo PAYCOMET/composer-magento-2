@@ -1,10 +1,10 @@
 <?php
 
-namespace Paytpv\Payment\Block\Process\Result;
+namespace Paycomet\Payment\Block\Process\Result;
 
 class Observe extends \Magento\Framework\View\Element\Template
 {
-    const OBSERVE_KEY = 'paytpv_payment_observe';
+    const OBSERVE_KEY = 'paycomet_payment_observe';
 
     private $_observe;
 

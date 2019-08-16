@@ -1,6 +1,6 @@
 <?php
 
-namespace Paytpv\Payment\Controller\Process;
+namespace Paycomet\Payment\Controller\Process;
 
 class Process extends \Magento\Framework\App\Action\Action
 {
@@ -15,11 +15,11 @@ class Process extends \Magento\Framework\App\Action\Action
      * Result constructor.
      *
      * @param \Magento\Framework\App\Action\Context                $context
-     * @param \Paytpv\Payment\Helper\Data                          $helper
+     * @param \Paycomet\Payment\Helper\Data                          $helper
      * @param \Magento\Sales\Model\OrderFactory                    $orderFactory
      * @param \Magento\Framework\Registry                          $coreRegistry
-     * @param \Paytpv\Payment\Logger\Logger                        $logger
-     * @param \Paytpv\Payment\Api\PaytpvPaymentManagementInterface $paymentManagement
+     * @param \Paycomet\Payment\Logger\Logger                        $logger
+     * @param \Paycomet\Payment\Api\PaycometPaymentManagementInterface $paymentManagement
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,

@@ -1,6 +1,6 @@
 <?php
 
-namespace Paytpv\Payment\Block\Process;
+namespace Paycomet\Payment\Block\Process;
 
 use Symfony\Component\Config\Definition\Exception\Exception;
 
@@ -17,7 +17,7 @@ class Process extends \Magento\Payment\Block\Form
     private $_order;
 
     /**
-     * @var \Paytpv\Payment\Helper\Data
+     * @var \Paycomet\Payment\Helper\Data
      */
     private $_helper;
 
@@ -27,14 +27,14 @@ class Process extends \Magento\Payment\Block\Form
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\OrderFactory                $orderFactory
      * @param \Magento\Checkout\Model\Session                  $checkoutSession
-     * @param \Paytpv\Payment\Helper\Data                  $helper
+     * @param \Paycomet\Payment\Helper\Data                  $helper
      * @param array                                            $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Paytpv\Payment\Helper\Data $helper,
+        \Paycomet\Payment\Helper\Data $helper,
         array $data = []
     ) {
         $this->_orderFactory = $orderFactory;
@@ -47,13 +47,13 @@ class Process extends \Magento\Payment\Block\Form
     /**
      * @return string
      */
-    public function getFormPaytpvUrl()
+    public function getFormPaycometUrl()
     {
         $result = '';
         try {
             $order = $this->_order;
             if ($order->getPayment()) {
-                $result = $this->_order->getPayment()->getMethodInstance()->getFormPaytpvUrl();
+                $result = $this->_order->getPayment()->getMethodInstance()->getFormPaycometUrl();
             }
         } catch (Exception $e) {
             // do nothing for now
