@@ -59,7 +59,6 @@ class Result extends \Magento\Framework\App\Action\Action
         \Paycomet\Payment\Logger\Logger $logger,
         \Paycomet\Payment\Api\PaycometPaymentManagementInterface $paymentManagement
     ) {
-        
         $this->_helper = $helper;
         $this->_orderFactory = $orderFactory;
         $this->_url = $context->getUrl();
@@ -74,7 +73,6 @@ class Result extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        print "sdk";
         try{
             $response = $this->getRequest()->getParams();
             unset($response["TransactionName"]);
@@ -115,7 +113,6 @@ class Result extends \Magento\Framework\App\Action\Action
      */
     private function _handleResponse($response)
     {
-        
         if (empty($response)) {
             $this->_logger->critical(__('Empty response received from gateway'));
 
