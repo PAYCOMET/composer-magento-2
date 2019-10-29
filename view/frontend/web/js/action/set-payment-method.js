@@ -19,8 +19,13 @@ define(
             var serviceUrl,
                 payload,
                 paymentData = quote.paymentMethod();
+            
             if (paymentData.title) {
                 delete paymentData.title;
+            }
+
+            if (paymentData.__disableTmpl) {
+                delete paymentData.__disableTmpl;
             }
             
             // PAYCOMET additional_data
