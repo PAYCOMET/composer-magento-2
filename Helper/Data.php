@@ -300,11 +300,18 @@ class Data extends AbstractHelper
         $response = $ClientPaycomet->AddUserUrl($fieldOrderId, $language, $this->getURLOK($fieldOrderId), $this->getURLKO($fieldOrderId));
 
        
-          
+        $function_txt = "AddUserUrl";
+        $dataResponse = array();
         if ($response->DS_ERROR_ID==0) {
-            $url = $response->URL_REDIRECT;
+            $dataResponse["url"] = $response->URL_REDIRECT;
+            $dataResponse["error"]  = 0;
+        } else {
+            $dataResponse["url"] = $response->URL_REDIRECT;
+            $dataResponse["error"]  = $response->DS_ERROR_ID;
+            $this->logDebug("Error in " . $function_txt .": " . $response->DS_ERROR_ID . "; URL: " . $response->URL_REDIRECT);
         }
-        return $url;
+        return $dataResponse;
+
     }
 
 
