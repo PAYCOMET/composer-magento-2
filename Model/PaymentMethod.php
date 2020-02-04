@@ -183,9 +183,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         \Magento\Framework\Module\ResourceInterface $resourceInterface,
         \Magento\Checkout\Model\Session $session,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         \Magento\Framework\ObjectManagerInterface $objectmanager,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,        
         array $data = []
     ) {
         parent::__construct(
@@ -1193,6 +1193,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         $merchantData = $this->getMerchantData($order);
 
+        $function_txt = "";
 
         // Payment/Preauthorization with Saved Card
         if (isset($hash) && $hash!=""){
@@ -1205,25 +1206,35 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             $formFields['TOKEN_USER'] = $TokenUser;
 
             if ($OPERATION==1) {
+                $function_txt = "ExecutePurchaseTokenUrl";
                 $response = $ClientPaycomet->ExecutePurchaseTokenUrl($fieldOrderId, $amount, $orderCurrencyCode, $IdUser,$TokenUser, $language, "", $Secure, null, $this->getURLOK($order), $this->getURLKO($order), $merchantData);
             } else if ($OPERATION==3) {
+                $function_txt = "ExecutePreauthorizationTokenUrl";
                 $response = $ClientPaycomet->ExecutePreauthorizationTokenUrl($fieldOrderId, $amount, $orderCurrencyCode, $IdUser,$TokenUser, $language, "", $Secure, null, $this->getURLOK($order), $this->getURLKO($order), $merchantData);
             }
 
         // Payment/Preautorization with New Card
         } else {
             if ($OPERATION==1) {
+                $function_txt = "ExecutePurchaseUrl";
                 $response = $ClientPaycomet->ExecutePurchaseUrl($fieldOrderId, $amount, $orderCurrencyCode, $language, "", $Secure, null, $this->getURLOK($order), $this->getURLKO($order), $merchantData);
             } else if ($OPERATION==3) {
+                $function_txt = "CreatePreauthorizationUrl";
                 $response = $ClientPaycomet->CreatePreauthorizationUrl($fieldOrderId, $amount, $orderCurrencyCode, $language, "", $Secure, null, $this->getURLOK($order), $this->getURLKO($order), $merchantData);
             }
         }
         
+        $dataResponse = array();
         if ($response->DS_ERROR_ID==0) {
-            $url = $response->URL_REDIRECT;
+            $dataResponse["url"] = $response->URL_REDIRECT;
+            $dataResponse["error"]  = 0;
+        } else {
+            $dataResponse["url"] = $response->URL_REDIRECT;
+            $dataResponse["error"]  = $response->DS_ERROR_ID;
+            $this->_helper->logDebug("Error in " . $function_txt .": " . $response->DS_ERROR_ID . "; URL: " . $response->URL_REDIRECT);
         }
 
-        return $url;
+        return $dataResponse;
     }
 
 

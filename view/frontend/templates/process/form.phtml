@@ -1,12 +1,23 @@
+<?php
+
+// Get payment URL response
+$arrResponse = $block->getFormPaycometUrl();
+
+if (!filter_var($arrResponse["url"],FILTER_VALIDATE_URL)) {
+    die(__('Error') . ": " . $arrResponse["error"]);
+}
+$action = $arrResponse["url"];
+
+?>
+
 <html>
 <head>
 </head>
 <body>
 
 
-<form id="paycomet_form" method="POST" action="<?php echo $block->getFormPaycometUrl(); ?>">
-</form>
-<script>
+<form id="paycomet_form" method="POST" action="<?php echo $action; ?>"></form>
+<script type="text/javascript">
      document.getElementById('paycomet_form').submit();
 </script>
 
