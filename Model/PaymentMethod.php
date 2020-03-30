@@ -1175,6 +1175,13 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $language_data = explode("_",$shopperLocale);
         $language = $language_data[0];
 
+        /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
+        $quoteRepository = $this->_objectManager->create(\Magento\Quote\Api\CartRepositoryInterface::class);
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $quoteRepository->get($order->getQuoteId());
+        $quote->setIsActive(1)->setReservedOrderId(null);
+        $quoteRepository->save($quote);
+        
         $baseUrl = $this->_storeManager->getStore($this->getStore())
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK);
 
