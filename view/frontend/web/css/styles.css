@@ -43,3 +43,8 @@
 .form_footer {
     font-weight: bold;
 }
+
+.paycomet-pci {
+    font-size: 0.8em;
+    display: block;
+}

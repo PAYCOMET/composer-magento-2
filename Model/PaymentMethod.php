@@ -252,9 +252,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         }
 
         $order = $payment->getOrder();
-        $realOrderId = $order->getRealOrderId();
-        $currencyCode = $order->getBaseCurrencyCode();
-        
+
         $merchant_code = trim($this->_helper->getConfigData('merchant_code'));
         $merchant_terminal = trim($this->_helper->getConfigData('merchant_terminal'));
         $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass');
@@ -327,9 +325,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         $order = $payment->getOrder();
         $realOrderId = $order->getRealOrderId();
-        $currencyCode = $order->getBaseCurrencyCode();
-
-        $amount_mage = $amount;
+        $currencyCode = $order->getBaseCurrencyCode();        
         
         $amount = $this->_helper->amountFromMagento($amount, $currencyCode);
         $merchant_code = trim($this->_helper->getConfigData('merchant_code'));
@@ -391,9 +387,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         
         $order = $payment->getOrder();
         $realOrderId = $order->getRealOrderId();
-        $currencyCode = $order->getBaseCurrencyCode();
-
-        $amount_mage = $amount;
+        $currencyCode = $order->getBaseCurrencyCode();        
         
         $amount = $this->_helper->amountFromMagento($amount, $currencyCode);
         $merchant_code = trim($this->_helper->getConfigData('merchant_code'));
@@ -492,15 +486,10 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     {
         parent::refund($payment, $amount);
         $order = $payment->getOrder();
-        $realOrderId = $order->getRealOrderId();
-        $comments = $payment->getCreditMemo()->getComments();
-        $grandTotal = $order->getBaseGrandTotal();
+        $realOrderId = $order->getRealOrderId();        
         $orderCurrencyCode = $order->getBaseCurrencyCode();
-        $amount = $this->_helper->amountFromMagento($amount, $orderCurrencyCode);
-        $IdUser = $payment->getAdditionalInformation('IdUser');
-        $TokenUser = $payment->getAdditionalInformation('TokenUser');
-        $AuthCode = $payment->getTransactionId();
-
+        $amount = $this->_helper->amountFromMagento($amount, $orderCurrencyCode);        
+        $AuthCode = $payment->getTransactionId();        
         $storeId = $order->getStoreId();
 
         $merchant_code = trim($this->_helper->getConfigData('merchant_code',$storeId));
@@ -509,10 +498,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
 
-        $AuthCode = str_replace("-refund","",$AuthCode);
-      
-
-        $response = $ClientPaycomet->ExecuteRefund($IdUser, $TokenUser, $realOrderId, $orderCurrencyCode, $AuthCode, $amount); 
+        $AuthCode = str_replace("-refund","",$AuthCode);        
+              
+        $response = $ClientPaycomet->ExecuteRefund('', '', $realOrderId, $orderCurrencyCode, $AuthCode, $amount); 
         
         
         if (!isset($response) || !$response) {
@@ -524,11 +512,11 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(sprintf('Refund failed. Error ( %s ) - %s', $response['DS_ERROR_ID'], $this->_helper->getErrorDesc($response['DS_ERROR_ID'])))
             );
+        } else { 
+            $payment->setTransactionId($response['DS_MERCHANT_AUTHCODE'])
+                    ->setParentTransactionId($AuthCode)
+                    ->setTransactionAdditionalInfo(\Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS, $response);
         }
-        $payment->setTransactionId($response['DS_MERCHANT_AUTHCODE'])
-                ->setParentTransactionId($AuthCode)
-                ->setTransactionAdditionalInfo(\Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS, $response);
-
         return $this;
     }
 
@@ -547,8 +535,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         parent::void($payment);
         $order = $payment->getOrder();
 
-        $realOrderId = $order->getRealOrderId();
-        $grandTotal = $order->getBaseGrandTotal();
+        $realOrderId = $order->getRealOrderId();        
 
         $orderCurrencyCode = $order->getBaseCurrencyCode();
         
@@ -1293,18 +1280,5 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         return ['timestamp' => $timestamp, 'order_id' => $orderid, 'result' => $result, 'hash' => $sha1hash];
     }
-
-    
-    
-
-    
-    
-    
-
-    
-    
-    
-
-
 
 }

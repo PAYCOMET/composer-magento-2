@@ -45,46 +45,6 @@ $_cards = $block->getPaycometCards();
 </form>
 
 
-<div id="paycomet-conditions" style="display:none">
-    <h2 class="estilo-tit1">
-        <p>
-          <?php echo $block->escapeHtml(__("This trade does not store or transmit data credit card or debit card. The data are sent via a secure, encrypted channel platform PAYCOMET"));?>.
-        </p>
-    </h2>
-    <h3 class="estilo-tit1" id="tarjetas"><?php echo __("Related Cards");?></h3>
-    <p>
-    <?php echo __("At any time, the user can add or remove data from your linked card. In the My Account section, you will see a section -My cards- where the cards will be stored and may be removed");?>.
-    </p>
-    <h3 class="estilo-tit1" id="politica_seguridad"><?php echo __("Security Policy");?></h3>
-    <p>
-    <?php echo __("All transaction information is transmitted between this site and PAYCOMET systems is encrypted using 256-bit SSL certificates. All cardholder information is transmitted encrypted and all messages sent to your servers from PAYCOMET signed using SHA hashing to prevent tampering. The information is transmitted to servers PAYCOMET can not probe, scan, used or modified by any external to gain access to confidential information");?>
-    </p>
-    <h3 class="estilo-tit1" id="politica_seguridad"><?php echo __("Encryption and Data Storage");?></h3>
-    <p>
-    <?php echo __("Once PAYCOMET systems, confidential information is protected using standard 1024-bit encryption. Encryption keys are kept in high security systems with double authentication volatile and which precludes their extraction. Banks, security agents and banks perform regular audits to ensure data protection");?>
-    </p>
-    <h3 class="estilo-tit1" id="politica_seguridad"><?php echo __("System Safety");?></h3>
-    <p>
-    <?php echo __("PAYCOMET systems are reviewed quarterly by specific tools ISO, a Qualified Qualified Security Assessor (QSA) and an independent approved scanning vendor (ASV) for the payment card brands");?>
-    </p>
-    <p>
-    <?php echo __("PAYCOMET also subject to an annual audit by the standards of data security (PCI DSS) and Payment Card Industry is a provider of payment services fully approved Level 1, which is the highest level of compliance");?>
-    </p>
-    <h3 class="estilo-tit1" id="politica_seguridad"><?php echo __("Links to banks");?></h3>
-    <p>
-    <?php echo __("PAYCOMET has multiple private links to banking networks that are completely independent of the Internet and which do not cross any public access network. Any cardholder information sent to the banks and all messages sent in response authorization are protected and can not be manipulated");?>
-    </p>
-    <h3 class="estilo-tit1" id="politica_seguridad"><?php echo __("Internal security");?></h3>
-    <p>
-    <?php echo __("PAYCOMET is audited access controls production environments. The CPD stay where systems operate according to the requirements for Tier III centers. This ensures that safety is not put at risk at any time. It has sophisticated alarm systems, surveillance and closed circuit TV security guards present 24 hours a day, 7 days a week on site, as well as monitoring and a rigorous maintenance. All transaction information and customer card is protected even our own employees");?>
-    </p>
-    <h3 class="estilo-tit1" id="politica_seguridad"><?php echo __("Disaster Recovery");?></h3>
-    <p>
-    <?php echo __("PAYCOMET has hosted Backup systems in different countries to ensure optimal safety systems and high availability. It also has a policy of commercial below and complete disaster recovery");?>
-    </p>
-    <p>&nbsp;</p>
-</div>
-
 <div id="paycomet-cards" data-bind="scope:'paycomet-cards'" >
     <!-- ko template: getTemplate() --><!-- /ko -->
 <script type="text/x-magento-init">

@@ -77,12 +77,10 @@ class PaycometConfigProvider implements ConfigProviderInterface
                 $config['payment'] [$code]['redirectUrl'] = $this->getMethodRedirectUrl($code);
                 $config['payment'] [$code]['iframeEnabled'] = $this->_helper->getConfigData('iframe_enabled');
                 $config['payment'] [$code]['iframeMode'] = $this->_helper->getConfigData('iframe_mode');
-                $config['payment'] [$code]['remembercardselected'] = $this->_helper->getConfigData('remembercardselected');
+                $config['payment'] [$code]['iframeHeight'] = $this->_helper->getConfigData('iframe_height');
                 $config['payment'] [$code]['card_offer_save'] = ($this->_helper->getConfigData('card_offer_save') && $this->_helper->getCustomerId());
                 $config['payment'] [$code]['paycometCards'] = $this->getPaycometToken($code);
                 $config['payment'] [$code]['form_footer'] = nl2br($this->_escaper->escapeHtml($this->_helper->getConfigData('form_footer')));
-
-                
             }
         }
 
