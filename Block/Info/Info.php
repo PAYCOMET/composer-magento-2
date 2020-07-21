@@ -58,15 +58,14 @@ class Info extends \Magento\Payment\Block\Info
         $authCode = $this->getInfo()->getAdditionalInformation('AuthCode');
         if ($authCode=="")
             $authCode = $this->getInfo()->getAdditionalInformation('DS_MERCHANT_AUTHCODE');
-
-      
-        $Scoring = $this->getInfo()->getAdditionalInformation('Scoring');
         
+        $Scoring = $this->getInfo()->getAdditionalInformation('Scoring');        
         $SecurePayment = $this->getInfo()->getAdditionalInformation('SecurePayment');
-        $cavv = $this->getInfo()->getAdditionalInformation('CAVV');
-        $xid = $this->getInfo()->getAdditionalInformation('XID');
+
+        $MethodName = $this->getInfo()->getAdditionalInformation('MethodName');
 
         $data = $this->checkAndSet($data, $orderId, 'Order Id');
+        $data = $this->checkAndSet($data, $MethodName, 'Method');
         $data = $this->checkAndSet($data, $cardType, 'Card Type');
         $data = $this->checkAndSet($data, $cardCountry, 'Card Country');
         $data = $this->checkAndSet($data, $Currency, 'Currency');

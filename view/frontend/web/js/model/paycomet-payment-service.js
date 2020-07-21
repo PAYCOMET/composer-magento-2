@@ -12,10 +12,9 @@ define(
 
         var isInAction = ko.observable(false);
         var isLightboxReady = ko.observable(false);
-        var iframeHeight = ko.observable('340px');
+        var iframeHeight = ko.observable(window.checkoutConfig.payment["paycomet_payment"].iframeHeight + 'px');
         var iframeWidth = ko.observable('100%'); 
           
-
         return {
             isInAction: isInAction,
             isLightboxReady: isLightboxReady,

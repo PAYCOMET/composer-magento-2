@@ -29,35 +29,13 @@ define(
 
 
         });
-
-
-        $("body").on('click','#paycomet_open_conditions',function() {
-                        
-            var options = {
-                
-                responsive: true,
-                innerScroll: false,
-                buttons: [{
-                    class: '',
-                    text: $t('Cancel'),
-                    click: function() {
-                        this.closeModal();
-                    }
-                }]
-            };
-            $("#paycomet-conditions").modal(options).modal('openModal');
-
-
-        });
+        
 
         // Show loading
         $("body").on('click','#paycomet_showcarddata',function() {
             if ($(this).is(":checked"))
                 jQuery('body').trigger('processStart');         
         });
-
-
-
         
 
         return Component.extend({

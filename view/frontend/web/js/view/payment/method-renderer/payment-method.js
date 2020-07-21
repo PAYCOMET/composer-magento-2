@@ -20,33 +20,11 @@ define(
     function(ko, $, Component, setPaymentMethodAction, lightboxAction, quote,
         additionalValidators, paycometPaymentService, fullScreenLoader, errorProcessor, customer, $t,url) {
         'use strict';
-        var paymentMethod = ko.observable(null);
-        var paycomet_save_card = ko.observable(false);
+        var paymentMethod = ko.observable(null);        
         var isOfferSave = ko.observable(false);
         var isVisibleCards = ko.observable(customer.isLoggedIn());
         var place = false;
-
-        $("body").on('click','#paycomet_open_conditions',function(){
-                        
-            var options = {
-                
-                responsive: true,
-                innerScroll: false,
-                buttons: [{
-                    class: '',
-                    text: $t('Close'),
-                    click: function() {
-                        this.closeModal();
-                    }
-                }]
-            };
-            $("#paycomet-conditions").modal(options).modal('openModal');
-
-
-        });
-
-
-
+        
         return Component.extend({
             self: this,
             defaults: {
@@ -55,9 +33,7 @@ define(
             isInAction: paycometPaymentService.isInAction,
             isLightboxReady: paycometPaymentService.isLightboxReady,
             iframeHeight: paycometPaymentService.iframeHeight,
-            iframeWidth: paycometPaymentService.iframeWidth,
-            
-            paycomet_save_card: paycomet_save_card,
+            iframeWidth: paycometPaymentService.iframeWidth,                    
 
             isOfferSave: isOfferSave,
             isVisibleCards: isVisibleCards,
@@ -174,11 +150,9 @@ define(
                     isVisibleCards(false);
                 }
                 if ($("#paycomet_card").val()!="") {
-                    isOfferSave(false);
-                    paycomet_save_card(false);
+                    isOfferSave(false);                    
                 } else {                
-                    isOfferSave(window.checkoutConfig.payment["paycomet_payment"].card_offer_save==1);
-                    paycomet_save_card(window.checkoutConfig.payment["paycomet_payment"].remembercardselected==1);
+                    isOfferSave(window.checkoutConfig.payment["paycomet_payment"].card_offer_save==1);                    
                 }
             }
             
