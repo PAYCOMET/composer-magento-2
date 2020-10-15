@@ -7,6 +7,7 @@ use Paycomet\Payment\Model\Config\Source\Environment;
 use Paycomet\Payment\Observer\DataAssignObserver;
 use Paycomet\Payment\Model\Config\Source\PaymentAction;
 use Paycomet\Bankstore\Client;
+use Paycomet\Bankstore\ApiRest;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -290,26 +291,55 @@ class Data extends AbstractHelper
         $merchant_pass = $this->getEncryptedConfigData('merchant_pass');
 
        
-        $fieldOrderId = $this->_session->getCustomer()->getId() . "|" . $this->_storeManager->getStore()->getId(); //UserId | StoreId
+        $fieldOrderId = $this->_session->getCustomer()->getId() . "_" . $this->_storeManager->getStore()->getId(); //UserId | StoreId
 
         $shopperLocale = $this->_resolver->getLocale();
         $language_data = explode("_",$shopperLocale);
         $language = $language_data[0];
 
-        $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
-        $response = $ClientPaycomet->AddUserUrl($fieldOrderId, $language, $this->getURLOK($fieldOrderId), $this->getURLKO($fieldOrderId));
-
-       
-        $function_txt = "AddUserUrl";
         $dataResponse = array();
-        if ($response->DS_ERROR_ID==0) {
-            $dataResponse["url"] = $response->URL_REDIRECT;
-            $dataResponse["error"]  = 0;
+
+        // Uso de Rest
+        if ($this->getConfigData('api_key')!="") {            
+            try {
+                $apiRest = new ApiRest(trim($this->getConfigData('api_key')));
+                $formResponse = $apiRest->form(
+                    107,
+                    $language,
+                    $merchant_terminal,
+                    '',
+                    [
+                        'terminal' => (int) $merchant_terminal,
+                        'order' => (string) $fieldOrderId,
+                        'urlOk' => (string) $this->getURLOK($fieldOrderId),
+                        'urlKo' => (string) $this->getURLKO($fieldOrderId)
+                    ]
+                );
+
+                $dataResponse["url"] = $formResponse->challengeUrl;
+                $dataResponse["error"]  = 0;
+            } catch (Exception $e) {
+                $dataResponse["url"] = $formResponse->challengeUrl;
+                $dataResponse["error"]  = $formResponse->errorCode;
+                $this->logDebug("Error in Rest 107: " . $e->getMessage());
+            }
+        
         } else {
-            $dataResponse["url"] = $response->URL_REDIRECT;
-            $dataResponse["error"]  = $response->DS_ERROR_ID;
-            $this->logDebug("Error in " . $function_txt .": " . $response->DS_ERROR_ID . "; URL: " . $response->URL_REDIRECT);
+            $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
+            $response = $ClientPaycomet->AddUserUrl($fieldOrderId, $language, $this->getURLOK($fieldOrderId), $this->getURLKO($fieldOrderId));
+
+            $function_txt = "AddUserUrl";
+        
+            if ($response->DS_ERROR_ID==0) {
+                $dataResponse["url"] = $response->URL_REDIRECT;
+                $dataResponse["error"]  = 0;
+            } else {
+                $dataResponse["url"] = $response->URL_REDIRECT;
+                $dataResponse["error"]  = $response->DS_ERROR_ID;
+                $this->logDebug("Error in " . $function_txt .": " . $response->DS_ERROR_ID . "; URL: " . $response->URL_REDIRECT);
+            }
         }
+               
         return $dataResponse;
 
     }
@@ -795,7 +825,7 @@ class Data extends AbstractHelper
         } else {
             $data = $this->getTokenData($payment);
             $IdUser = $data["iduser"];
-            $TokenUser = $data["tokenuser"];
+            $TokenUser = $data["tokenuser"];            
         }
         $order->setPaycometToken($IdUser."|".$TokenUser);
         $order->save();
@@ -826,22 +856,37 @@ class Data extends AbstractHelper
             $IdUser = $response['IdUser'];
             $TokenUser = $response['TokenUser'];
 
-
             $merchant_code = trim($this->getConfigData('merchant_code',$storeId));
             $merchant_terminal = trim($this->getConfigData('merchant_terminal',$storeId));
             $merchant_pass = $this->getEncryptedConfigData('merchant_pass',$storeId);
-            $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
 
+            if ($this->getConfigData('api_key')!="") {
+                        
+                $apiRest = new ApiRest(trim($this->getConfigData('api_key')));
+                $formResponse = $apiRest->infoUser(
+                    $IdUser,
+                    $TokenUser,
+                    $merchant_terminal
+                );
 
-            $resp = $ClientPaycomet->InfoUser($IdUser, $TokenUser);
-
-            $resp = (array) $resp;
-
+                $resp = array();
+                $resp["DS_MERCHANT_PAN"] = $formResponse->pan;
+                $resp["DS_CARD_BRAND"] = $formResponse->cardBrand;
+                $resp["DS_EXPIRYDATE"] = $formResponse->expiryDate;
+                $resp["DS_ERROR_ID"] = 0;
+        
+            } else {
+                $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
+                $resp = $ClientPaycomet->InfoUser($IdUser, $TokenUser);
+                $resp = (array)$resp;
+            }
+            
             if ('' == $resp['DS_ERROR_ID'] || 0 == $resp['DS_ERROR_ID']) {
                 return $this->addCustomerCard($customerId,$IdUser,$TokenUser,$resp);
             } else{
                 return false;
             }
+                    
         } catch (\Exception $e) {
             //card storage exceptions should not stop a transaction
             $this->_logger->critical($e);

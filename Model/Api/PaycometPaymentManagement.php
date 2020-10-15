@@ -111,9 +111,9 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
         }
 
         //Store customer card
-        $datosOrder = explode("|",$response["Order"]);
+        $datosOrder = explode("_",$response["Order"]);
         $customerId = $datosOrder[0];
-        $storeId = $datosOrder[1];
+	    $storeId = $datosOrder[1];
 
         if (!empty($customerId)) {
             return $this->_helper->_handleCardStorage($response, $customerId, $storeId);
