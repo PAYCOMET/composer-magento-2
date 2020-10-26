@@ -37,9 +37,17 @@ define(
 
             // check if agreement is enabled if so add it to payload
             if (agreementsConfig.isEnabled) {
-                var agreementForm = $('.payment-method._active div[data-role=checkout-agreements] input'),
-                    agreementData = agreementForm.serializeArray(),
-                    agreementIds = [];
+                
+                var agreementIds = [];                
+                // Conditions in Method
+                if ($('.payment-method._active div[data-role=checkout-agreements] input').length > 0){
+                    var agreementForm = $('.payment-method._active div[data-role=checkout-agreements] input'),
+                        agreementData = agreementForm.serializeArray();
+                // Conditions in Form (Onestepcheckout) 
+                } else if ($('.form.form-checkout-agreements input').length > 0){
+                    var agreementForm = $('.form.form-checkout-agreements input'),
+                        agreementData = agreementForm.serializeArray();
+                }
 
                 agreementData.forEach(function(item) {
                     agreementIds.push(item.value);
