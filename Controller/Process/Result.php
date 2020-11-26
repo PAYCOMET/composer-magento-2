@@ -73,7 +73,7 @@ class Result extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        try{
+	try{
             $response = $this->getRequest()->getParams();
             unset($response["TransactionName"]);
 
@@ -119,7 +119,6 @@ class Result extends \Magento\Framework\App\Action\Action
             return false;
         }
 
-
         $this->_helper->logDebug(__('Gateway response:').print_r($this->_helper->stripTrimFields($response), true));
 
         // validate response
@@ -131,7 +130,7 @@ class Result extends \Magento\Framework\App\Action\Action
             return false;
         }
 
-        
+             
         $transaction_type = $response['TransactionType'];
         switch ($transaction_type){
             // add_user
@@ -186,16 +185,16 @@ class Result extends \Magento\Framework\App\Action\Action
         switch ($transaction_type){
             case 107: // add_user
 
-                $arrDatos = explode("|",$ref);
+                $arrDatos = explode("_",$ref);
                 $storeId = $arrDatos[1];
 
                 $merchant_code = $this->_helper->getConfigData('merchant_code',$storeId);
                 $merchant_terminal = $this->_helper->getConfigData('merchant_terminal',$storeId);
-                $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass',$storeId);
-
+                $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass',$storeId);                 
                 $sign = $response['NotificationHash'];
                 $datetime = $response['DateTime'];
-                $local_sign = hash('sha512',$merchant_code.$merchant_terminal.$transaction_type.$ref.$datetime. md5($merchant_pass));
+
+                $local_sign = hash('sha512',$merchant_code.$merchant_terminal.$transaction_type.$ref.$datetime.md5($merchant_pass));                
 
                 break;
 
