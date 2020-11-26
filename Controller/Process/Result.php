@@ -131,8 +131,8 @@ class Result extends \Magento\Framework\App\Action\Action
         }
 
              
-	$transaction_type = $response['TransactionType'];
-	switch ($transaction_type){
+        $transaction_type = $response['TransactionType'];
+        switch ($transaction_type){
             // add_user
             case 107:               
                 // process the response

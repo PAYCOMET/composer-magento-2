@@ -286,9 +286,11 @@ class Data extends AbstractHelper
             return [];
         }
 
-        $merchant_code = trim($this->getConfigData('merchant_code'));
-        $merchant_terminal = trim($this->getConfigData('merchant_terminal'));
-        $merchant_pass = $this->getEncryptedConfigData('merchant_pass');
+        
+        $merchant_code      = trim($this->getConfigData('merchant_code'));
+        $merchant_terminal  = trim($this->getConfigData('merchant_terminal'));
+        $merchant_pass      = trim($this->getEncryptedConfigData('merchant_pass'));
+        $api_key            = trim($this->getEncryptedConfigData('api_key'));
 
        
         $fieldOrderId = $this->_session->getCustomer()->getId() . "_" . $this->_storeManager->getStore()->getId(); //UserId | StoreId
@@ -300,9 +302,12 @@ class Data extends AbstractHelper
         $dataResponse = array();
 
         // Uso de Rest
-        if ($this->getConfigData('api_key')!="") {            
+        if ($api_key != "") {
             try {
-                $apiRest = new ApiRest(trim($this->getConfigData('api_key')));
+
+                $dataResponse["url"]  = ""; // Inicializamos
+
+                $apiRest = new ApiRest($api_key);
                 $formResponse = $apiRest->form(
                     107,
                     $language,
@@ -315,11 +320,15 @@ class Data extends AbstractHelper
                         'urlKo' => (string) $this->getURLKO($fieldOrderId)
                     ]
                 );
+                
+                
+                $dataResponse["error"]  = $formResponse->errorCode;
+                if ($formResponse->errorCode == 0) {
+                    $dataResponse["url"] = $formResponse->challengeUrl;                    
+                }                
 
-                $dataResponse["url"] = $formResponse->challengeUrl;
-                $dataResponse["error"]  = 0;
             } catch (Exception $e) {
-                $dataResponse["url"] = $formResponse->challengeUrl;
+               
                 $dataResponse["error"]  = $formResponse->errorCode;
                 $this->logDebug("Error in Rest 107: " . $e->getMessage());
             }
@@ -711,16 +720,20 @@ class Data extends AbstractHelper
 
 
     public function getTokenData($payment)
-    {
-
+    {        
         $hash = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_TOKENCARD);
+        $customer_id = $this->getCustomerId();
+       
+        if ($hash=="" || $customer_id=="") {
+            return null;
+        }
 
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
         $connection = $resource->getConnection();
 
         $conds[] = $connection->quoteInto("hash" . ' = ?', $hash);
-        $conds[] = $connection->quoteInto("customer_id" . ' = ?', $this->getCustomerId());
+        $conds[] = $connection->quoteInto("customer_id" . ' = ?', $customer_id);
         $where = implode(' AND ', $conds);
        
         $select = $connection->select()
@@ -757,23 +770,24 @@ class Data extends AbstractHelper
     public function isFirstPurchaseToken($payment)
     {
 
+        $data = $this->getTokenData($payment);
+        
+        if (isset($data['iduser']) && isset($data['tokenuser'])) {            
+            $paycomet_token = $data['iduser'] . "|" . $data['tokenuser'];
 
-        $token = $this->getTokenData($payment);
-        $paycomet_token = $token["iduser"] . "|" . $token["tokenuser"];
+            $searchCriteria = $this->_searchCriteriaBuilder
+            ->addFilter('customer_id', $this->getCustomerId())
+            ->addFilter('paycomet_token', $paycomet_token)
+            ->addFilter('status', array('pending','cancel','canceled','refund'), 'nin')
+            ->create();  
 
-        $searchCriteria = $this->_searchCriteriaBuilder
-        ->addFilter('customer_id', $this->getCustomerId())
-        ->addFilter('paycomet_token', $paycomet_token)
-        ->addFilter('status', array('pending','cancel','canceled','refund'), 'nin')
-        ->create();  
+            $orders = $this->_orderRepository->getList($searchCriteria);
 
-        $orders = $this->_orderRepository->getList($searchCriteria);
-
-        if (sizeof($orders)>0) {
-            return false;
+            if (sizeof($orders)>0) {
+                return false;
+            }
         }
         return true;
-
     }
 
 
@@ -791,8 +805,7 @@ class Data extends AbstractHelper
             $transactionid = $response['DS_MERCHANT_AUTHCODE'];
             $amount = $response['DS_MERCHANT_AMOUNT'];
         }
-        $amount = $this->amountFromPaycomet($amount, $order->getBaseCurrencyCode());
-
+        $amount = $this->amountFromPaycomet($amount, $order->getBaseCurrencyCode());        
         
         $payment_action = $this->getConfigData('payment_action', $order->getStoreId());
         $isAutoSettle = $payment_action == PaymentAction::AUTHORIZE_CAPTURE;
@@ -805,31 +818,36 @@ class Data extends AbstractHelper
         //Set information
         //$this->setAdditionalInfo($payment, $response);
        
-        //Add order Transaction
-        $this->createTransaction($type, $transactionid, $order, $response);
-
+        //Add order Transaction        
+        $this->createTransaction($type, $transactionid, $order, $response);        
         //Should we invoice
         if ($isAutoSettle) {
             $this->createInvoice($order, $transactionid, $amount);
-        }
-
+        }        
         //Send order email
         if (!$order->getEmailSent()) {
             $this->_orderSender->send($order);
-        }
+        }        
 
         // Set PAYCOMET iduser|tokenuser to order
-        if ( isset($response['IdUser']) && isset($response['TokenUser']) ) {
+        $IdUser = 0; $TokenUser = ""; // Inicializamos
+        if (isset($response['IdUser']) && isset($response['TokenUser']) ) {
             $IdUser = $response['IdUser'];
-            $TokenUser = $response['TokenUser'];
-        } else {
+            $TokenUser = $response['TokenUser'];            
+        } else {            
             $data = $this->getTokenData($payment);
-            $IdUser = $data["iduser"];
-            $TokenUser = $data["tokenuser"];            
+            if (isset($data['iduser']) && isset($data['tokenuser'])) {
+                $IdUser = $data["iduser"];
+                $TokenUser = $data["tokenuser"];
+            }
         }
-        $order->setPaycometToken($IdUser."|".$TokenUser);
+        // Si tenemos token se lo asociadmos al pedido
+        if ($IdUser>0 && $TokenUser!="") {
+            $order->setPaycometToken($IdUser."|".$TokenUser);
+        }
+                        
         $order->save();
-
+        
         // Save Customer Card Token for future purchase
         $savecard = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_SAVECARD);
         $token = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_TOKENCARD);
@@ -856,13 +874,14 @@ class Data extends AbstractHelper
             $IdUser = $response['IdUser'];
             $TokenUser = $response['TokenUser'];
 
-            $merchant_code = trim($this->getConfigData('merchant_code',$storeId));
-            $merchant_terminal = trim($this->getConfigData('merchant_terminal',$storeId));
-            $merchant_pass = $this->getEncryptedConfigData('merchant_pass',$storeId);
-
-            if ($this->getConfigData('api_key')!="") {
+            $merchant_code      = trim($this->getConfigData('merchant_code',$storeId));
+            $merchant_terminal  = trim($this->getConfigData('merchant_terminal',$storeId));
+            $merchant_pass      = trim($this->getEncryptedConfigData('merchant_pass',$storeId));
+            $api_key            = trim($this->getEncryptedConfigData('api_key',$storeId));
+            
+            if ($api_key != "") {
                         
-                $apiRest = new ApiRest(trim($this->getConfigData('api_key')));
+                $apiRest = new ApiRest($api_key);
                 $formResponse = $apiRest->infoUser(
                     $IdUser,
                     $TokenUser,
