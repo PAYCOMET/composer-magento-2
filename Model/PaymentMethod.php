@@ -352,9 +352,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     $realOrderId,
                     $amount,
                     $currencyCode,
-                    '1',
+                    1,
                     $this->_remoteAddress->getRemoteAddress(),
-                    '0',
+                    0,
                     $IdUser,
                     $TokenUser,
                     "",
@@ -362,7 +362,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     '',
                     '',
                     '',
-                    '1',
+                    1,
                     [],
                     '',
                     '',
@@ -535,7 +535,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     throw new \Magento\Framework\Exception\LocalizedException(__('Token Card failed'));
                 }
                 $IdUser = $data["iduser"];
-                $TokenUser = $data["tokenuser"];                
+                $TokenUser = $data["tokenuser"];
 
                 // Uso de Rest
                 if ($api_key != "") {
@@ -550,9 +550,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                             $realOrderId,
                             $amount,
                             $currencyCode,
-                            '1',
+                            1,
                             $this->_remoteAddress->getRemoteAddress(),
-                            '0',
+                            0,
                             $IdUser,
                             $TokenUser,
                             '',
@@ -560,7 +560,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                             '',
                             '',
                             '',
-                            '1',
+                            1,
                             [],
                             '',
                             '',
