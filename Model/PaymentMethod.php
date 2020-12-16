@@ -1013,8 +1013,10 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $Merchant_EMV3DS["threeDSRequestorAuthenticationInfo"] = $this->threeDSRequestorAuthenticationInfo();
 
 
-		// AddrMatch
-		$Merchant_EMV3DS["addrMatch"] = ($order->getBillingAddress()->getData('customer_address_id') == $order->getShippingAddress()->getData('customer_address_id'))?"Y":"N";
+        // AddrMatch
+        if ($order->getBillingAddress() && $order->getShippingAddress()) {
+		    $Merchant_EMV3DS["addrMatch"] = ($order->getBillingAddress()->getData('customer_address_id') == $order->getShippingAddress()->getData('customer_address_id'))?"Y":"N";
+        }
 
 		$Merchant_EMV3DS["challengeWindowSize"] = 05;
 
@@ -1079,32 +1081,36 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             $acctInfoData["txnActivityYear"] = $this->numPurchaseCustomer($order->getCustomerId(),0,1,"year");
 
 
-            $firstAddressDelivery = $this->firstAddressDelivery($order->getCustomerId(),$order->getShippingAddress()->getData('customer_address_id'));
+            if ($order->getShippingAddress()) {
+                $firstAddressDelivery = $this->firstAddressDelivery($order->getCustomerId(),$order->getShippingAddress()->getData('customer_address_id'));
+                
+                if ($firstAddressDelivery!="") {
 
-            if ($firstAddressDelivery!="") {
+                    $acctInfoData["shipAddressUsage"] = date("Ymd",strtotime($firstAddressDelivery));
 
-                $acctInfoData["shipAddressUsage"] = date("Ymd",strtotime($firstAddressDelivery));
+                    $date_firstAddressDelivery = new \DateTime($firstAddressDelivery);
+                    $diff = $date_now->diff($date_firstAddressDelivery);
+                    $dias_firstAddressDelivery = $diff->days;
 
-                $date_firstAddressDelivery = new \DateTime($firstAddressDelivery);
-                $diff = $date_now->diff($date_firstAddressDelivery);
-                $dias_firstAddressDelivery = $diff->days;
-
-                if ($dias_firstAddressDelivery==0) {
-                    $acctInfoData["shipAddressUsageInd"] = "01";
-                } else if ($dias_upd < 30) {
-                    $acctInfoData["shipAddressUsageInd"] = "02";
-                } else if ($dias_upd < 60) {
-                    $acctInfoData["shipAddressUsageInd"] = "03";
-                } else {
-                    $acctInfoData["shipAddressUsageInd"] = "04";
+                    if ($dias_firstAddressDelivery==0) {
+                        $acctInfoData["shipAddressUsageInd"] = "01";
+                    } else if ($dias_upd < 30) {
+                        $acctInfoData["shipAddressUsageInd"] = "02";
+                    } else if ($dias_upd < 60) {
+                        $acctInfoData["shipAddressUsageInd"] = "03";
+                    } else {
+                        $acctInfoData["shipAddressUsageInd"] = "04";
+                    }
                 }
             }
 
         }
 
-        if (
-            ( ($order->getCustomerFirstname() != "") && ( $order->getCustomerFirstname() != $order->getShippingAddress()->getData('firstname') ) ) ||
-            ( ($order->getCustomerLastname() != "") && ( $order->getCustomerLastname() != $order->getShippingAddress()->getData('lastname') ) )
+        if ( $order->getShippingAddress() && 
+            (
+                ( ($order->getCustomerFirstname() != "") && ( $order->getCustomerFirstname() != $order->getShippingAddress()->getData('firstname') ) ) ||
+                ( ($order->getCustomerLastname() != "") && ( $order->getCustomerLastname() != $order->getShippingAddress()->getData('lastname') ) )
+            )
         ) {
             $acctInfoData["shipNameIndicator"] = "02";
         } else {
