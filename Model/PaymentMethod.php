@@ -564,7 +564,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                             [],
                             '',
                             '',
-                            $merchantData
+                            $merchantData,
+                            1
                         );
 
                         $response = array();
@@ -643,6 +644,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         // Uso de Rest
         if ($api_key != "") {
 
+            $notifyDirectPayment = 2;
             $apiRest = new ApiRest($api_key);
 
             $executeRefundReponse = $apiRest->executeRefund(
@@ -651,7 +653,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 $amount,
                 $orderCurrencyCode,
                 $AuthCode,
-                $this->_remoteAddress->getRemoteAddress()
+                $this->_remoteAddress->getRemoteAddress(),
+                $notifyDirectPayment
             );
 
             $response = array();
@@ -1397,7 +1400,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                             'tokenUser' => $TokenUser,
                             'merchantData' => $merchantData,
                             'urlOk' => $this->getURLOK($order),
-                            'urlKo' => $this->getURLOK($order)
+                            'urlKo' => $this->getURLKO($order)
                         ]
                     );
 
@@ -1444,7 +1447,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                             'secure' => $Secure,
                             'merchantData' => $merchantData,
                             'urlOk' => $this->getURLOK($order),
-                            'urlKo' => $this->getURLOK($order)
+                            'urlKo' => $this->getURLKO($order)
                         ]
                     );
                     
