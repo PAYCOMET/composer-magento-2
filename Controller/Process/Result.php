@@ -134,14 +134,17 @@ class Result extends \Magento\Framework\App\Action\Action
         $transaction_type = $response['TransactionType'];
         switch ($transaction_type){
             // add_user
-            case 107:               
+            case 107:
                 // process the response
                 return $this->_paymentManagement->processResponseAddUser($response);
-                                
+
+                break;
+
+            // refund -> not processed in notification
+            case 2: 
                 break;
 
             default:
-
                 //get the actual order id
                 $incrementId = $response['Order'];
 
