@@ -43,6 +43,10 @@ class Process extends \Magento\Framework\App\Action\Action
                 return $this->_redirect('checkout/onepage/success');
             }
 
+            if (isset($payment) && $payment->getAdditionalInformation('DS_CHALLENGE_URL')){
+                return $this->_redirect($payment->getAdditionalInformation('DS_CHALLENGE_URL'));
+            }
+            
             if (!$order->getId()){
                 return;
             }

@@ -38,7 +38,7 @@ define(
             // check if agreement is enabled if so add it to payload
             if (agreementsConfig.isEnabled) {
                 
-                var agreementIds = [];                
+                var agreementIds = [];
                 // Conditions in Method
                 if ($('.payment-method._active div[data-role=checkout-agreements] input').length > 0){
                     var agreementForm = $('.payment-method._active div[data-role=checkout-agreements] input'),
@@ -49,9 +49,11 @@ define(
                         agreementData = agreementForm.serializeArray();
                 }
 
-                agreementData.forEach(function(item) {
-                    agreementIds.push(item.value);
-                });
+                if (agreementData) {
+                    agreementData.forEach(function(item) {
+                        agreementIds.push(item.value);
+                    });
+                }
 
                 paymentData.extension_attributes = {
                     agreement_ids: agreementIds

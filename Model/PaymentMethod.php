@@ -142,7 +142,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
     private $_objectManager;
 
-    private $_remoteAddress;
+    private $_remoteAddress;    
 
     /**
      * PaymentMethod constructor.
@@ -302,7 +302,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $stateObject->setIsNotified(false);
 
         return $this;
-
     }
 
 
@@ -339,11 +338,15 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $merchant_pass      = trim($this->_helper->getEncryptedConfigData('merchant_pass'));
         $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
 
+        $methodId = 1;
+        $secure = 0;
+        $userInteraction = 1;
+        $defered = 0;        
 
         // Uso de Rest
         if ($api_key != "") {
 
-            $merchantData = $this->getMerchantData($order);
+            $merchantData = $this->getMerchantData($order);            
 
             try {
                 $apiRest = new ApiRest($api_key);
@@ -352,32 +355,38 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     $realOrderId,
                     $amount,
                     $currencyCode,
-                    1,
+                    $methodId,
                     $this->_remoteAddress->getRemoteAddress(),
-                    0,
+                    $secure,
                     $IdUser,
                     $TokenUser,
-                    "",
-                    "",
+                    $this->getURLOK($order),
+                    $this->getURLKO($order),
                     '',
                     '',
                     '',
-                    1,
+                    $userInteraction,
                     [],
                     '',
                     '',
                     $merchantData,
-                    0
-                );
-
-
+                    $defered
+                );                
                 $response = array();
                 $response["DS_RESPONSE"] = ($createPreauthorizationResponse->errorCode > 0)? 0 : 1;
                 $response["DS_ERROR_ID"] = $createPreauthorizationResponse->errorCode;
 
                 if ($response["DS_RESPONSE"]==1) {
-                    $response["DS_MERCHANT_AUTHCODE"] = $createPreauthorizationResponse->authCode;
-                    $response["DS_MERCHANT_AMOUNT"] = $createPreauthorizationResponse->amount;
+                    $response["DS_MERCHANT_AUTHCODE"] = $createPreauthorizationResponse->authCode ?? '';
+                    $response["DS_MERCHANT_AMOUNT"] = $createPreauthorizationResponse->amount ?? 0;
+                }
+
+                $response["DS_CHALLENGE_URL"] = $createPreauthorizationResponse->challengeUrl ?? '';
+
+                // Si nos llega challenge se la asignamos para redirigir posteriormente
+                if ($response["DS_CHALLENGE_URL"] != "" && $response["DS_CHALLENGE_URL"] != "0") {                    
+                    $payment->setAdditionalInformation("DS_CHALLENGE_URL", $response["DS_CHALLENGE_URL"]);
+                    return $this;
                 }
 
             } catch (Exception $e) {
@@ -386,19 +395,24 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             }
 
         } else {
-
-
+            
             $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
 
-            $response = $ClientPaycomet->CreatePreauthorization($IdUser, $TokenUser, $amount, $realOrderId, $currencyCode,"","",null,"",null);
+            $response = $ClientPaycomet->CreatePreauthorization($IdUser, $TokenUser, $amount, $realOrderId, $currencyCode,"","",null,"",null,null,null,null,$userInteraction);
 
             if (!isset($response) || !$response) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('The authorize action failed'));
             }
-
-
-
             $response = (array) $response;
+
+            // Si nos llega challenge se la asignamos para redirigir posteriormente
+            if ($response["DS_CHALLENGE_URL"] != "" && $response["DS_CHALLENGE_URL"] != "0") {
+
+                $order->setPaycometToken($IdUser."|".$TokenUser);
+                $order->save();
+                $payment->setAdditionalInformation("DS_CHALLENGE_URL", urldecode($response["DS_CHALLENGE_URL"]));
+                return $this;
+            }
         }
 
         if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
@@ -415,9 +429,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         // Set Operation Type
         $response["TransactionType"] = 3;
-
-
-
 
         $this->_helper->CreateTransInvoice($order,$response);
 
@@ -537,6 +548,12 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 $IdUser = $data["iduser"];
                 $TokenUser = $data["tokenuser"];
 
+                $methodId = 1;
+                $secure = 0;
+                $userInteraction = 1;
+                $notifyDirectPayment = 1;
+
+
                 // Uso de Rest
                 if ($api_key != "") {
 
@@ -550,30 +567,38 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                             $realOrderId,
                             $amount,
                             $currencyCode,
-                            1,
+                            $methodId,
                             $this->_remoteAddress->getRemoteAddress(),
-                            0,
+                            $secure,
                             $IdUser,
                             $TokenUser,
+                            $this->getURLOK($order),
+                            $this->getURLKO($order),
                             '',
                             '',
                             '',
-                            '',
-                            '',
-                            1,
+                            $userInteraction,
                             [],
                             '',
                             '',
                             $merchantData,
-                            1
+                            $notifyDirectPayment
                         );
 
                         $response = array();
+
                         $response["DS_RESPONSE"] = ($executePurchaseResponse->errorCode > 0)? 0 : 1;
                         $response["DS_ERROR_ID"] = $executePurchaseResponse->errorCode;
                         if ($response["DS_RESPONSE"]==1) {
-                            $response["DS_MERCHANT_AUTHCODE"] = $executePurchaseResponse->authCode;
-                            $response["DS_MERCHANT_AMOUNT"] = $executePurchaseResponse->amount;
+                            $response["DS_MERCHANT_AUTHCODE"] = $executePurchaseResponse->authCode ?? '';
+                            $response["DS_MERCHANT_AMOUNT"] = $executePurchaseResponse->amount ?? 0;
+                        }
+                        $response["DS_CHALLENGE_URL"] = $executePurchaseResponse->challengeUrl ?? '';
+
+                        // Si nos llega challenge se la asignamos para redirigir posteriormente
+                        if ($response["DS_CHALLENGE_URL"] != "" && $response["DS_CHALLENGE_URL"] != "0") {
+                            $payment->setAdditionalInformation("DS_CHALLENGE_URL", $response["DS_CHALLENGE_URL"]);
+                            return $this;                      
                         }
                     } catch (Exception $e) {
                         $response["DS_RESPONSE"] = 0;
@@ -581,18 +606,24 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     }
 
                 } else {
-                    $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
+                    $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");                    
 
-                    $response = $ClientPaycomet->ExecutePurchase($IdUser,$TokenUser,$amount,$realOrderId,$currencyCode,"","",null,"",null);
+                    $response = $ClientPaycomet->ExecutePurchase($IdUser,$TokenUser,$amount,$realOrderId,$currencyCode,"","",null,"",null,null,null,null,$userInteraction);
 
                     if (!isset($response) || !$response) {
                         throw new \Magento\Framework\Exception\LocalizedException(__('The capture action failed'));
                     }
                     $response = (array) $response;
+
+                    // Si nos llega challenge se la asignamos para redirigir posteriormente
+                    if ($response["DS_CHALLENGE_URL"] != "" && $response["DS_CHALLENGE_URL"] != "0") {
+                        $payment->setAdditionalInformation("DS_CHALLENGE_URL", urldecode($response["DS_CHALLENGE_URL"]));
+                        return $this;                      
+                    }
                 }
 
                 if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
-                   
+
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(sprintf('Payment failed. Error ( %s ) - %s', $response['DS_ERROR_ID'], $this->_helper->getErrorDesc($response['DS_ERROR_ID'])))
                     );
@@ -602,7 +633,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 $errorDesc = $this->_helper->getErrorDesc($response['DS_ERROR_ID']);
                 $response["ErrorDescription"] = (string)$errorDesc;
                 $response["SecurePayment"] = 0;
-
 
                 $this->_helper->CreateTransInvoice($order,$response);
 
@@ -824,12 +854,13 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      * @return string
      */
     public function getCheckoutRedirectUrl()
-    {
+    {        
         return $this->_urlBuilder->getUrl(
             'paycomet_payment/process/process',
             ['_secure' => $this->_getRequest()->isSecure()]
         );
     }
+    
 
     /**
      * Retrieve request object.
@@ -917,22 +948,25 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
     private function isoCodeToNumber($code)
     {
-
+        $isoCodeNumber = 724; // Default value;
 		$arrCode = array("AF" => "004", "AX" => "248", "AL" => "008", "DE" => "276", "AD" => "020", "AO" => "024", "AI" => "660", "AQ" => "010", "AG" => "028", "SA" => "682", "DZ" => "012", "AR" => "032", "AM" => "051", "AW" => "533", "AU" => "036", "AT" => "040", "AZ" => "031", "BS" => "044", "BD" => "050", "BB" => "052", "BH" => "048", "BE" => "056", "BZ" => "084", "BJ" => "204", "BM" => "060", "BY" => "112", "BO" => "068", "BQ" => "535", "BA" => "070", "BW" => "072", "BR" => "076", "BN" => "096", "BG" => "100", "BF" => "854", "BI" => "108", "BT" => "064", "CV" => "132", "KH" => "116", "CM" => "120", "CA" => "124", "QA" => "634", "TD" => "148", "CL" => "52", "CN" => "156", "CY" => "196", "CO" => "170", "KM" => "174", "KP" => "408", "KR" => "410", "CI" => "384", "CR" => "188", "HR" => "191", "CU" => "192", "CW" => "531", "DK" => "208", "DM" => "212", "EC" => "218", "EG" => "818", "SV" => "222", "AE" => "784", "ER" => "232", "SK" => "703", "SI" => "705", "ES" => "724", "US" => "840", "EE" => "233", "ET" => "231", "PH" => "608", "FI" => "246", "FJ" => "242", "FR" => "250", "GA" => "266", "GM" => "270", "GE" => "268", "GH" => "288", "GI" => "292", "GD" => "308", "GR" => "300", "GL" => "304", "GP" => "312", "GU" => "316", "GT" => "320", "GF" => "254", "GG" => "831", "GN" => "324", "GW" => "624", "GQ" => "226", "GY" => "328", "HT" => "332", "HN" => "340", "HK" => "344", "HU" => "348", "IN" => "356", "ID" => "360", "IQ" => "368", "IR" => "364", "IE" => "372", "BV" => "074", "IM" => "833", "CX" => "162", "IS" => "352", "KY" => "136", "CC" => "166", "CK" => "184", "FO" => "234", "GS" => "239", "HM" => "334", "FK" => "238", "MP" => "580", "MH" => "584", "PN" => "612", "SB" => "090", "TC" => "796", "UM" => "581", "VG" => "092", "VI" => "850", "IL" => "376", "IT" => "380", "JM" => "388", "JP" => "392", "JE" => "832", "JO" => "400", "KZ" => "398", "KE" => "404", "KG" => "417", "KI" => "296", "KW" => "414", "LA" => "418", "LS" => "426", "LV" => "428", "LB" => "422", "LR" => "430", "LY" => "434", "LI" => "438", "LT" => "440", "LU" => "442", "MO" => "446", "MK" => "807", "MG" => "450", "MY" => "458", "MW" => "454", "MV" => "462", "ML" => "466", "MT" => "470", "MA" => "504", "MQ" => "474", "MU" => "480", "MR" => "478", "YT" => "175", "MX" => "484", "FM" => "583", "MD" => "498", "MC" => "492", "MN" => "496", "ME" => "499", "MS" => "500", "MZ" => "508", "MM" => "104", "NA" => "516", "NR" => "520", "NP" => "524", "NI" => "558", "NE" => "562", "NG" => "566", "NU" => "570", "NF" => "574", "NO" => "578", "NC" => "540", "NZ" => "554", "OM" => "512", "NL" => "528", "PK" => "586", "PW" => "585", "PS" => "275", "PA" => "591", "PG" => "598", "PY" => "600", "PE" => "604", "PF" => "258", "PL" => "616", "PT" => "620", "PR" => "630", "GB" => "826", "EH" => "732", "CF" => "140", "CZ" => "203", "CG" => "178", "CD" => "180", "DO" => "214", "RE" => "638", "RW" => "646", "RO" => "642", "RU" => "643", "WS" => "882", "AS" => "016", "BL" => "652", "KN" => "659", "SM" => "674", "MF" => "663", "PM" => "666", "VC" => "670", "SH" => "654", "LC" => "662", "ST" => "678", "SN" => "686", "RS" => "688", "SC" => "690", "SL" => "694", "SG" => "702", "SX" => "534", "SY" => "760", "SO" => "706", "LK" => "144", "SZ" => "748", "ZA" => "710", "SD" => "729", "SS" => "728", "SE" => "752", "CH" => "756", "SR" => "740", "SJ" => "744", "TH" => "764", "TW" => "158", "TZ" => "834", "TJ" => "762", "IO" => "086", "TF" => "260", "TL" => "626", "TG" => "768", "TK" => "772", "TO" => "776", "TT" => "780", "TN" => "788", "TM" => "795", "TR" => "792", "TV" => "798", "UA" => "804", "UG" => "800", "UY" => "858", "UZ" => "860", "VU" => "548", "VA" => "336", "VE" => "862", "VN" => "704", "WF" => "876", "YE" => "887", "DJ" => "262", "ZM" => "894", "ZW" => "716");
 
-		return $arrCode[$code];
+        if (isset($arrCode[$code])) {
+            $isoCodeNumber = $arrCode[$code];
+        }
+        return $isoCodeNumber;
 
     }
 
     private function isoCodePhonePrefix($code)
     {
+        $isoCodePhonePrefix = 34;
+        $arrCode = array("AC" => "247", "AD" => "376", "AE" => "971", "AF" => "93","AG" => "268", "AI" => "264", "AL" => "355", "AM" => "374", "AN" => "599", "AO" => "244", "AR" => "54", "AS" => "684", "AT" => "43", "AU" => "61", "AW" => "297", "AX" => "358", "AZ" => "374", "AZ" => "994", "BA" => "387", "BB" => "246", "BD" => "880", "BE" => "32", "BF" => "226", "BG" => "359", "BH" => "973", "BI" => "257", "BJ" => "229", "BM" => "441", "BN" => "673", "BO" => "591", "BR" => "55", "BS" => "242", "BT" => "975", "BW" => "267", "BY" => "375", "BZ" => "501", "CA" => "1", "CC" => "61", "CD" => "243", "CF" => "236", "CG" => "242", "CH" => "41", "CI" => "225", "CK" => "682", "CL" => "56", "CM" => "237", "CN" => "86", "CO" => "57", "CR" => "506", "CS" => "381", "CU" => "53", "CV" => "238", "CX" => "61", "CY" => "392", "CY" => "357", "CZ" => "420", "DE" => "49", "DJ" => "253", "DK" => "45", "DM" => "767", "DO" => "809", "DZ" => "213", "EC" => "593", "EE" => "372", "EG" => "20", "EH" => "212", "ER" => "291", "ES" => "34", "ET" => "251", "FI" => "358", "FJ" => "679", "FK" => "500", "FM" => "691", "FO" => "298", "FR" => "33", "GA" => "241", "GB" => "44", "GD" => "473", "GE" => "995", "GF" => "594", "GG" => "44", "GH" => "233", "GI" => "350", "GL" => "299", "GM" => "220", "GN" => "224", "GP" => "590", "GQ" => "240", "GR" => "30", "GT" => "502", "GU" => "671", "GW" => "245", "GY" => "592", "HK" => "852", "HN" => "504", "HR" => "385", "HT" => "509", "HU" => "36", "ID" => "62", "IE" => "353", "IL" => "972", "IM" => "44", "IN" => "91", "IO" => "246", "IQ" => "964", "IR" => "98", "IS" => "354", "IT" => "39", "JE" => "44", "JM" => "876", "JO" => "962", "JP" => "81", "KE" => "254", "KG" => "996", "KH" => "855", "KI" => "686", "KM" => "269", "KN" => "869", "KP" => "850", "KR" => "82", "KW" => "965", "KY" => "345", "KZ" => "7", "LA" => "856", "LB" => "961", "LC" => "758", "LI" => "423", "LK" => "94", "LR" => "231", "LS" => "266", "LT" => "370", "LU" => "352", "LV" => "371", "LY" => "218", "MA" => "212", "MC" => "377", "MD"  > "533", "MD" => "373", "ME" => "382", "MG" => "261", "MH" => "692", "MK" => "389", "ML" => "223", "MM" => "95", "MN" => "976", "MO" => "853", "MP" => "670", "MQ" => "596", "MR" => "222", "MS" => "664", "MT" => "356", "MU" => "230", "MV" => "960", "MW" => "265", "MX" => "52", "MY" => "60", "MZ" => "258", "NA" => "264", "NC" => "687", "NE" => "227", "NF" => "672", "NG" => "234", "NI" => "505", "NL" => "31", "NO" => "47", "NP" => "977", "NR" => "674", "NU" => "683", "NZ" => "64", "OM" => "968", "PA" => "507", "PE" => "51", "PF" => "689", "PG" => "675", "PH" => "63", "PK" => "92", "PL" => "48", "PM" => "508", "PR" => "787", "PS" => "970", "PT" => "351", "PW" => "680", "PY" => "595", "QA" => "974", "RE" => "262", "RO" => "40", "RS" => "381", "RU" => "7", "RW" => "250", "SA" => "966", "SB" => "677", "SC" => "248", "SD" => "249", "SE" => "46", "SG" => "65", "SH" => "290", "SI" => "386", "SJ" => "47", "SK" => "421", "SL" => "232", "SM" => "378", "SN" => "221", "SO" => "252", "SO" => "252", "SR"  > "597", "ST" => "239", "SV" => "503", "SY" => "963", "SZ" => "268", "TA" => "290", "TC" => "649", "TD" => "235", "TG" => "228", "TH" => "66", "TJ" => "992", "TK" =>  "690", "TL" => "670", "TM" => "993", "TN" => "216", "TO" => "676", "TR" => "90", "TT" => "868", "TV" => "688", "TW" => "886", "TZ" => "255", "UA" => "380", "UG" =>  "256", "US" => "1", "UY" => "598", "UZ" => "998", "VA" => "379", "VC" => "784", "VE" => "58", "VG" => "284", "VI" => "340", "VN" => "84", "VU" => "678", "WF" => "681", "WS" => "685", "YE" => "967", "YT" => "262", "ZA" => "27","ZM" => "260", "ZW" => "263");
 
-        try {
-            $arrCode = array("AC" => "247", "AD" => "376", "AE" => "971", "AF" => "93","AG" => "268", "AI" => "264", "AL" => "355", "AM" => "374", "AN" => "599", "AO" => "244", "AR" => "54", "AS" => "684", "AT" => "43", "AU" => "61", "AW" => "297", "AX" => "358", "AZ" => "374", "AZ" => "994", "BA" => "387", "BB" => "246", "BD" => "880", "BE" => "32", "BF" => "226", "BG" => "359", "BH" => "973", "BI" => "257", "BJ" => "229", "BM" => "441", "BN" => "673", "BO" => "591", "BR" => "55", "BS" => "242", "BT" => "975", "BW" => "267", "BY" => "375", "BZ" => "501", "CA" => "1", "CC" => "61", "CD" => "243", "CF" => "236", "CG" => "242", "CH" => "41", "CI" => "225", "CK" => "682", "CL" => "56", "CM" => "237", "CN" => "86", "CO" => "57", "CR" => "506", "CS" => "381", "CU" => "53", "CV" => "238", "CX" => "61", "CY" => "392", "CY" => "357", "CZ" => "420", "DE" => "49", "DJ" => "253", "DK" => "45", "DM" => "767", "DO" => "809", "DZ" => "213", "EC" => "593", "EE" => "372", "EG" => "20", "EH" => "212", "ER" => "291", "ES" => "34", "ET" => "251", "FI" => "358", "FJ" => "679", "FK" => "500", "FM" => "691", "FO" => "298", "FR" => "33", "GA" => "241", "GB" => "44", "GD" => "473", "GE" => "995", "GF" => "594", "GG" => "44", "GH" => "233", "GI" => "350", "GL" => "299", "GM" => "220", "GN" => "224", "GP" => "590", "GQ" => "240", "GR" => "30", "GT" => "502", "GU" => "671", "GW" => "245", "GY" => "592", "HK" => "852", "HN" => "504", "HR" => "385", "HT" => "509", "HU" => "36", "ID" => "62", "IE" => "353", "IL" => "972", "IM" => "44", "IN" => "91", "IO" => "246", "IQ" => "964", "IR" => "98", "IS" => "354", "IT" => "39", "JE" => "44", "JM" => "876", "JO" => "962", "JP" => "81", "KE" => "254", "KG" => "996", "KH" => "855", "KI" => "686", "KM" => "269", "KN" => "869", "KP" => "850", "KR" => "82", "KW" => "965", "KY" => "345", "KZ" => "7", "LA" => "856", "LB" => "961", "LC" => "758", "LI" => "423", "LK" => "94", "LR" => "231", "LS" => "266", "LT" => "370", "LU" => "352", "LV" => "371", "LY" => "218", "MA" => "212", "MC" => "377", "MD"  > "533", "MD" => "373", "ME" => "382", "MG" => "261", "MH" => "692", "MK" => "389", "ML" => "223", "MM" => "95", "MN" => "976", "MO" => "853", "MP" => "670", "MQ" => "596", "MR" => "222", "MS" => "664", "MT" => "356", "MU" => "230", "MV" => "960", "MW" => "265", "MX" => "52", "MY" => "60", "MZ" => "258", "NA" => "264", "NC" => "687", "NE" => "227", "NF" => "672", "NG" => "234", "NI" => "505", "NL" => "31", "NO" => "47", "NP" => "977", "NR" => "674", "NU" => "683", "NZ" => "64", "OM" => "968", "PA" => "507", "PE" => "51", "PF" => "689", "PG" => "675", "PH" => "63", "PK" => "92", "PL" => "48", "PM" => "508", "PR" => "787", "PS" => "970", "PT" => "351", "PW" => "680", "PY" => "595", "QA" => "974", "RE" => "262", "RO" => "40", "RS" => "381", "RU" => "7", "RW" => "250", "SA" => "966", "SB" => "677", "SC" => "248", "SD" => "249", "SE" => "46", "SG" => "65", "SH" => "290", "SI" => "386", "SJ" => "47", "SK" => "421", "SL" => "232", "SM" => "378", "SN" => "221", "SO" => "252", "SO" => "252", "SR"  > "597", "ST" => "239", "SV" => "503", "SY" => "963", "SZ" => "268", "TA" => "290", "TC" => "649", "TD" => "235", "TG" => "228", "TH" => "66", "TJ" => "992", "TK" =>  "690", "TL" => "670", "TM" => "993", "TN" => "216", "TO" => "676", "TR" => "90", "TT" => "868", "TV" => "688", "TW" => "886", "TZ" => "255", "UA" => "380", "UG" =>  "256", "US" => "1", "UY" => "598", "UZ" => "998", "VA" => "379", "VC" => "784", "VE" => "58", "VG" => "284", "VI" => "340", "VN" => "84", "VU" => "678", "WF" => "681", "WS" => "685", "YE" => "967", "YT" => "262", "ZA" => "27","ZM" => "260", "ZW" => "263");
-            if (isset($arrCode[$code]))
-                return $arrCode[$code];
-        } catch (exception $e) {}
-        return "";
+        if (isset($arrCode[$code])) {
+            $isoCodePhonePrefix = $arrCode[$code];
+        }
+        return $isoCodePhonePrefix;
     }
 
 
@@ -966,9 +1000,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         if ($phone!="") {
             $phone_prefix = $this->isoCodePhonePrefix($billingAddressData->getCountryId());
-	    if ($phone_prefix!="") {
-                $arrDatosWorkPhone["cc"] = (int)$phone_prefix;
-                $arrDatosWorkPhone["subscriber"] = preg_replace("/[^0-9]/", '', $phone);
+	        if ($phone_prefix!="") {
+                $arrDatosWorkPhone["cc"] = substr(preg_replace("/[^0-9]/", '', $phone_prefix),0,3);
+                $arrDatosWorkPhone["subscriber"] = substr(preg_replace("/[^0-9]/", '', $phone),0,15);
                 $Merchant_EMV3DS["customer"]["workPhone"] = $arrDatosWorkPhone;
             }
         }
@@ -987,7 +1021,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $Merchant_EMV3DS["shipping"]["shipAddrLine3"] = ($shippingAddressData)?$street2:"";
         $Merchant_EMV3DS["shipping"]["shipAddrPostCode"] = ($shippingAddressData)?$shippingAddressData->getPostcode():"";
         //$Merchant_EMV3DS["shipping"]["shipAddrState"] = ($shippingAddressData)?$shippingAddressData->getRegionId():"";	 // ISO 3166-2
-
 
         // Billing
         if ($billingAddressData) {
@@ -1409,7 +1442,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     }
                     $response->DS_ERROR_ID = $response->errorCode;
 
-                } catch (Exception $e) {                   
+                } catch (Exception $e) {
                     $response["url"] = "";
                     $response["error"]  = $response->errorCode;
                 }
@@ -1450,12 +1483,11 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                             'urlKo' => $this->getURLKO($order)
                         ]
                     );
-                    
                     if ($response->errorCode==0) {
                         $response->URL_REDIRECT = $response->challengeUrl;
-                    }                    
+                    }
                     $response->DS_ERROR_ID = $response->errorCode;
-                } catch (Exception $e) {                    
+                } catch (Exception $e) {
                     $response["url"] = "";
                     $response["error"]  = $response->errorCode;
                 }
