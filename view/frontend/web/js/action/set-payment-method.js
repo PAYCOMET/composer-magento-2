@@ -19,7 +19,7 @@ define(
             var serviceUrl,
                 payload,
                 paymentData = quote.paymentMethod();
-            
+
             if (paymentData.title) {
                 delete paymentData.title;
             }
@@ -27,23 +27,23 @@ define(
             if (paymentData.__disableTmpl) {
                 delete paymentData.__disableTmpl;
             }
-            
+
             // PAYCOMET additional_data
             paymentData.additional_data = {
-                saveCard: $("#paycomet_savecard").is(':checked')?1:0,
-                paycometCard: $("#paycomet_card").val()
+                saveCard:       $("#paycomet_savecard").is(':checked')?1:0,
+                paycometCard:   $("#paycomet_card").val(),
+                paycometJetToken:  $("input[name='paytpvToken']" ).val()
             }
-
 
             // check if agreement is enabled if so add it to payload
             if (agreementsConfig.isEnabled) {
-                
+
                 var agreementIds = [];
                 // Conditions in Method
                 if ($('.payment-method._active div[data-role=checkout-agreements] input').length > 0){
                     var agreementForm = $('.payment-method._active div[data-role=checkout-agreements] input'),
                         agreementData = agreementForm.serializeArray();
-                // Conditions in Form (Onestepcheckout) 
+                // Conditions in Form (Onestepcheckout)
                 } else if ($('.form.form-checkout-agreements input').length > 0){
                     var agreementForm = $('.form.form-checkout-agreements input'),
                         agreementData = agreementForm.serializeArray();

@@ -142,7 +142,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
     private $_objectManager;
 
-    private $_remoteAddress;    
+    private $_remoteAddress;
 
     /**
      * PaymentMethod constructor.
@@ -260,9 +260,11 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         $order = $payment->getOrder();
 
-        $hash = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_TOKENCARD);
+        $tokenCardPayment = false; // Inicializamos
 
-        // Saved Card --> Get Data
+        $hash = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_TOKENCARD);
+        $jetToken = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_JETTOKEN);
+        // Pago mediante tarjeta tokenizada ----------------------------------------------------------
         if (isset($hash) && $hash!=""){
 
             // Verifiy Token Data
@@ -270,6 +272,76 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             if (!isset($data["iduser"]) || !isset($data["tokenuser"])){
                 throw new \Magento\Framework\Exception\LocalizedException(__('Token Card failed'));
             }
+            $idUser = $data["iduser"];
+            $tokenUser = $data["tokenuser"];
+            $tokenCardPayment = true;
+
+        // Fin Pago mediante tarjeta tokenizada ------------------------------------------------------
+        } if (isset($jetToken) && $jetToken!=""){
+
+            $merchant_code      = trim($this->_helper->getConfigData('merchant_code'));
+            $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));
+            $merchant_pass      = trim($this->_helper->getEncryptedConfigData('merchant_pass'));
+            $jet_id            = trim($this->_helper->getEncryptedConfigData('jetid'));
+            $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
+
+             // Uso de Rest
+            if ($api_key != "") {
+
+                try {
+                    $apiRest = new ApiRest($api_key);
+                    $tokenCard = $apiRest->addUser(
+                        $merchant_terminal,
+                        $jetToken,
+                        '',
+                        '',
+                        '',
+                        2
+                    );
+                    $response = array();
+                    $response["DS_RESPONSE"] = ($tokenCard->errorCode > 0)? 0 : 1;
+
+                    if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
+                        throw new \Magento\Framework\Exception\LocalizedException(__('jetToken card failed'));
+                    }
+
+                    if ($response["DS_RESPONSE"]==1) {
+                        $response["DS_IDUSER"] = $tokenCard->idUser ?? 0;
+                        $response["DS_TOKEN_USER"] = $tokenCard->tokenUser ?? '';
+                    }
+
+                } catch (Exception $e) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__('jetToken card failed'));
+                }
+            } else {
+
+                $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,$jet_id);
+
+                $response = $ClientPaycomet->AddUserToken($jetToken);
+                if (!isset($response) || !$response) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__('jetToken card failed'));
+                }
+                $response = (array) $response;
+                if ($response["DS_ERROR_ID"] >0 ) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__('jetToken card failed'));
+                }
+            }
+
+            $idUser = $response["DS_IDUSER"];
+            $tokenUser = $response["DS_TOKEN_USER"];
+
+            $tokenCardPayment = true;
+
+        }
+
+        // Fin Pago mediante jetIFrame -------------------------------------------------------------------
+
+        // If a Payment with Saved Card or JetIframe
+        if ($tokenCardPayment){
+
+            // Si es pago con Token o jetIframe guardamos los datos del token en el pedido
+            $order->setPaycometToken($idUser."|".$tokenUser);
+            $order->save();
 
             // Verifiy 3D Secure Payment
             $Secure = ($this->isSecureTransaction($order,$amount))?1:0;
@@ -341,12 +413,12 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $methodId = 1;
         $secure = 0;
         $userInteraction = 1;
-        $defered = 0;        
+        $defered = 0;
 
         // Uso de Rest
         if ($api_key != "") {
 
-            $merchantData = $this->getMerchantData($order);            
+            $merchantData = $this->getMerchantData($order);
 
             try {
                 $apiRest = new ApiRest($api_key);
@@ -371,7 +443,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     '',
                     $merchantData,
                     $defered
-                );                
+                );
                 $response = array();
                 $response["DS_RESPONSE"] = ($createPreauthorizationResponse->errorCode > 0)? 0 : 1;
                 $response["DS_ERROR_ID"] = $createPreauthorizationResponse->errorCode;
@@ -384,7 +456,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 $response["DS_CHALLENGE_URL"] = $createPreauthorizationResponse->challengeUrl ?? '';
 
                 // Si nos llega challenge se la asignamos para redirigir posteriormente
-                if ($response["DS_CHALLENGE_URL"] != "" && $response["DS_CHALLENGE_URL"] != "0") {                    
+                if ($response["DS_CHALLENGE_URL"] != "" && $response["DS_CHALLENGE_URL"] != "0") {
                     $payment->setAdditionalInformation("DS_CHALLENGE_URL", $response["DS_CHALLENGE_URL"]);
                     return $this;
                 }
@@ -395,7 +467,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             }
 
         } else {
-            
+
             $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
 
             $response = $ClientPaycomet->CreatePreauthorization($IdUser, $TokenUser, $amount, $realOrderId, $currencyCode,"","",null,"",null,null,null,null,$userInteraction);
@@ -598,7 +670,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                         // Si nos llega challenge se la asignamos para redirigir posteriormente
                         if ($response["DS_CHALLENGE_URL"] != "" && $response["DS_CHALLENGE_URL"] != "0") {
                             $payment->setAdditionalInformation("DS_CHALLENGE_URL", $response["DS_CHALLENGE_URL"]);
-                            return $this;                      
+                            return $this;
                         }
                     } catch (Exception $e) {
                         $response["DS_RESPONSE"] = 0;
@@ -606,7 +678,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     }
 
                 } else {
-                    $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");                    
+                    $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
 
                     $response = $ClientPaycomet->ExecutePurchase($IdUser,$TokenUser,$amount,$realOrderId,$currencyCode,"","",null,"",null,null,null,null,$userInteraction);
 
@@ -618,7 +690,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     // Si nos llega challenge se la asignamos para redirigir posteriormente
                     if ($response["DS_CHALLENGE_URL"] != "" && $response["DS_CHALLENGE_URL"] != "0") {
                         $payment->setAdditionalInformation("DS_CHALLENGE_URL", urldecode($response["DS_CHALLENGE_URL"]));
-                        return $this;                      
+                        return $this;
                     }
                 }
 
@@ -854,13 +926,13 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      * @return string
      */
     public function getCheckoutRedirectUrl()
-    {        
+    {
         return $this->_urlBuilder->getUrl(
             'paycomet_payment/process/process',
             ['_secure' => $this->_getRequest()->isSecure()]
         );
     }
-    
+
 
     /**
      * Retrieve request object.
@@ -895,9 +967,13 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $payment  = $order->getPayment();
 
         $hash = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_TOKENCARD);
+        $jetIframe = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_JETTOKEN);
 
-        $payment_data_card = (isset($hash) && $hash!="")?$hash:0;
-
+        $paymentNewCard = true;
+        // Si pago con Token y NO pago con jetIframe
+        if ( (isset($hash) && $hash!="") || !($jetIframe!="")) {
+            $paymentNewCard = false;
+        }
 
         $orderCurrencyCode = $order->getBaseCurrencyCode();
         $amount = $this->_helper->amountFromMagento($order->getBaseGrandTotal(), $orderCurrencyCode);
@@ -912,13 +988,11 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             return true;
         }
         // Si esta definido que el pago es 3d secure y no estamos usando una tarjeta tokenizada
-        if ($secure_first && $payment_data_card===0){
+        if ($secure_first && $paymentNewCard){
             return true;
         }
 
-
         $total_amount = ($total_amount==0)?$amount:$total_amount;
-
 
         // Si se supera el importe maximo para compra segura
         if ($terminales==2 && ($secure_amount!="" && $secure_amount < $total_amount)){
@@ -926,7 +1000,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         }
 
         // Si esta definido como que la primera compra es Segura y es la primera compra aunque este tokenizada
-        if ($terminales==2 && $secure_first && $payment_data_card!=0 && $this->_helper->isFirstPurchaseToken($order->getPayment()))
+        if ($terminales==2 && $secure_first && !$paymentNewCard && $this->_helper->isFirstPurchaseToken($order->getPayment()))
             return true;
 
         return false;
@@ -1119,7 +1193,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
             if ($order->getShippingAddress()) {
                 $firstAddressDelivery = $this->firstAddressDelivery($order->getCustomerId(),$order->getShippingAddress()->getData('customer_address_id'));
-                
+
                 if ($firstAddressDelivery!="") {
 
                     $acctInfoData["shipAddressUsage"] = date("Ymd",strtotime($firstAddressDelivery));
@@ -1142,7 +1216,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         }
 
-        if ( $order->getShippingAddress() && 
+        if ( $order->getShippingAddress() &&
             (
                 ( ($order->getCustomerFirstname() != "") && ( $order->getCustomerFirstname() != $order->getShippingAddress()->getData('firstname') ) ) ||
                 ( ($order->getCustomerLastname() != "") && ( $order->getCustomerLastname() != $order->getShippingAddress()->getData('lastname') ) )
@@ -1355,8 +1429,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     {
 
         $order = $this->_session->getLastRealOrder();
-        $payment = $order->getPayment();
-
 
         $merchant_code      = trim($this->_helper->getConfigData('merchant_code'));
         $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));
@@ -1386,8 +1458,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         $Secure = ($this->isSecureTransaction($order,$amount))?1:0;
 
-        $hash = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_TOKENCARD);
-
         $OPERATION = ($payment_action==PaymentAction::AUTHORIZE_CAPTURE)?1:3; // EXECUTE_PURCHASE : CREATE_PREAUTORIZATION
 
         $formFields = [];
@@ -1396,19 +1466,15 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         $function_txt = "";
 
-        // Payment/Preauthorization with Saved Card
-        if (isset($hash) && $hash!=""){
+        // Payment/Preauthorization with Saved Card or jetIframe
+        if ($order->getPaycometToken() != ""){
+            $paycometToken = explode("|",$order->getPaycometToken());
 
-            $data = $this->_helper->getTokenData($payment);
-            if (!isset($data["iduser"]) || !isset($data["tokenuser"])){
-                throw new \Magento\Framework\Exception\LocalizedException(__('Token Card failed'));
-            }
-            $IdUser = $data["iduser"];
-            $TokenUser = $data["tokenuser"];
+            $IdUser = $paycometToken[0];
+            $TokenUser = $paycometToken[1];
 
             $formFields['IDUSER'] = $IdUser;
             $formFields['TOKEN_USER'] = $TokenUser;
-
 
             if ($api_key != "") {
 

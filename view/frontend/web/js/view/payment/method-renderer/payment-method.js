@@ -15,16 +15,19 @@ define(
         'Magento_Customer/js/model/customer',
         'mage/translate',
         'mage/url'
-
     ],
     function(ko, $, Component, setPaymentMethodAction, lightboxAction, quote,
         additionalValidators, paycometPaymentService, fullScreenLoader, errorProcessor, customer, $t,url) {
         'use strict';
-        var paymentMethod = ko.observable(null);        
+        var paymentMethod = ko.observable(null);
         var isOfferSave = ko.observable(false);
         var isVisibleCards = ko.observable(customer.isLoggedIn());
+        var isVisibleJetIframe = ko.observable(false);
+        var isVisibleButton = ko.observable(false);
+        var expiry = ko.observable("");
         var place = false;
-        
+
+
         return Component.extend({
             self: this,
             defaults: {
@@ -33,16 +36,23 @@ define(
             isInAction: paycometPaymentService.isInAction,
             isLightboxReady: paycometPaymentService.isLightboxReady,
             iframeHeight: paycometPaymentService.iframeHeight,
-            iframeWidth: paycometPaymentService.iframeWidth,                    
+            iframeWidth: paycometPaymentService.iframeWidth,
 
             isOfferSave: isOfferSave,
             isVisibleCards: isVisibleCards,
+            isVisibleJetIframe: isVisibleJetIframe,
+            isVisibleButton: isVisibleButton,
+            expiry: expiry,
 
             initialize: function() {
                 this._super();
-                $(window).bind('message', function(event) {
-                    paycometPaymentService.iframeResize(event.originalEvent.data);
-                });
+                if (window.checkoutConfig.payment["paycomet_payment"].integration==0) {
+                    $(window).bind('message', function(event) {
+                        paycometPaymentService.iframeResize(event.originalEvent.data);
+                    });
+                }
+                jQuery.getScript("https://api.paycomet.com/gateway/paycomet.jetiframe.js");
+
             },
             resetIframe: function() {
                 this.isLightboxReady(false);
@@ -54,7 +64,8 @@ define(
                     'method': this.getCode(),
                     'additional_data': {
                         'saveCard': $("#paycomet_savecard").is(':checked')?1:0,
-                        'paycometCard': $("#paycomet_card").val()
+                        'paycometCard': $("#paycomet_card").val(),
+                        'paycometJetToken':  $("input[name='paytpvToken']" ).val()
                     }
                 };
 
@@ -77,17 +88,28 @@ define(
                 return window.checkoutConfig.payment["paycomet_payment"].form_footer;
             },
 
+            /**
+             * Get jetId.
+             * @returns {String}
+             */
+            getJetId: function() {
+                return window.checkoutConfig.payment["paycomet_payment"].jetid;
+            },
+
+
             /** Redirect */
             continueToPayment: function(){
-                
+
                 this.resetIframe();
 
                 if (this.validate() && additionalValidators.validate()){
-                    
+
                     setPaymentMethodAction() // Place Order
                         .done(
                             function(response){
-                                if (window.checkoutConfig.payment["paycomet_payment"].iframeEnabled === '1' && $("#paycomet_card").val()=="") {
+                                if (window.checkoutConfig.payment["paycomet_payment"].integration==0 &&
+                                    window.checkoutConfig.payment["paycomet_payment"].iframeEnabled === '1' &&
+                                    $("#paycomet_card").val()=="") {
                                     paycometPaymentService.isInAction(true);
                                     paycometPaymentService.isLightboxReady(true);
                                     if (window.checkoutConfig.payment["paycomet_payment"].iframeMode === 'lightbox') {
@@ -97,18 +119,17 @@ define(
                                         document.addEventListener('click', paycometPaymentService.leaveIframeForLinks, true);
                                     }
                                 }else{
-
                                     $.mage.redirect(window.checkoutConfig.payment["paycomet_payment"].redirectUrl);
                                 }
-                                
                             }
                         ).fail(
                             function(response){
+                                $('button.checkout').prop( "disabled", false);
                                 errorProcessor.process(response);
                                 fullScreenLoader.stopLoader();
                             }
                         );
-                    
+
                     return false;
                 }
             },
@@ -122,7 +143,7 @@ define(
             iframeLoaded: function() {
                 fullScreenLoader.stopLoader();
             },
-            
+
             /**
              * Load User PAYCOMET cards
              */
@@ -139,7 +160,15 @@ define(
                     [{'hash': '', 'desc': $t('NEW CARD')}]
                 );
             },
- 
+
+            buttonClick: function() {
+                if ($("#paycomet_card").val()!="") {
+                    this.continueToPayment();
+                } else {
+                    $("#paycometPaymentForm").submit();
+                }
+            },
+
             /**
              * Show / Hide Save card check
              */
@@ -149,15 +178,40 @@ define(
                 if ( $("#paycomet_card > option").length==1) {
                     isVisibleCards(false);
                 }
+                /* Si hay una tarjeta tokenizada seleccionda */
                 if ($("#paycomet_card").val()!="") {
-                    isOfferSave(false);                    
-                } else {                
-                    isOfferSave(window.checkoutConfig.payment["paycomet_payment"].card_offer_save==1);                    
+                    isOfferSave(false);
+                    isVisibleJetIframe(false);
+                    isVisibleButton(true)
+                } else {
+                    isOfferSave(window.checkoutConfig.payment["paycomet_payment"].card_offer_save==1);
+                    isVisibleJetIframe(window.checkoutConfig.payment["paycomet_payment"].integration==1);
+                    isVisibleButton(false);
+                }
+            },
+
+            buildED: function(){
+                var t = document.getElementById('expiry_date').value,
+                    n = t.substr(0, 2),
+                    a = t.substr(3, 2);
+                $('[data-paycomet=\'dateMonth\']').val(n), $('[data-paycomet=\'dateYear\']').val(a);
+            },
+
+            expiryDate: function() {
+                var curLength = $("#expiry_date").val().length;
+                if(curLength === 2){
+                    var newInput = $("#expiry_date").val();
+                    newInput += '/';
+                    $("#expiry_date").val(newInput);
                 }
             }
-            
 
-            
         });
-    }
+    },
+
 );
+
+
+function jetAction() {
+    jQuery("#submit_jet").click();
+}

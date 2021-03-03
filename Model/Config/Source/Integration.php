@@ -19,7 +19,7 @@ class Integration implements \Magento\Framework\Option\ArrayInterface
     {
         return [
         	0 => __('BankStore IFRAME/XML'),
-        	//1 => __('BankStore JET/XML')
+        	1 => __('BankStore JETIFRAME/XML')
         ];
     }
 }
