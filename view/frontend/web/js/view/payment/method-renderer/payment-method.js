@@ -51,7 +51,11 @@ define(
                         paycometPaymentService.iframeResize(event.originalEvent.data);
                     });
                 }
-                jQuery.getScript("https://api.paycomet.com/gateway/paycomet.jetiframe.js");
+                
+                // if jetIframe
+                if (window.checkoutConfig.payment["paycomet_payment"].integration==1) {
+                    jQuery.getScript("https://api.paycomet.com/gateway/paycomet.jetiframe.js");
+                }
 
             },
             resetIframe: function() {
@@ -186,7 +190,8 @@ define(
                 } else {
                     isOfferSave(window.checkoutConfig.payment["paycomet_payment"].card_offer_save==1);
                     isVisibleJetIframe(window.checkoutConfig.payment["paycomet_payment"].integration==1);
-                    isVisibleButton(false);
+                    // Se oculta el boton principal cuando no hay tarjeta seleccionada y es jetIframe
+                    isVisibleButton(window.checkoutConfig.payment["paycomet_payment"].integration!=1);
                 }
             },
 

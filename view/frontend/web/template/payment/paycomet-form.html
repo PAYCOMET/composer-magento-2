@@ -38,8 +38,14 @@
             </select>
         </div>
 
-        <!-- Boton -->
-        
+        <div data-bind="visible: isOfferSave()">
+            <br/>
+            <input type="checkbox" name="payment[' + getCode() + '][paycomet_card]" id="paycomet_savecard">
+            <label for="paycomet_savecard" data-bind="text: $t('Save card for future purchases.')"></label>
+            <span class="paycomet-pci" data-bind="text: $t('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS).')"></span>            
+        </div>
+
+        <!-- Boton Principal -->
         <div class="primary" data-bind="visible: isVisibleButton()">
             <br/>
             <button class="action primary checkout"
@@ -84,15 +90,9 @@
                 <input type="hidden" data-paycomet="jetID" data-bind="value: getJetId()"></input>
                 <input type="hidden" data-paycomet="cardHolderName" value="Noname">
                 <button type="hidden" id="submit_jet" data-bind="click: continueToPayment"></button>
-            </div>
-
-            <div data-bind="visible: isOfferSave()">
-                <input type="checkbox" name="payment[' + getCode() + '][paycomet_card]" id="paycomet_savecard">
-                <label for="paycomet_savecard" data-bind="text: $t('Save card for future purchases.')"></label>
-                <span class="paycomet-pci" data-bind="text: $t('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS).')"></span>            
-            </div>
-
+            </div>            
             
+            <!-- Boton jetIframe -->
             <div class="primary">
                 <br/>
                 <button class="action primary checkout"
