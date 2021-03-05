@@ -777,7 +777,7 @@ class Data extends AbstractHelper
             $searchCriteria = $this->_searchCriteriaBuilder
             ->addFilter('customer_id', $this->getCustomerId())
             ->addFilter('paycomet_token', $paycomet_token)
-            ->addFilter('status', array('pending','cancel','canceled','refund'), 'nin')
+            ->addFilter('status', array('pending_payment','pending','cancel','canceled','refund'), 'nin')
             ->create();
 
             $orders = $this->_orderRepository->getList($searchCriteria);

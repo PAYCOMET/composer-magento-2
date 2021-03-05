@@ -38,24 +38,24 @@
             </select>
         </div>
 
-        <div data-bind="visible: isOfferSave()">
-            <br/>
+        <div id="paycomet_savecards" data-bind="visible: isOfferSave()">            
             <input type="checkbox" name="payment[' + getCode() + '][paycomet_card]" id="paycomet_savecard">
             <label for="paycomet_savecard" data-bind="text: $t('Save card for future purchases.')"></label>
             <span class="paycomet-pci" data-bind="text: $t('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS).')"></span>            
         </div>
 
         <!-- Boton Principal -->
-        <div class="primary" data-bind="visible: isVisibleButton()">
-            <br/>
-            <button class="action primary checkout"
-                    type="submit"
-                    data-bind="click: continueToPayment, enable: (getCode() == isChecked())"
-                    disabled>
-                <span data-bind="text: $t('Place Order')"></span>
-            </button>
+        <div class="actions-toolbar">
+            <div class="primary" data-bind="visible: isVisibleButton()">                
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="click: continueProcess, enable: (getCode() == isChecked())"
+                        disabled>
+                    <span data-bind="text: $t('Place Order')"></span>
+                </button>
+            </div>
         </div>
-        
+
         <form role="form" id="paycometPaymentForm" method="POST" class="" data-bind="visible: isVisibleJetIframe()" action="javascript:jetAction();" >
             <div class="paycomet_jet">
                 <ul>
@@ -85,23 +85,24 @@
                     <input type="hidden" class="paytpv_cardholdername" data-paycomet="cardHolderName" width="360" maxlength="50" value="NONAME" onclick="this.value='';">
                 </ul>
 
-                <div id="paymentErrorMsg"></div>
-                
+                <div class="mage-error" id="paymentErrorMsg" generated="true"></div>
+
                 <input type="hidden" data-paycomet="jetID" data-bind="value: getJetId()"></input>
                 <input type="hidden" data-paycomet="cardHolderName" value="Noname">
                 <button type="hidden" id="submit_jet" data-bind="click: continueToPayment"></button>
             </div>            
-            
+
             <!-- Boton jetIframe -->
-            <div class="primary">
-                <br/>
-                <button class="action primary checkout"
-                        type="submit"
-                        data-bind="enable: (getCode() == isChecked())"
-                        disabled>
-                    <span data-bind="text: $t('Place Order')"></span>
-                </button>
-            </div>            
+            <div class="actions-toolbar">
+                <div class="primary">
+                    <button class="action primary checkout"
+                            type="submit"
+                            data-bind="enable: (getCode() == isChecked())"
+                            disabled>
+                        <span data-bind="text: $t('Place Order')"></span>
+                    </button>
+                </div>
+            </div>
         </form>
 
         <div data-bind="visible: isInAction()">

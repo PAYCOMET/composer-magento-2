@@ -47,6 +47,9 @@ define(
                 } else if ($('.form.form-checkout-agreements input').length > 0){
                     var agreementForm = $('.form.form-checkout-agreements input'),
                         agreementData = agreementForm.serializeArray();
+                } else if ($('form .checkout-agreements input').length > 0){                    
+                    var agreementForm = $('form .checkout-agreements input'),
+                    agreementData = agreementForm.serializeArray();
                 }
 
                 if (agreementData) {

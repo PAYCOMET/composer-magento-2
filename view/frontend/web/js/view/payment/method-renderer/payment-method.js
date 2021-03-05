@@ -100,6 +100,16 @@ define(
                 return window.checkoutConfig.payment["paycomet_payment"].jetid;
             },
 
+            /**
+             * continueProcess
+             * 
+             */
+            continueProcess: function () {                
+                // Si hay una tarjeta seleccionada o estamos en integracion Bankstore Iframe/XML continuamos
+                if ($("#paycomet_card").val()!="" || window.checkoutConfig.payment["paycomet_payment"].integration==0) {
+                    this.continueToPayment();
+                }
+            },
 
             /** Redirect */
             continueToPayment: function(){
@@ -128,14 +138,13 @@ define(
                             }
                         ).fail(
                             function(response){
-                                $('button.checkout').prop( "disabled", false);
                                 errorProcessor.process(response);
                                 fullScreenLoader.stopLoader();
                             }
                         );
-
                     return false;
                 }
+                $('button.checkout').prop( "disabled", false);
             },
             validate: function() {
                 return true;
