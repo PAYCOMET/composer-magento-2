@@ -46,7 +46,7 @@
 
         <!-- Boton Principal -->
         <div class="actions-toolbar">
-            <div class="primary" data-bind="visible: isVisibleButton()">                
+            <div class="primary" data-bind="visible: isVisibleButton()">
                 <button class="action primary checkout"
                         type="submit"
                         data-bind="click: continueProcess, enable: (getCode() == isChecked())"
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <form role="form" id="paycometPaymentForm" method="POST" class="" data-bind="visible: isVisibleJetIframe()" action="javascript:jetAction();" >
+        <form role="form" id="paycometPaymentForm" method="POST" class="" data-bind="afterRender: jetIframeLoad, visible: isVisibleJetIframe()" action="javascript:jetAction();" >
             <div class="paycomet_jet">
                 <ul>
                     <li>

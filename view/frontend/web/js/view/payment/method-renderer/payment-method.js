@@ -51,13 +51,14 @@ define(
                         paycometPaymentService.iframeResize(event.originalEvent.data);
                     });
                 }
-                
-                // if jetIframe
-                if (window.checkoutConfig.payment["paycomet_payment"].integration==1) {
-                    jQuery.getScript("https://api.paycomet.com/gateway/paycomet.jetiframe.js");
-                }
 
             },
+
+            jetIframeLoad: function() {                
+                jQuery.getScript("https://api.paycomet.com/gateway/paycomet.jetiframe.js");
+            },
+
+
             resetIframe: function() {
                 this.isLightboxReady(false);
                 this.isInAction(false);
