@@ -51,13 +51,11 @@ define(
                         paycometPaymentService.iframeResize(event.originalEvent.data);
                     });
                 }
-
             },
 
-            jetIframeLoad: function() {                
+            jetIframeLoad: function() {
                 jQuery.getScript("https://api.paycomet.com/gateway/paycomet.jetiframe.js");
             },
-
 
             resetIframe: function() {
                 this.isLightboxReady(false);
