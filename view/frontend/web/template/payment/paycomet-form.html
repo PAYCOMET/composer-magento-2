@@ -90,17 +90,19 @@
                 <input type="hidden" data-paycomet="jetID" data-bind="value: getJetId()"></input>
                 <input type="hidden" data-paycomet="cardHolderName" value="Noname">
                 <button type="hidden" id="submit_jet" data-bind="click: continueToPayment"></button>
-            </div>            
+            </div>
 
             <!-- Boton jetIframe -->
-            <div class="actions-toolbar">
-                <div class="primary">
-                    <button class="action primary checkout"
-                            type="submit"
-                            data-bind="enable: (getCode() == isChecked())"
-                            disabled>
-                        <span data-bind="text: $t('Place Order')"></span>
-                    </button>
+            <div class="payment-method-content">
+                <div class="actions-toolbar">
+                    <div class="primary">
+                        <button class="action primary checkout"
+                                type="submit"
+                                data-bind="enable: (getCode() == isChecked())"
+                                disabled>
+                            <span data-bind="text: $t('Place Order')"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>
