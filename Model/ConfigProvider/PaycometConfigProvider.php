@@ -81,6 +81,8 @@ class PaycometConfigProvider implements ConfigProviderInterface
                 $config['payment'] [$code]['card_offer_save'] = ($this->_helper->getConfigData('card_offer_save') && $this->_helper->getCustomerId());
                 $config['payment'] [$code]['paycometCards'] = $this->getPaycometToken($code);
                 $config['payment'] [$code]['form_footer'] = nl2br($this->_escaper->escapeHtml($this->_helper->getConfigData('form_footer')));
+                $config['payment'] [$code]['integration'] = $this->_helper->getConfigData('integration');
+                $config['payment'] [$code]['jetid'] = $this->_helper->getEncryptedConfigData('jetid');
             }
         }
 

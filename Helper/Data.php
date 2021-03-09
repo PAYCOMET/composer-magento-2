@@ -192,7 +192,7 @@ class Data extends AbstractHelper
     }
 
 
-    
+
 
     /**
      * @desc Check if configuration is set to sandbox mode
@@ -234,7 +234,6 @@ class Data extends AbstractHelper
      */
     private function getURLOK($orderid)
     {
-        
         return $this->_urlBuilder->getUrl(
             'paycomet_payment/cards/view',$this->_buildSessionParams(true,$orderid)
         );
@@ -275,7 +274,7 @@ class Data extends AbstractHelper
 
 
     /**
-     * 
+     *
      * @return string paycomet adduser url
      *
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -286,13 +285,13 @@ class Data extends AbstractHelper
             return [];
         }
 
-        
+
         $merchant_code      = trim($this->getConfigData('merchant_code'));
         $merchant_terminal  = trim($this->getConfigData('merchant_terminal'));
         $merchant_pass      = trim($this->getEncryptedConfigData('merchant_pass'));
         $api_key            = trim($this->getEncryptedConfigData('api_key'));
 
-       
+
         $fieldOrderId = $this->_session->getCustomer()->getId() . "_" . $this->_storeManager->getStore()->getId(); //UserId | StoreId
 
         $shopperLocale = $this->_resolver->getLocale();
@@ -320,25 +319,25 @@ class Data extends AbstractHelper
                         'urlKo' => (string) $this->getURLKO($fieldOrderId)
                     ]
                 );
-                
-                
+
+
                 $dataResponse["error"]  = $formResponse->errorCode;
                 if ($formResponse->errorCode == 0) {
-                    $dataResponse["url"] = $formResponse->challengeUrl;                    
-                }                
+                    $dataResponse["url"] = $formResponse->challengeUrl;
+                }
 
             } catch (Exception $e) {
-               
+
                 $dataResponse["error"]  = $formResponse->errorCode;
                 $this->logDebug("Error in Rest 107: " . $e->getMessage());
             }
-        
+
         } else {
             $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
             $response = $ClientPaycomet->AddUserUrl($fieldOrderId, $language, $this->getURLOK($fieldOrderId), $this->getURLKO($fieldOrderId));
 
             $function_txt = "AddUserUrl";
-        
+
             if ($response->DS_ERROR_ID==0) {
                 $dataResponse["url"] = $response->URL_REDIRECT;
                 $dataResponse["error"]  = 0;
@@ -348,7 +347,7 @@ class Data extends AbstractHelper
                 $this->logDebug("Error in " . $function_txt .": " . $response->DS_ERROR_ID . "; URL: " . $response->URL_REDIRECT);
             }
         }
-               
+
         return $dataResponse;
 
     }
@@ -359,7 +358,7 @@ class Data extends AbstractHelper
         return $this->_session->isLoggedIn();
     }
 
-   
+
     /**
      * @desc Logs debug information if enabled
      *
@@ -419,7 +418,7 @@ class Data extends AbstractHelper
                 $returnedFields[$key] = $field;
             }
         }
-        
+
 
         return $returnedFields;
     }
@@ -621,7 +620,7 @@ class Data extends AbstractHelper
     public function getCustomerById($id) {
         return $this->_customerFactory->create()->load($id);
     }
-    
+
     public function createTransaction($type, $transactionid, $order = null, $paymentData = array())
     {
         try {
@@ -642,8 +641,8 @@ class Data extends AbstractHelper
                 case \Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH:
                     $message = __('Authorize amount of %1',$order->getBaseCurrency()->formatTxt($order->getGrandTotal()));
                 break;
-            }            
-            
+            }
+
             $trans = $this->_transactionBuilder;
             $transaction = $trans->setPayment($payment)
                                 ->setOrder($order)
@@ -655,7 +654,7 @@ class Data extends AbstractHelper
 
             if ($type==\Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH)
                 $transaction->setIsClosed(false);
-             
+
             $order->setPayment($payment);
 
             $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
@@ -690,14 +689,14 @@ class Data extends AbstractHelper
                 ->pay()
                 ->save();
 
-       
+
         $message = __(
             'Invoiced amount of %1 Transaction ID: %2',
             $order->getBaseCurrency()->formatTxt($amount),
             $pasref
         );
         $this->_addHistoryComment($order, $message);
-        
+
     }
 
 
@@ -720,10 +719,10 @@ class Data extends AbstractHelper
 
 
     public function getTokenData($payment)
-    {        
+    {
         $hash = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_TOKENCARD);
         $customer_id = $this->getCustomerId();
-       
+
         if ($hash=="" || $customer_id=="") {
             return null;
         }
@@ -735,7 +734,7 @@ class Data extends AbstractHelper
         $conds[] = $connection->quoteInto("hash" . ' = ?', $hash);
         $conds[] = $connection->quoteInto("customer_id" . ' = ?', $customer_id);
         $where = implode(' AND ', $conds);
-       
+
         $select = $connection->select()
             ->from(
                 ['token' => 'paycomet_token'],
@@ -753,11 +752,11 @@ class Data extends AbstractHelper
     */
     public function getFirstOrder($order)
     {
-        
+
         $searchCriteria = $this->_searchCriteriaBuilder
         ->addFilter('customer_id', $this->getCustomerId())
         ->addFilter('status', array('pending','cancel','canceled','refund'), 'nin')
-        ->create();  
+        ->create();
 
         $orders = $this->_orderRepository->getList($searchCriteria);
 
@@ -771,15 +770,15 @@ class Data extends AbstractHelper
     {
 
         $data = $this->getTokenData($payment);
-        
-        if (isset($data['iduser']) && isset($data['tokenuser'])) {            
+
+        if (isset($data['iduser']) && isset($data['tokenuser'])) {
             $paycomet_token = $data['iduser'] . "|" . $data['tokenuser'];
 
             $searchCriteria = $this->_searchCriteriaBuilder
             ->addFilter('customer_id', $this->getCustomerId())
             ->addFilter('paycomet_token', $paycomet_token)
-            ->addFilter('status', array('pending','cancel','canceled','refund'), 'nin')
-            ->create();  
+            ->addFilter('status', array('pending_payment','pending','cancel','canceled','refund'), 'nin')
+            ->create();
 
             $orders = $this->_orderRepository->getList($searchCriteria);
 
@@ -805,8 +804,8 @@ class Data extends AbstractHelper
             $transactionid = $response['DS_MERCHANT_AUTHCODE'];
             $amount = $response['DS_MERCHANT_AMOUNT'];
         }
-        $amount = $this->amountFromPaycomet($amount, $order->getBaseCurrencyCode());        
-        
+        $amount = $this->amountFromPaycomet($amount, $order->getBaseCurrencyCode());
+
         $payment_action = $this->getConfigData('payment_action', $order->getStoreId());
         $isAutoSettle = $payment_action == PaymentAction::AUTHORIZE_CAPTURE;
 
@@ -814,27 +813,27 @@ class Data extends AbstractHelper
               ? \Magento\Sales\Model\Order\Payment\Transaction::TYPE_CAPTURE
               : \Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH;
 
-        
+
         //Set information
         //$this->setAdditionalInfo($payment, $response);
-       
-        //Add order Transaction        
-        $this->createTransaction($type, $transactionid, $order, $response);        
+
+        //Add order Transaction
+        $this->createTransaction($type, $transactionid, $order, $response);
         //Should we invoice
         if ($isAutoSettle) {
             $this->createInvoice($order, $transactionid, $amount);
-        }        
+        }
         //Send order email
         if (!$order->getEmailSent()) {
             $this->_orderSender->send($order);
-        }        
+        }
 
         // Set PAYCOMET iduser|tokenuser to order
         $IdUser = 0; $TokenUser = ""; // Inicializamos
         if (isset($response['IdUser']) && isset($response['TokenUser']) ) {
             $IdUser = $response['IdUser'];
-            $TokenUser = $response['TokenUser'];            
-        } else {            
+            $TokenUser = $response['TokenUser'];
+        } else {
             $data = $this->getTokenData($payment);
             if (isset($data['iduser']) && isset($data['tokenuser'])) {
                 $IdUser = $data["iduser"];
@@ -845,9 +844,9 @@ class Data extends AbstractHelper
         if ($IdUser>0 && $TokenUser!="") {
             $order->setPaycometToken($IdUser."|".$TokenUser);
         }
-                        
+
         $order->save();
-        
+
         // Save Customer Card Token for future purchase
         $savecard = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_SAVECARD);
         $token = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_TOKENCARD);
@@ -856,8 +855,7 @@ class Data extends AbstractHelper
             if (!empty($customerId)) {
                 $this->_handleCardStorage($response, $customerId, $order->getStoreId());
             }
-        }      
-
+        }
     }
 
 
@@ -878,9 +876,9 @@ class Data extends AbstractHelper
             $merchant_terminal  = trim($this->getConfigData('merchant_terminal',$storeId));
             $merchant_pass      = trim($this->getEncryptedConfigData('merchant_pass',$storeId));
             $api_key            = trim($this->getEncryptedConfigData('api_key',$storeId));
-            
+
             if ($api_key != "") {
-                        
+
                 $apiRest = new ApiRest($api_key);
                 $formResponse = $apiRest->infoUser(
                     $IdUser,
@@ -893,19 +891,19 @@ class Data extends AbstractHelper
                 $resp["DS_CARD_BRAND"] = $formResponse->cardBrand;
                 $resp["DS_EXPIRYDATE"] = $formResponse->expiryDate;
                 $resp["DS_ERROR_ID"] = 0;
-        
+
             } else {
                 $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
                 $resp = $ClientPaycomet->InfoUser($IdUser, $TokenUser);
                 $resp = (array)$resp;
             }
-            
+
             if ('' == $resp['DS_ERROR_ID'] || 0 == $resp['DS_ERROR_ID']) {
                 return $this->addCustomerCard($customerId,$IdUser,$TokenUser,$resp);
             } else{
                 return false;
             }
-                    
+
         } catch (\Exception $e) {
             //card storage exceptions should not stop a transaction
             $this->_logger->critical($e);
@@ -943,7 +941,7 @@ class Data extends AbstractHelper
         }
 
     }
-    
+
 
 
 
@@ -1309,5 +1307,5 @@ class Data extends AbstractHelper
 
 
 
-    
+
 }

@@ -19,14 +19,18 @@ define(
             displayMessage: displayMessage,
 
             iframeResize: function(event) {
-                var data = JSON.parse(event);
-                if (data.iframe) {
-                    if (this.iframeHeight() != data.iframe.height) {
-                        this.iframeHeight(data.iframe.height);
+                try {
+                    var data = JSON.parse(event);
+                    if (data.iframe) {
+                        if (this.iframeHeight() != data.iframe.height) {
+                            this.iframeHeight(data.iframe.height);
+                        }
+                        if (this.iframeWidth() != data.iframe.width) {
+                            this.iframeWidth(data.iframe.width);
+                        }
                     }
-                    if (this.iframeWidth() != data.iframe.width) {
-                        this.iframeWidth(data.iframe.width);
-                    }
+                } catch (e) {
+                    return false;
                 }
             }
         };

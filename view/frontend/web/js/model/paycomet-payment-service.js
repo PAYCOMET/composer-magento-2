@@ -43,14 +43,20 @@ define(
                 }
             },
             iframeResize: function(event) {
-                var data = JSON.parse(event);
-                if (data.iframe && window.checkoutConfig.payment[quote.paymentMethod().method].iframeEnabled === '1') {
-                    if (this.iframeHeight() != data.iframe.height && data.iframe.height != '0px') {
-                        this.iframeHeight(data.iframe.height);
+
+                try {
+                    var data = JSON.parse(event);
+                    alert(data);
+                    if (data.iframe && window.checkoutConfig.payment[quote.paymentMethod().method].iframeEnabled === '1') {
+                        if (this.iframeHeight() != data.iframe.height && data.iframe.height != '0px') {
+                            this.iframeHeight(data.iframe.height);
+                        }
+                        if (this.iframeWidth() != data.iframe.width) {
+                            this.iframeWidth(data.iframe.width);
+                        }
                     }
-                    if (this.iframeWidth() != data.iframe.width) {
-                        this.iframeWidth(data.iframe.width);
-                    }
+                } catch (e) {
+                    return false;
                 }
             },
            
