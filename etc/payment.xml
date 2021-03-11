@@ -5,5 +5,72 @@
         <method name="paycomet_payment">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="paycomet_paypal">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_bizum">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_ideal">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_klarna">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_giropay">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_mybank">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_multibanco">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_trustly">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_przelewy24">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_bancontact">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_eps">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_tele2">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_paysera">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_postfinance">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_qiwi">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_yandex">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_mts">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_beeline">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_paysafecard">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+         <method name="paycomet_skrill">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+         <method name="paycomet_webmoney">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+         <method name="paycomet_instantcredit">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+
     </methods>
 </payment>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Paycomet\Payment\Model;
+namespace Paycomet\Payment\Model\Bizum;
 
 use Paycomet\Payment\Model\Config\Source\DMFields;
 use Paycomet\Payment\Model\Config\Source\FraudMode;
@@ -16,7 +16,7 @@ use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod implements GatewayInterface
 {
-    const METHOD_CODE = 'paycomet_payment';
+    const METHOD_CODE = 'paycomet_bizum';
     const NOT_AVAILABLE = 'N/A';
 
     /**
