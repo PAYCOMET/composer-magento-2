@@ -30,6 +30,7 @@ define(
             initialize: function() {
                 this._super();                
             },
+            
             getData: function () {
                 var data = {
                     'method': this.getCode(),
@@ -38,14 +39,7 @@ define(
 
                 return data;
             },
-
-            /**
-             * Get action url for payment method iframe.
-             * @returns {String}
-             */
-            getActionUrl: function() {
-                return this.isInAction() ? window.checkoutConfig.payment["paycomet_payment"].redirectUrl : '';
-            },
+            
 
             /** Redirect */
             continueToPayment: function(){                

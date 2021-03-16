@@ -7,8 +7,7 @@ define(
         'Magento_Checkout/js/view/payment/default',
         'Paycomet_Payment/js/action/set-payment-method',        
         'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/model/payment/additional-validators',
-        'Paycomet_Payment/js/model/paycomet-payment-service',
+        'Magento_Checkout/js/model/payment/additional-validators',        
         'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer',
@@ -16,7 +15,7 @@ define(
         'mage/url'
     ],
     function(ko, $, Component, setPaymentMethodAction, quote,
-        additionalValidators, paycometPaymentService, fullScreenLoader, errorProcessor, customer, $t,url) {
+        additionalValidators, fullScreenLoader, errorProcessor, customer, $t,url) {
         'use strict';
         var paymentMethod = ko.observable(null);                
 
@@ -24,8 +23,7 @@ define(
             self: this,
             defaults: {
                 template: 'Paycomet_Payment/payment/bizum/paycomet-form'
-            },
-            isInAction: paycometPaymentService.isInAction,            
+            },            
 
             initialize: function() {
                 this._super();                
@@ -44,18 +42,18 @@ define(
              * @returns {String}
              */
             getActionUrl: function() {
-                return this.isInAction() ? window.checkoutConfig.payment["paycomet_payment"].redirectUrl : '';
+                return window.checkoutConfig.payment["paycomet_payment"].redirectUrl;
             },
 
             /** Redirect */
-            continueToPayment: function(){                
+            continueToPayment: function(){
 
                 if (this.validate() && additionalValidators.validate()){
 
                     setPaymentMethodAction() // Place Order
                         .done(
                             function(response){
-                                $.mage.redirect(window.checkoutConfig.payment["paycomet_payment"].redirectUrl);                                
+                                $.mage.redirect(window.checkoutConfig.payment["paycomet_payment"].redirectUrl);
                             }
                         ).fail(
                             function(response){

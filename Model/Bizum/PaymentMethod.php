@@ -43,17 +43,17 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      *
      * @var bool
      */
-    protected $_canAuthorize = true;
+    protected $_canAuthorize = false;
 
     /**
      * @var bool
      */
-    protected $_canCapture = true;
+    protected $_canCapture = false;
 
     /**
      * @var bool
      */
-    protected $_canCapturePartial = true;
+    protected $_canCapturePartial = false;
 
     /**
      * @var bool
@@ -895,27 +895,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         return $this;
     }
 
-    public function getCheckoutCards()
-    {
-        $data = array();
-        // Si no esta logado no cargamos nada
-        if (!$this->_helper->customerIsLogged())
-            return $data;
-
-        $resource = $this->_objectManager->get('Magento\Framework\App\ResourceConnection');
-        $connection = $resource->getConnection();
-
-
-        $select = $connection->select()
-            ->from(
-                ['token' => 'paycomet_token'],
-                ['hash', 'cc', 'brand' , 'desc']
-            )
-            ->where('customer_id = ?', $this->_helper->getCustomerId())
-            ->order('date DESC');
-        $data = $connection->fetchAll($select);
-        return $data;
-    }
+    
 
     /**
      * Checkout redirect URL.
@@ -927,6 +907,12 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      */
     public function getCheckoutRedirectUrl()
     {
+
+        //$payment = $this->getInfoInstance();
+        //$order = $payment->getOrder();
+
+        throw new \Magento\Framework\Exception\LocalizedException(__('Txerra'. $$order->getRealOrderId()));
+
         return $this->_urlBuilder->getUrl(
             'paycomet_payment/process/process',
             ['_secure' => $this->_getRequest()->isSecure()]
@@ -1426,7 +1412,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getFormPaycometUrl()
-    {
+    {        
 
         $order = $this->_session->getLastRealOrder();
 
@@ -1586,10 +1572,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
 
     /**
-     * Checkout redirect URL.
-     *
-     * @see \Magento\Checkout\Controller\Onepage::savePaymentAction()
-     * @see \Magento\Quote\Model\Quote\Payment::getCheckoutRedirectUrl()
+     * Checkout getURLOK.
      *
      * @return string
      */
@@ -1601,10 +1584,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     }
 
     /**
-     * Checkout redirect URL.
-     *
-     * @see \Magento\Checkout\Controller\Onepage::savePaymentAction()
-     * @see \Magento\Quote\Model\Quote\Payment::getCheckoutRedirectUrl()
+     * Checkout getURLKO.
      *
      * @return string
      */

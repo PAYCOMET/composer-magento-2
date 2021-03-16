@@ -225,10 +225,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * Checkout redirect URL.
-     *
-     * @see \Magento\Checkout\Controller\Onepage::savePaymentAction()
-     * @see \Magento\Quote\Model\Quote\Payment::getCheckoutRedirectUrl()
+     * Checkout getURLOK.
      *
      * @return string
      */
@@ -240,10 +237,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * Checkout redirect URL.
-     *
-     * @see \Magento\Checkout\Controller\Onepage::savePaymentAction()
-     * @see \Magento\Quote\Model\Quote\Payment::getCheckoutRedirectUrl()
+     * Checkout getURLKO.
      *
      * @return string
      */

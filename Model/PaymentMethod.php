@@ -1586,10 +1586,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
 
     /**
-     * Checkout redirect URL.
-     *
-     * @see \Magento\Checkout\Controller\Onepage::savePaymentAction()
-     * @see \Magento\Quote\Model\Quote\Payment::getCheckoutRedirectUrl()
+     * Checkout getURLOK.
      *
      * @return string
      */
@@ -1601,10 +1598,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     }
 
     /**
-     * Checkout redirect URL.
-     *
-     * @see \Magento\Checkout\Controller\Onepage::savePaymentAction()
-     * @see \Magento\Quote\Model\Quote\Payment::getCheckoutRedirectUrl()
+     * Checkout getURLKO.
      *
      * @return string
      */
