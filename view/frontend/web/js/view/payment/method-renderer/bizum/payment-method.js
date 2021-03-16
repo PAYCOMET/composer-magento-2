@@ -35,15 +35,7 @@ define(
                 };
 
                 return data;
-            },
-
-            /**
-             * Get action url for payment method iframe.
-             * @returns {String}
-             */
-            getActionUrl: function() {
-                return window.checkoutConfig.payment["paycomet_payment"].redirectUrl;
-            },
+            },            
 
             /** Redirect */
             continueToPayment: function(){

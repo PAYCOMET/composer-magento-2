@@ -909,9 +909,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     {
 
         //$payment = $this->getInfoInstance();
-        //$order = $payment->getOrder();
-
-        throw new \Magento\Framework\Exception\LocalizedException(__('Txerra'. $$order->getRealOrderId()));
+        //$order = $payment->getOrder();        
 
         return $this->_urlBuilder->getUrl(
             'paycomet_payment/process/process',
