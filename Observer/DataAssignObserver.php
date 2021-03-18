@@ -17,7 +17,7 @@ class DataAssignObserver extends AbstractDataAssignObserver
 {
     const PAYCOMET_SAVECARD     = 'saveCard';
     const PAYCOMET_TOKENCARD    = 'paycometCard';
-    const PAYCOMET_JETTOKEN        = 'paycometJetToken';
+    const PAYCOMET_JETTOKEN     = 'paycometJetToken';
 
     /**
      * @var array

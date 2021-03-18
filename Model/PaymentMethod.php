@@ -16,6 +16,7 @@ use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod implements GatewayInterface
 {
+    const METHOD_ID = 1;
     const METHOD_CODE = 'paycomet_payment';
     const NOT_AVAILABLE = 'N/A';
 
@@ -243,7 +244,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     {
         $payment = $this->getInfoInstance();
         $order = $payment->getOrder();
-
+     
         /*
          * do not send order confirmation mail after order creation wait for
          * result confirmation from PAYCOMET
@@ -344,7 +345,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             $order->save();
 
             // Verifiy 3D Secure Payment
-            $Secure = ($this->isSecureTransaction($order,$amount))?1:0;
+            $Secure = ($this->_helper->isSecureTransaction($order,$amount))?1:0;
 
             // Non Secure Payment with Token Card
             if (!$Secure){
@@ -418,7 +419,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         // Uso de Rest
         if ($api_key != "") {
 
-            $merchantData = $this->getMerchantData($order);
+            $merchantData = $this->_helper->getMerchantData($order,self::METHOD_ID);
 
             try {
                 $apiRest = new ApiRest($api_key);
@@ -432,8 +433,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     $secure,
                     $IdUser,
                     $TokenUser,
-                    $this->getURLOK($order),
-                    $this->getURLKO($order),
+                    $this->_helper->getURLOK($order),
+                    $this->_helper->getURLKO($order),
                     '',
                     '',
                     '',
@@ -629,7 +630,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 // Uso de Rest
                 if ($api_key != "") {
 
-                    $merchantData = $this->getMerchantData($order);
+                    $merchantData = $this->_helper->getMerchantData($order,self::METHOD_ID);
                     $apiRest = new ApiRest($api_key);
 
                     try {
@@ -644,8 +645,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                             $secure,
                             $IdUser,
                             $TokenUser,
-                            $this->getURLOK($order),
-                            $this->getURLKO($order),
+                            $this->_helper->getURLOK($order),
+                            $this->_helper->getURLKO($order),
                             '',
                             '',
                             '',
@@ -957,55 +958,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     }
 
 
-    private function isSecureTransaction($order,$total_amount=0){
-
-
-        $terminales = trim($this->_helper->getConfigData('merchant_terminales'));
-        $secure_first = trim($this->_helper->getConfigData('secure_first'));
-        $secure_amount = trim($this->_helper->getConfigData('secure_amount'));
-
-        $payment  = $order->getPayment();
-
-        $hash = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_TOKENCARD);
-        $jetIframe = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_JETTOKEN);
-
-        $paymentNewCard = true;
-        // Si pago con Token y NO pago con jetIframe
-        if ( (isset($hash) && $hash!="") || !($jetIframe!="")) {
-            $paymentNewCard = false;
-        }
-
-        $orderCurrencyCode = $order->getBaseCurrencyCode();
-        $amount = $this->_helper->amountFromMagento($order->getBaseGrandTotal(), $orderCurrencyCode);
-
-        if ($secure_amount>0) {
-            $secure_amount = $this->_helper->amountFromMagento($secure_amount, $orderCurrencyCode);
-        }
-
-        // Transaccion Segura:
-        // Si solo tiene Terminal Seguro
-        if ($terminales==0){
-            return true;
-        }
-        // Si esta definido que el pago es 3d secure y no estamos usando una tarjeta tokenizada
-        if ($secure_first && $paymentNewCard){
-            return true;
-        }
-
-        $total_amount = ($total_amount==0)?$amount:$total_amount;
-
-        // Si se supera el importe maximo para compra segura
-        if ($terminales==2 && ($secure_amount!="" && $secure_amount < $total_amount)){
-            return true;
-        }
-
-        // Si esta definido como que la primera compra es Segura y es la primera compra aunque este tokenizada
-        if ($terminales==2 && $secure_first && !$paymentNewCard && $this->_helper->isFirstPurchaseToken($order->getPayment()))
-            return true;
-
-        return false;
-    }
-
+    
 
     private function getMerchantData($order)
     {
@@ -1456,7 +1409,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $quote->setIsActive(1)->setReservedOrderId(null);
         $quoteRepository->save($quote);
 
-        $Secure = ($this->isSecureTransaction($order,$amount))?1:0;
+        $Secure = ($this->_helper->isSecureTransaction($order,$amount))?1:0;
 
         $OPERATION = ($payment_action==PaymentAction::AUTHORIZE_CAPTURE)?1:3; // EXECUTE_PURCHASE : CREATE_PREAUTORIZATION
 
@@ -1478,7 +1431,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
             if ($api_key != "") {
 
-                $merchantData = $this->getMerchantData($order);
+                $merchantData = $this->_helper->getMerchantData($order,self::METHOD_ID);
 
                 try {
                     $apiRest = new ApiRest($api_key);
@@ -1498,8 +1451,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                             'idUser' => $IdUser,
                             'tokenUser' => $TokenUser,
                             'merchantData' => $merchantData,
-                            'urlOk' => $this->getURLOK($order),
-                            'urlKo' => $this->getURLKO($order)
+                            'urlOk' => $this->_helper->getURLOK($order),
+                            'urlKo' => $this->_helper->getURLKO($order)
                         ]
                     );
 
@@ -1516,10 +1469,10 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             } else {
                 if ($OPERATION==1) {
                     $function_txt = "ExecutePurchaseTokenUrl";
-                    $response = $ClientPaycomet->ExecutePurchaseTokenUrl($fieldOrderId, $amount, $orderCurrencyCode, $IdUser,$TokenUser, $language, "", $Secure, null, $this->getURLOK($order), $this->getURLKO($order), "");
+                    $response = $ClientPaycomet->ExecutePurchaseTokenUrl($fieldOrderId, $amount, $orderCurrencyCode, $IdUser,$TokenUser, $language, "", $Secure, null, $this->getURLOK($order), $this->_helper->getURLKO($order), "");
                 } else if ($OPERATION==3) {
                     $function_txt = "ExecutePreauthorizationTokenUrl";
-                    $response = $ClientPaycomet->ExecutePreauthorizationTokenUrl($fieldOrderId, $amount, $orderCurrencyCode, $IdUser,$TokenUser, $language, "", $Secure, null, $this->getURLOK($order), $this->getURLKO($order), "");
+                    $response = $ClientPaycomet->ExecutePreauthorizationTokenUrl($fieldOrderId, $amount, $orderCurrencyCode, $IdUser,$TokenUser, $language, "", $Secure, null, $this->getURLOK($order), $this->_helper->getURLKO($order), "");
                 }
             }
 
@@ -1528,7 +1481,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
             if ($api_key != "") {
 
-                $merchantData = $this->getMerchantData($order);
+                $merchantData = $this->_helper->getMerchantData($order,self::METHOD_ID);
 
                 try {
                     $apiRest = new ApiRest($api_key);
@@ -1545,8 +1498,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                             'userInteraction' => 1,
                             'secure' => $Secure,
                             'merchantData' => $merchantData,
-                            'urlOk' => $this->getURLOK($order),
-                            'urlKo' => $this->getURLKO($order)
+                            'urlOk' => $this->_helper->getURLOK($order),
+                            'urlKo' => $this->_helper->getURLKO($order)
                         ]
                     );
                     if ($response->errorCode==0) {
@@ -1562,10 +1515,10 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
                 if ($OPERATION==1) {
                     $function_txt = "ExecutePurchaseUrl";
-                    $response = $ClientPaycomet->ExecutePurchaseUrl($fieldOrderId, $amount, $orderCurrencyCode, $language, "", $Secure, null, $this->getURLOK($order), $this->getURLKO($order), "");
+                    $response = $ClientPaycomet->ExecutePurchaseUrl($fieldOrderId, $amount, $orderCurrencyCode, $language, "", $Secure, null, $this->getURLOK($order), $this->_helper->getURLKO($order), "");
                 } else if ($OPERATION==3) {
                     $function_txt = "CreatePreauthorizationUrl";
-                    $response = $ClientPaycomet->CreatePreauthorizationUrl($fieldOrderId, $amount, $orderCurrencyCode, $language, "", $Secure, null, $this->getURLOK($order), $this->getURLKO($order), "");
+                    $response = $ClientPaycomet->CreatePreauthorizationUrl($fieldOrderId, $amount, $orderCurrencyCode, $language, "", $Secure, null, $this->getURLOK($order), $this->_helper->getURLKO($order), "");
                 }
             }
         }
@@ -1581,50 +1534,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         }
 
         return $dataResponse;
-    }
-
-
-
-    /**
-     * Checkout getURLOK.
-     *
-     * @return string
-     */
-    private function getURLOK($order)
-    {
-        return $this->_urlBuilder->getUrl(
-            'paycomet_payment/process/result',$this->_buildSessionParams(true,$order)
-        );
-    }
-
-    /**
-     * Checkout getURLKO.
-     *
-     * @return string
-     */
-    private function getURLKO($order)
-    {
-        return $this->_urlBuilder->getUrl(
-            'paycomet_payment/process/result',$this->_buildSessionParams(false,$order)
-        );
-    }
-
-
-    /**
-     * Build params for the session redirect.
-     *
-     * @param bool $result
-     *
-     * @return array
-     */
-    private function _buildSessionParams($result,$order){
-        $result = ($result) ? '1' : '0';
-        $timestamp = strftime('%Y%m%d%H%M%S');
-        $merchant_code = $this->_helper->getConfigData('merchant_code');
-        $orderid = $order->getRealOrderId();
-        $sha1hash = $this->_helper->signFields("$timestamp.$merchant_code.$orderid.$result");
-
-        return ['timestamp' => $timestamp, 'order_id' => $orderid, 'result' => $result, 'hash' => $sha1hash];
     }
 
 }

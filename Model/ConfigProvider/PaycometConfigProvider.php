@@ -20,10 +20,31 @@ class PaycometConfigProvider implements ConfigProviderInterface
     /**
      * @var string[]
      */
+    // APMs
     protected $_methodCodes = [
         'paycomet_payment',
         'paycomet_paypal',
-        'paycomet_bizum'
+        'paycomet_bizum',
+        'paycomet_ideal',
+        'paycomet_klarna',
+        'paycomet_giropay',
+        'paycomet_mybank',
+        'paycomet_multibanco',
+        'paycomet_trustly',
+        'paycomet_przelewy24',
+        'paycomet_bancontact',
+        'paycomet_eps',
+        'paycomet_tele2',
+        'paycomet_paysera',
+        'paycomet_postfinance',
+        'paycomet_qiwi',
+        'paycomet_yandex',
+        'paycomet_mts',
+        'paycomet_beeline',
+        'paycomet_paysafecard',
+        'paycomet_skrill',
+        'paycomet_webmoney',
+        'paycomet_instantcredit'
     ];
 
     /**
@@ -85,17 +106,16 @@ class PaycometConfigProvider implements ConfigProviderInterface
                         $config['payment'] [$code]['form_footer'] = nl2br($this->_escaper->escapeHtml($this->_helper->getConfigData('form_footer')));
                         $config['payment'] [$code]['integration'] = $this->_helper->getConfigData('integration');
                         $config['payment'] [$code]['jetid'] = $this->_helper->getEncryptedConfigData('jetid');
+                        $config['payment'] [$code]['isActive'] = $this->_helper->getConfigData('active');
 
                         break;
-                    case 'paycomet_paypal':
+                    
+                    // 'Apms'                    
+                    default: 
                         $config['payment'] [$code]['redirectUrl'] = $this->getMethodRedirectUrl($code);
-                        
+                        $config['payment'] [$code]['isActive'] = $this->_helper->getConfigData('active');
                         break;
-
-                    case 'paycomet_bizum':
-                        $config['payment'] [$code]['redirectUrl'] = $this->getMethodRedirectUrl($code);                    
-
-                        break;
+                    
                 }
             }
         }

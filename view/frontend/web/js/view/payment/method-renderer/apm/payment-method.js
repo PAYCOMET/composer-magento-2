@@ -22,7 +22,7 @@ define(
         return Component.extend({
             self: this,
             defaults: {
-                template: 'Paycomet_Payment/payment/bizum/paycomet-form'
+                template: 'Paycomet_Payment/payment/apm/paycomet-form'
             },            
 
             initialize: function() {

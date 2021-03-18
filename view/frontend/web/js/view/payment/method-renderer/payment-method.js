@@ -76,6 +76,19 @@ define(
             },
 
             /**
+             * Check if payment is active
+             *
+             * @returns {Boolean}
+             */
+             isActive: function () {
+                var active = this.getCode() === this.isChecked();
+
+                this.active(active);
+
+                return active;
+            },
+
+            /**
              * Get action url for payment method iframe.
              * @returns {String}
              */

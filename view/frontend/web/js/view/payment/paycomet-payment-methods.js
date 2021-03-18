@@ -9,43 +9,63 @@ define(
     function (Component,ko,rendererList,_,$t) {
         'use strict';
 
-        var config = window.checkoutConfig.payment,          
-            paycomet_payment    = 'paycomet_payment',
-            paycomet_paypal     = 'paycomet_paypal',
-            paycomet_bizum      = 'paycomet_bizum';
+        var config = window.checkoutConfig.payment;        
 
-        
-        rendererList.push(
-            {
-                type: paycomet_payment,
-                component: 'Paycomet_Payment/js/view/payment/method-renderer/payment-method'
+        var paycomet_payment    = 'paycomet_payment';
+        if (config[paycomet_payment].isActive) {
+            rendererList.push(
+                {
+                    type: paycomet_payment,
+                    component: 'Paycomet_Payment/js/view/payment/method-renderer/payment-method'
+                }
+            );
+        }
+
+
+        // APMs
+        var arrAPM = [
+            'paypal',
+            'bizum',
+            'ideal',
+            'klarna',
+            'giropay',
+            'mybank',
+            'multibanco',
+            'trustly',
+            'przelewy24',
+            'bancontact',
+            'eps',
+            'tele2',
+            'paysera',
+            'postfinance',
+            'qiwi',
+            'yandex',
+            'mts',
+            'beeline',
+            'skrill',
+            'webmoney',
+            'instantcredit'
+        ];
+
+        for (var i = 0; i < arrAPM.length; i+=1) {            
+            var apm_type = 'paycomet_' + arrAPM[i];            
+            //var apm_component = 'Paycomet_Payment/js/view/payment/method-renderer/apm/'+arrAPM[i]+'/payment-method';
+            var apm_component = 'Paycomet_Payment/js/view/payment/method-renderer/apm/payment-method';
+            if (config[apm_type].isActive) {
+                rendererList.push(
+                    {
+                        type: apm_type,
+                        component: apm_component
+                    }
+                );
             }
-        );
-
-        rendererList.push(
-            {
-                type: paycomet_paypal,
-                component: 'Paycomet_Payment/js/view/payment/method-renderer/paypal/payment-method'
-            }
-        );
-
-        rendererList.push(
-            {
-                type: paycomet_bizum,
-                component: 'Paycomet_Payment/js/view/payment/method-renderer/bizum/payment-method'
-            }
-        );
-
-        
-            
-
+        }
         /** Add view logic here if needed */
         return Component.extend({
-           
+
             getCustomerCards: function () {
                 return window.checkoutConfig.payment[quote.paymentMethod().method].paycometCards;
             }
-
 
         });
     }
