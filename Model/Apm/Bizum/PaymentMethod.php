@@ -223,6 +223,29 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $this->_remoteAddress = $remoteAddress;
     }
     
+    /**
+     * Check method for processing with base currency
+     *     
+     * @return array currencies acepted 
+     */    
+    public function getAcceptedCurrencyCodes() {
+        return array($this->getConfigData('currency'));
+    }
+
+    /**
+     * Check method for processing with base currency
+     *
+     * @param string $currencyCode
+     * @return bool
+     */
+    public function canUseForCurrency($currencyCode)
+    {    
+        if (!in_array($currencyCode, $this->getAcceptedCurrencyCodes())) {
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * Do not validate payment form using server methods
@@ -248,7 +271,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         // Obtenemos la challenge del APM
         $challengUrl = $this->_helper->getAPMPaycometUrl($order, self::METHOD_ID);
     
-        // Se la asignamos para redirigir al final        
+        // Se la asignamos para redirigir al final
         $payment->setAdditionalInformation("DS_CHALLENGE_URL", $challengUrl);
 
         return $this;

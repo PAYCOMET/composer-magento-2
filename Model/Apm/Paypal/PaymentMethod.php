@@ -224,6 +224,29 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     }
 
     /**
+     * Check method for processing with base currency
+     *     
+     * @return array currencies acepted 
+     */    
+    public function getAcceptedCurrencyCodes() {
+        return array($this->getConfigData('currency'));
+    }
+
+    /**
+     * Check method for processing with base currency
+     *
+     * @param string $currencyCode
+     * @return bool
+     */
+    public function canUseForCurrency($currencyCode)
+    {    
+        if (!in_array($currencyCode, $this->getAcceptedCurrencyCodes())) {
+            return false;
+        }
+        return true;
+    }
+    
+    /**
      * Do not validate payment form using server methods
      *
      * @return bool

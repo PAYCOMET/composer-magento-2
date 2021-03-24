@@ -59,7 +59,7 @@ class Info extends \Magento\Payment\Block\Info
         if ($authCode=="")
             $authCode = $this->getInfo()->getAdditionalInformation('DS_MERCHANT_AUTHCODE');
         
-        $Scoring = $this->getInfo()->getAdditionalInformation('Scoring');        
+        $Scoring = $this->getInfo()->getAdditionalInformation('Scoring');
         $SecurePayment = $this->getInfo()->getAdditionalInformation('SecurePayment');
 
         $MethodName = $this->getInfo()->getAdditionalInformation('MethodName');

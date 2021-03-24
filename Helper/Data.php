@@ -350,7 +350,7 @@ class Data extends AbstractHelper
     }
 
 
-    private function isSecureTransaction($order,$total_amount=0){
+    public function isSecureTransaction($order,$total_amount=0){
 
         $terminales = trim($this->getConfigData('merchant_terminales'));
         $secure_first = trim($this->getConfigData('secure_first'));
@@ -399,7 +399,7 @@ class Data extends AbstractHelper
     }
 
 
-    private function getMerchantData($order, $methodId)
+    public function getMerchantData($order, $methodId)
     {
 
         $MERCHANT_EMV3DS = $this->getEMV3DS($order);
@@ -895,7 +895,7 @@ class Data extends AbstractHelper
      *
      * @return string
      */
-    private function getURLOK($order)
+    public function getURLOK($order)
     {
         return $this->_urlBuilder->getUrl(
             'paycomet_payment/process/result',$this->_buildSessionParams(true,$order)
@@ -907,7 +907,7 @@ class Data extends AbstractHelper
      *
      * @return string
      */
-    private function getURLKO($order)
+    public function getURLKO($order)
     {
         return $this->_urlBuilder->getUrl(
             'paycomet_payment/process/result',$this->_buildSessionParams(false,$order)

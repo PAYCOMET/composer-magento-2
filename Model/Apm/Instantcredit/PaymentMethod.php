@@ -16,7 +16,7 @@ use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod implements GatewayInterface
 {
-    const METHOD_ID = 31;
+    const METHOD_ID = 33;
     const METHOD_CODE = 'paycomet_instantcredit';
     const NOT_AVAILABLE = 'N/A';
 
@@ -223,6 +223,28 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $this->_remoteAddress = $remoteAddress;
     }
     
+    /**
+     * Check method for processing with base currency
+     *     
+     * @return array currencies acepted 
+     */    
+    public function getAcceptedCurrencyCodes() {
+        return array($this->getConfigData('currency'));
+    }
+
+    /**
+     * Check method for processing with base currency
+     *
+     * @param string $currencyCode
+     * @return bool
+     */
+    public function canUseForCurrency($currencyCode)
+    {    
+        if (!in_array($currencyCode, $this->getAcceptedCurrencyCodes())) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Do not validate payment form using server methods

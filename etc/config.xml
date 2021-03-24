@@ -4,8 +4,8 @@
         <payment>
             <paycomet_payment>                
                 <active>0</active>
-                <model>Paycomet\Payment\Model\PaymentMethod</model>
-                <title>PAYCOMET Payments</title>
+                <model>Paycomet\Payment\Model\PaymentMethod</model>                
+                <title>PAYCOMET</title>
                 <environment>sandbox</environment>
                 <card_offer_save>1</card_offer_save>
                 <card_manage>1</card_manage>                
@@ -26,7 +26,6 @@
                 <can_refund>1</can_refund>
                 <payment_action>authorize_capture</payment_action>
                 <secure_first>1</secure_first>                
-                <title>PAYCOMET</title>
                 <currency>EUR</currency>
                 <environment>production</environment>
                 <sort_order>0</sort_order>
@@ -37,6 +36,7 @@
                 <model>Paycomet\Payment\Model\Apm\Paypal\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_paypal>
             <paycomet_bizum>
@@ -45,6 +45,7 @@
                 <model>Paycomet\Payment\Model\Apm\Bizum\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_bizum>
             <paycomet_ideal>
@@ -53,6 +54,7 @@
                 <model>Paycomet\Payment\Model\Apm\Ideal\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_ideal>
             <paycomet_klarna>
@@ -61,6 +63,7 @@
                 <model>Paycomet\Payment\Model\Apm\Klarna\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_klarna>
             <paycomet_giropay>
@@ -69,6 +72,7 @@
                 <model>Paycomet\Payment\Model\Apm\Giropay\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_giropay>
             <paycomet_mybank>
@@ -77,6 +81,7 @@
                 <model>Paycomet\Payment\Model\Apm\Mybank\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_mybank>
             <paycomet_multibanco>
@@ -85,6 +90,7 @@
                 <model>Paycomet\Payment\Model\Apm\Multibanco\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_multibanco>
             <paycomet_trustly>
@@ -93,6 +99,7 @@
                 <model>Paycomet\Payment\Model\Apm\Trustly\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_trustly>
             <paycomet_przelewy24>
@@ -101,6 +108,7 @@
                 <model>Paycomet\Payment\Model\Apm\Przelewy24\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_przelewy24>
             <paycomet_bancontact>
@@ -109,6 +117,7 @@
                 <model>Paycomet\Payment\Model\Apm\Bancontact\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_bancontact>
             <paycomet_eps>
@@ -117,6 +126,7 @@
                 <model>Paycomet\Payment\Model\Apm\Eps\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_eps>
             <paycomet_tele2>
@@ -125,6 +135,7 @@
                 <model>Paycomet\Payment\Model\Apm\Tele2\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_tele2>
             <paycomet_paysera>
@@ -133,6 +144,7 @@
                 <model>Paycomet\Payment\Model\Apm\Paysera\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_paysera>
             <paycomet_postfinance>
@@ -141,6 +153,7 @@
                 <model>Paycomet\Payment\Model\Apm\Postfinance\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_postfinance>
             <paycomet_qiwi>
@@ -149,6 +162,7 @@
                 <model>Paycomet\Payment\Model\Apm\Qiwi\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_qiwi>
             <paycomet_yandex>
@@ -157,6 +171,7 @@
                 <model>Paycomet\Payment\Model\Apm\Yandex\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_yandex>
             <paycomet_mts>
@@ -165,6 +180,7 @@
                 <model>Paycomet\Payment\Model\Apm\Mts\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_mts>
             <paycomet_beeline>
@@ -173,6 +189,7 @@
                 <model>Paycomet\Payment\Model\Apm\Beeline\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_beeline>
             <paycomet_paysafecard>
@@ -181,6 +198,7 @@
                 <model>Paycomet\Payment\Model\Apm\Paysafecard\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_paysafecard>
             <paycomet_skrill>
@@ -189,6 +207,7 @@
                 <model>Paycomet\Payment\Model\Apm\Skrill\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_skrill>
             <paycomet_webmoney>
@@ -197,6 +216,7 @@
                 <model>Paycomet\Payment\Model\Apm\Webmoney\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_webmoney>
             <paycomet_instantcredit>
@@ -205,6 +225,7 @@
                 <model>Paycomet\Payment\Model\Apm\Instantcredit\PaymentMethod</model>
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <currency>EUR</currency>
                 <sort_order></sort_order>
             </paycomet_instantcredit>
         </payment>

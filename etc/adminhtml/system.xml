@@ -96,16 +96,10 @@
                             </depends>
                             <config_path>payment/paycomet_payment/secure_amount</config_path>
                         </field>
-                        <field id="currency" translate="label" type="select" sortOrder="38" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="currency" translate="label" type="select" sortOrder="38" showInDefault="1" showInWebsite="1" showInStore="0"  canRestore="1">
                             <label>Accepted Currency</label>
                             <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                             <config_path>payment/paycomet_payment/currency</config_path>
-                        </field>
-
-                        <field id="form_footer" type="textarea" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Ecommerce Info</label>
-                            <tooltip>Data to show below the payment form</tooltip>
-                            <config_path>payment/paycomet_payment/form_footer</config_path>
                         </field>
 
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -171,6 +165,15 @@
                             </depends>
                         </field>
 
+                        <field id="form_footer" type="textarea" translate="label" sortOrder="47" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Ecommerce Info</label>
+                            <tooltip>Data to show below the payment form</tooltip>
+                            <config_path>payment/paycomet_payment/form_footer</config_path>
+                            <depends>
+                                <field id="iframe_enabled">1</field>
+                            </depends>
+                        </field>
+
                         <field id="debug_log" translate="label" type="select" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Enable debug logging</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -222,6 +225,11 @@
                                 <field id="allowspecific">1</field>
                             </depends>
                         </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_paypal/currency</config_path>
+                        </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
                             <config_path>payment/paycomet_paypal/sort_order</config_path>
@@ -253,6 +261,11 @@
                             <depends>
                                 <field id="allowspecific">1</field>
                             </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_bizum/currency</config_path>
                         </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
@@ -286,6 +299,11 @@
                                 <field id="allowspecific">1</field>
                             </depends>
                         </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_ideal/currency</config_path>
+                        </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
                             <config_path>payment/paycomet_ideal/sort_order</config_path>
@@ -317,6 +335,11 @@
                             <depends>
                                 <field id="allowspecific">1</field>
                             </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_klarna/currency</config_path>
                         </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
@@ -350,6 +373,11 @@
                                 <field id="allowspecific">1</field>
                             </depends>
                         </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_giropay/currency</config_path>
+                        </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
                             <config_path>payment/paycomet_giropay/sort_order</config_path>
@@ -381,6 +409,11 @@
                             <depends>
                                 <field id="allowspecific">1</field>
                             </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_mybank/currency</config_path>
                         </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
@@ -414,6 +447,11 @@
                                 <field id="allowspecific">1</field>
                             </depends>
                         </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_multibanco/currency</config_path>
+                        </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
                             <config_path>payment/paycomet_multibanco/sort_order</config_path>
@@ -445,6 +483,11 @@
                             <depends>
                                 <field id="allowspecific">1</field>
                             </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_trustly/currency</config_path>
                         </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
@@ -478,6 +521,11 @@
                                 <field id="allowspecific">1</field>
                             </depends>
                         </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_przelewy24/currency</config_path>
+                        </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
                             <config_path>payment/paycomet_przelewy24/sort_order</config_path>
@@ -509,6 +557,11 @@
                             <depends>
                                 <field id="allowspecific">1</field>
                             </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_bancontact/currency</config_path>
                         </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
@@ -542,6 +595,11 @@
                                 <field id="allowspecific">1</field>
                             </depends>
                         </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_eps/currency</config_path>
+                        </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
                             <config_path>payment/paycomet_eps/sort_order</config_path>
@@ -573,6 +631,11 @@
                             <depends>
                                 <field id="allowspecific">1</field>
                             </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_tele2/currency</config_path>
                         </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
@@ -606,6 +669,11 @@
                                 <field id="allowspecific">1</field>
                             </depends>
                         </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_paysera/currency</config_path>
+                        </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
                             <config_path>payment/paycomet_paysera/sort_order</config_path>
@@ -637,6 +705,11 @@
                             <depends>
                                 <field id="allowspecific">1</field>
                             </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_postfinance/currency</config_path>
                         </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
@@ -670,6 +743,11 @@
                                 <field id="allowspecific">1</field>
                             </depends>
                         </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_qiwi/currency</config_path>
+                        </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
                             <config_path>payment/paycomet_qiwi/sort_order</config_path>
@@ -701,6 +779,11 @@
                             <depends>
                                 <field id="allowspecific">1</field>
                             </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_yandex/currency</config_path>
                         </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
@@ -734,6 +817,11 @@
                                 <field id="allowspecific">1</field>
                             </depends>
                         </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_mts/currency</config_path>
+                        </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
                             <config_path>payment/paycomet_mts/sort_order</config_path>
@@ -765,6 +853,11 @@
                             <depends>
                                 <field id="allowspecific">1</field>
                             </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_beeline/currency</config_path>
                         </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
@@ -798,6 +891,11 @@
                                 <field id="allowspecific">1</field>
                             </depends>
                         </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_paysafecard/currency</config_path>
+                        </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
                             <config_path>payment/paycomet_paysafecard/sort_order</config_path>
@@ -829,6 +927,11 @@
                             <depends>
                                 <field id="allowspecific">1</field>
                             </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_skrill/currency</config_path>
                         </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
@@ -862,6 +965,11 @@
                                 <field id="allowspecific">1</field>
                             </depends>
                         </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_webmoney/currency</config_path>
+                        </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
                             <config_path>payment/paycomet_webmoney/sort_order</config_path>
@@ -893,6 +1001,11 @@
                             <depends>
                                 <field id="allowspecific">1</field>
                             </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_instantcredit/currency</config_path>
                         </field>
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>

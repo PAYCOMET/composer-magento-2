@@ -94,6 +94,12 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
             return false;
         }
 
+        // Verificamos que no se haya creado ya la misma Transacción.
+        if ( $payment->getLastTransId() == $response["AuthCode"]) {
+            print "PAYCOMET 1";
+            return false;
+        }
+    
         $this->_helper->CreateTransInvoice($order,$response);
 
         return true;
