@@ -8,7 +8,6 @@ use Paycomet\Payment\Model\Config\Source\PaymentAction;
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
-use Paycomet\Bankstore\Client;
 use Paycomet\Bankstore\ApiRest;
 use Paycomet\Payment\Observer\DataAssignObserver;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
@@ -225,9 +224,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
     /**
      * Check method for processing with base currency
-     *     
-     * @return array currencies acepted 
-     */    
+     *
+     * @return array currencies acepted
+     */
     public function getAcceptedCurrencyCodes() {
         return array($this->getConfigData('currency'));
     }
@@ -239,13 +238,13 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      * @return bool
      */
     public function canUseForCurrency($currencyCode)
-    {    
+    {
         if (!in_array($currencyCode, $this->getAcceptedCurrencyCodes())) {
             return false;
         }
         return true;
     }
-    
+
     /**
      * Do not validate payment form using server methods
      *
@@ -271,35 +270,12 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $challengUrl = $this->_helper->getAPMPaycometUrl($order, self::METHOD_ID);
 
         // Se la asignamos para redirigir al final
-        
+
         $payment->setAdditionalInformation("DS_CHALLENGE_URL", $challengUrl);
 
         return $this;
 
     }
-
-
-    /**
-     * Send authorize request to gateway
-     *
-     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface $payment
-     * @param  float $amount
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount){ }
-
-    /**
-     * Capture.
-     *
-     * @param \Magento\Payment\Model\InfoInterface $payment
-     * @param float                                $amount
-     *
-     * @return $this
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount) { }
 
     /**
      * Refund specified amount for payment.
@@ -313,16 +289,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount) {}
 
-    /**
-     * Refund specified amount for payment.
-     *
-     * @param \Magento\Payment\Model\InfoInterface $payment
-     *
-     * @return $this
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function void(\Magento\Payment\Model\InfoInterface $payment) {}
+
 
 
     /**

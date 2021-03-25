@@ -8,7 +8,6 @@ use Paycomet\Payment\Model\Config\Source\PaymentAction;
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
-use Paycomet\Bankstore\Client;
 use Paycomet\Bankstore\ApiRest;
 use Paycomet\Payment\Observer\DataAssignObserver;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
@@ -89,7 +88,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     /**
      * @var bool
      */
-    protected $_canVoid = true;
+    protected $_canVoid = false;
 
     /**
      * @var bool
@@ -222,13 +221,13 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $this->_objectManager = $objectmanager;
         $this->_remoteAddress = $remoteAddress;
     }
-    
+
 
     /**
      * Check method for processing with base currency
-     *     
-     * @return array currencies acepted 
-     */    
+     *
+     * @return array currencies acepted
+     */
     public function getAcceptedCurrencyCodes() {
         return array($this->getConfigData('currency'));
     }
@@ -240,7 +239,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      * @return bool
      */
     public function canUseForCurrency($currencyCode)
-    {    
+    {
         if (!in_array($currencyCode, $this->getAcceptedCurrencyCodes())) {
             return false;
         }
@@ -267,39 +266,16 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     {
         $payment = $this->getInfoInstance();
         $order = $payment->getOrder();
-                
+
         // Obtenemos la challenge del APM
         $challengUrl = $this->_helper->getAPMPaycometUrl($order, self::METHOD_ID);
-    
-        // Se la asignamos para redirigir al final        
+
+        // Se la asignamos para redirigir al final
         $payment->setAdditionalInformation("DS_CHALLENGE_URL", $challengUrl);
 
         return $this;
 
     }
-
-
-    /**
-     * Send authorize request to gateway
-     *
-     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface $payment
-     * @param  float $amount
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount){ }
-
-    /**
-     * Capture.
-     *
-     * @param \Magento\Payment\Model\InfoInterface $payment
-     * @param float                                $amount
-     *
-     * @return $this
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount) { }
 
     /**
      * Refund specified amount for payment.
@@ -314,124 +290,10 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
         parent::refund($payment, $amount);
-        $order = $payment->getOrder();
-        $realOrderId = $order->getRealOrderId();
-        $orderCurrencyCode = $order->getBaseCurrencyCode();
-        $amount = $this->_helper->amountFromMagento($amount, $orderCurrencyCode);
-        $AuthCode = $payment->getTransactionId();
-        $AuthCode = str_replace("-refund","",$AuthCode);
-        $AuthCode = str_replace("-capture","",$AuthCode);
-        $storeId = $order->getStoreId();
-
-        $merchant_code      = trim($this->_helper->getConfigData('merchant_code',$storeId));
-        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal',$storeId));
-        $merchant_pass      = trim($this->_helper->getEncryptedConfigData('merchant_pass',$storeId));
-        $api_key            = trim($this->_helper->getEncryptedConfigData('api_key',$storeId));
-
-        // Uso de Rest
-        if ($api_key != "") {
-
-            $notifyDirectPayment = 2;
-            $apiRest = new ApiRest($api_key);
-
-            $executeRefundReponse = $apiRest->executeRefund(
-                $realOrderId,
-                $merchant_terminal,
-                $amount,
-                $orderCurrencyCode,
-                $AuthCode,
-                $this->_remoteAddress->getRemoteAddress(),
-                $notifyDirectPayment
-            );
-
-            $response = array();
-            $response["DS_RESPONSE"] = ($executeRefundReponse->errorCode > 0)? 0 : 1;
-            $response["DS_ERROR_ID"] = $executeRefundReponse->errorCode;
-
-            if ($response["DS_RESPONSE"]==1) {
-                $response["DS_MERCHANT_AUTHCODE"] = $executeRefundReponse->authCode;
-            }
-
-
-        } else {
-
-            $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
-            $response = $ClientPaycomet->ExecuteRefund('', '', $realOrderId, $orderCurrencyCode, $AuthCode, $amount);
-
-            if (!isset($response) || !$response) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('The refund action failed'));
-            }
-
-            $response = (array) $response;
-        }
-        if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __(sprintf('Refund failed. Error ( %s ) - %s', $response['DS_ERROR_ID'], $this->_helper->getErrorDesc($response['DS_ERROR_ID'])))
-            );
-        } else {
-            $payment->setTransactionId($response['DS_MERCHANT_AUTHCODE'])
-                    ->setParentTransactionId($AuthCode)
-                    ->setTransactionAdditionalInfo(\Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS, $response);
-        }
+        $this->_helper->refund($payment, $amount);
         return $this;
     }
 
-    /**
-     * Refund specified amount for payment.
-     *
-     * @param \Magento\Payment\Model\InfoInterface $payment
-     *
-     * @return $this
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function void(\Magento\Payment\Model\InfoInterface $payment) 
-    {
-
-        parent::void($payment);
-        $order = $payment->getOrder();
-
-        $realOrderId = $order->getRealOrderId();
-
-        $orderCurrencyCode = $order->getBaseCurrencyCode();
-
-        $amount = $this->_helper->amountFromMagento($order->getBaseGrandTotal(), $orderCurrencyCode);
-
-
-        $paycometToken = explode("|",$order->getPaycometToken());
-        $IdUser = $paycometToken[0];
-        $TokenUser = $paycometToken[1];
-
-        $AuthCode = $payment->getTransactionId();
-
-
-        $storeId = $order->getStoreId();
-
-        $merchant_code = $this->_helper->getConfigData('merchant_code',$storeId);
-        $merchant_terminal = $this->_helper->getConfigData('merchant_terminal',$storeId);
-        $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass',$storeId);
-
-        $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
-
-
-        $response = $ClientPaycomet->PreauthorizationCancel($IdUser, $TokenUser, $amount, $realOrderId);
-
-        if (!isset($response) || !$response) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The cancel action failed'));
-        }
-
-        $response = (array) $response;
-        if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __(sprintf('Refund failed. Error ( %s ) - %s', $response['DS_ERROR_ID'], $this->_helper->getErrorDesc($response['DS_ERROR_ID'])))
-            );
-        }
-        $payment->setTransactionId($response['DS_MERCHANT_AUTHCODE'])
-                ->setParentTransactionId($AuthCode)
-                ->setTransactionAdditionalInfo(\Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS, $response);
-
-        return $this;
-    }
 
     /**
      * Accept under review payment.
@@ -478,7 +340,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         return $this;
     }
 
-    
+
 
     /**
      * Checkout redirect URL.
@@ -521,5 +383,5 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     }
 
 
-    
+
 }

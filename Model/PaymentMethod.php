@@ -8,7 +8,6 @@ use Paycomet\Payment\Model\Config\Source\PaymentAction;
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
-use Paycomet\Bankstore\Client;
 use Paycomet\Bankstore\ApiRest;
 use Paycomet\Payment\Observer\DataAssignObserver;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
@@ -294,16 +293,12 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         // Fin Pago mediante tarjeta tokenizada ------------------------------------------------------
         } if (isset($jetToken) && $jetToken!=""){
-
-            $merchant_code      = trim($this->_helper->getConfigData('merchant_code'));
+            
             $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));
-            $merchant_pass      = trim($this->_helper->getEncryptedConfigData('merchant_pass'));
-            $jet_id            = trim($this->_helper->getEncryptedConfigData('jetid'));
             $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
 
              // Uso de Rest
             if ($api_key != "") {
-
                 try {
                     $apiRest = new ApiRest($api_key);
                     $tokenCard = $apiRest->addUser(
@@ -330,17 +325,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     throw new \Magento\Framework\Exception\LocalizedException(__('jetToken card failed'));
                 }
             } else {
-
-                $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,$jet_id);
-
-                $response = $ClientPaycomet->AddUserToken($jetToken);
-                if (!isset($response) || !$response) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('jetToken card failed'));
-                }
-                $response = (array) $response;
-                if ($response["DS_ERROR_ID"] >0 ) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('jetToken card failed'));
-                }
+                $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));
             }
 
             $idUser = $response["DS_IDUSER"];
@@ -361,7 +346,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
             // Verifiy 3D Secure Payment
             $Secure = ($this->_helper->isSecureTransaction($order,$amount))?1:0;
-
 
             // Non Secure Payment with Token Card
             if (!$Secure){
@@ -408,7 +392,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         if ($amount <= 0) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid amount.'));
         }
-
         $order = $payment->getOrder();
         $realOrderId = $order->getRealOrderId();
         $currencyCode = $order->getBaseCurrencyCode();
@@ -422,10 +405,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         }
         $IdUser = $data["iduser"];
         $TokenUser = $data["tokenuser"];
-
-        $merchant_code      = trim($this->_helper->getConfigData('merchant_code'));
+        
         $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));
-        $merchant_pass      = trim($this->_helper->getEncryptedConfigData('merchant_pass'));
         $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
 
         $methodId = 1;
@@ -435,9 +416,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         // Uso de Rest
         if ($api_key != "") {
-
             $merchantData = $this->_helper->getMerchantData($order,self::METHOD_ID);
-
             try {
                 $apiRest = new ApiRest($api_key);
                 $createPreauthorizationResponse = $apiRest->createPreautorization(
@@ -485,24 +464,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             }
 
         } else {
-
-            $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
-
-            $response = $ClientPaycomet->CreatePreauthorization($IdUser, $TokenUser, $amount, $realOrderId, $currencyCode,"","",null,"",null,null,null,null,$userInteraction);
-
-            if (!isset($response) || !$response) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('The authorize action failed'));
-            }
-            $response = (array) $response;
-
-            // Si nos llega challenge se la asignamos para redirigir posteriormente
-            if ($response["DS_CHALLENGE_URL"] != "" && $response["DS_CHALLENGE_URL"] != "0") {
-
-                $order->setPaycometToken($IdUser."|".$TokenUser);
-                $order->save();
-                $payment->setAdditionalInformation("DS_CHALLENGE_URL", urldecode($response["DS_CHALLENGE_URL"]));
-                return $this;
-            }
+            $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));
         }
 
         if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
@@ -540,7 +502,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
-
         if ($amount <= 0) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid amount.'));
         }
@@ -549,10 +510,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $realOrderId = $order->getRealOrderId();
         $currencyCode = $order->getBaseCurrencyCode();
 
-        $amount = $this->_helper->amountFromMagento($amount, $currencyCode);
-        $merchant_code      = trim($this->_helper->getConfigData('merchant_code'));
-        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));
-        $merchant_pass      = trim($this->_helper->getEncryptedConfigData('merchant_pass'));
+        $amount = $this->_helper->amountFromMagento($amount, $currencyCode);    
+        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));        
         $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
 
         $TransactionType = $payment->getAdditionalInformation('TransactionType');
@@ -562,7 +521,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
                 // Uso de Rest
                 if ($api_key != "") {
-
                     try {
                         $apiRest = new ApiRest($api_key);
 
@@ -592,21 +550,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     }
 
                 } else {
-
-                    $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
-
-                    $paycometToken = explode("|",$order->getPaycometToken());
-                    $IdUser = $paycometToken[0];
-                    $TokenUser = $paycometToken[1];
-
-                    $response = $ClientPaycomet->PreauthorizationConfirm($IdUser, $TokenUser, $amount, $realOrderId);
-
-                    if (!isset($response) || !$response) {
-                        throw new \Magento\Framework\Exception\LocalizedException(__('The capture action failed'));
-                    }
-
-                    $response = (array) $response;
-
+                    $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));
                 }
 
                 if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
@@ -646,10 +590,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
                 // Uso de Rest
                 if ($api_key != "") {
-
                     $merchantData = $this->_helper->getMerchantData($order,self::METHOD_ID);
                     $apiRest = new ApiRest($api_key);
-
                     try {
 
                         $executePurchaseResponse = $apiRest->executePurchase(
@@ -696,20 +638,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     }
 
                 } else {
-                    $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
-
-                    $response = $ClientPaycomet->ExecutePurchase($IdUser,$TokenUser,$amount,$realOrderId,$currencyCode,"","",null,"",null,null,null,null,$userInteraction);
-
-                    if (!isset($response) || !$response) {
-                        throw new \Magento\Framework\Exception\LocalizedException(__('The capture action failed'));
-                    }
-                    $response = (array) $response;
-
-                    // Si nos llega challenge se la asignamos para redirigir posteriormente
-                    if ($response["DS_CHALLENGE_URL"] != "" && $response["DS_CHALLENGE_URL"] != "0") {
-                        $payment->setAdditionalInformation("DS_CHALLENGE_URL", urldecode($response["DS_CHALLENGE_URL"]));
-                        return $this;
-                    }
+                    $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));
                 }
 
                 if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
@@ -728,9 +657,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
                 break;
         }
-
         return $this;
-
     }
 
 
@@ -747,65 +674,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
         parent::refund($payment, $amount);
-        $order = $payment->getOrder();
-        $realOrderId = $order->getRealOrderId();
-        $orderCurrencyCode = $order->getBaseCurrencyCode();
-        $amount = $this->_helper->amountFromMagento($amount, $orderCurrencyCode);
-        $AuthCode = $payment->getTransactionId();
-        $AuthCode = str_replace("-refund","",$AuthCode);
-        $AuthCode = str_replace("-capture","",$AuthCode);
-        $storeId = $order->getStoreId();
-
-        $merchant_code      = trim($this->_helper->getConfigData('merchant_code',$storeId));
-        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal',$storeId));
-        $merchant_pass      = trim($this->_helper->getEncryptedConfigData('merchant_pass',$storeId));
-        $api_key            = trim($this->_helper->getEncryptedConfigData('api_key',$storeId));
-
-        // Uso de Rest
-        if ($api_key != "") {
-
-            $notifyDirectPayment = 2;
-            $apiRest = new ApiRest($api_key);
-
-            $executeRefundReponse = $apiRest->executeRefund(
-                $realOrderId,
-                $merchant_terminal,
-                $amount,
-                $orderCurrencyCode,
-                $AuthCode,
-                $this->_remoteAddress->getRemoteAddress(),
-                $notifyDirectPayment
-            );
-
-            $response = array();
-            $response["DS_RESPONSE"] = ($executeRefundReponse->errorCode > 0)? 0 : 1;
-            $response["DS_ERROR_ID"] = $executeRefundReponse->errorCode;
-
-            if ($response["DS_RESPONSE"]==1) {
-                $response["DS_MERCHANT_AUTHCODE"] = $executeRefundReponse->authCode;
-            }
-
-
-        } else {
-
-            $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
-            $response = $ClientPaycomet->ExecuteRefund('', '', $realOrderId, $orderCurrencyCode, $AuthCode, $amount);
-
-            if (!isset($response) || !$response) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('The refund action failed'));
-            }
-
-            $response = (array) $response;
-        }
-        if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __(sprintf('Refund failed. Error ( %s ) - %s', $response['DS_ERROR_ID'], $this->_helper->getErrorDesc($response['DS_ERROR_ID'])))
-            );
-        } else {
-            $payment->setTransactionId($response['DS_MERCHANT_AUTHCODE'])
-                    ->setParentTransactionId($AuthCode)
-                    ->setTransactionAdditionalInfo(\Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS, $response);
-        }
+        $this->_helper->refund($payment, $amount);        
         return $this;
     }
 
@@ -820,49 +689,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
-
         parent::void($payment);
-        $order = $payment->getOrder();
-
-        $realOrderId = $order->getRealOrderId();
-
-        $orderCurrencyCode = $order->getBaseCurrencyCode();
-
-        $amount = $this->_helper->amountFromMagento($order->getBaseGrandTotal(), $orderCurrencyCode);
-
-
-        $paycometToken = explode("|",$order->getPaycometToken());
-        $IdUser = $paycometToken[0];
-        $TokenUser = $paycometToken[1];
-
-        $AuthCode = $payment->getTransactionId();
-
-
-        $storeId = $order->getStoreId();
-
-        $merchant_code = $this->_helper->getConfigData('merchant_code',$storeId);
-        $merchant_terminal = $this->_helper->getConfigData('merchant_terminal',$storeId);
-        $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass',$storeId);
-
-        $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
-
-
-        $response = $ClientPaycomet->PreauthorizationCancel($IdUser, $TokenUser, $amount, $realOrderId);
-
-        if (!isset($response) || !$response) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The cancel action failed'));
-        }
-
-        $response = (array) $response;
-        if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __(sprintf('Refund failed. Error ( %s ) - %s', $response['DS_ERROR_ID'], $this->_helper->getErrorDesc($response['DS_ERROR_ID'])))
-            );
-        }
-        $payment->setTransactionId($response['DS_MERCHANT_AUTHCODE'])
-                ->setParentTransactionId($AuthCode)
-                ->setTransactionAdditionalInfo(\Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS, $response);
-
+        $this->_helper->void($payment);        
         return $this;
     }
 
@@ -886,9 +714,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         throw new \Magento\Framework\Exception\LocalizedException(__('Hold Paaym'));
         return $this;
     }
-
-
-
 
     /**
      * Assign data to info model instance.
@@ -922,7 +747,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         $resource = $this->_objectManager->get('Magento\Framework\App\ResourceConnection');
         $connection = $resource->getConnection();
-
 
         $select = $connection->select()
             ->from(
@@ -987,10 +811,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     {
 
         $order = $this->_session->getLastRealOrder();
-
-        $merchant_code      = trim($this->_helper->getConfigData('merchant_code'));
+        
         $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));
-        $merchant_pass      = trim($this->_helper->getEncryptedConfigData('merchant_pass'));
         $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
 
         $payment_action = trim($this->_helper->getConfigData('payment_action'));
@@ -1019,9 +841,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $OPERATION = ($payment_action==PaymentAction::AUTHORIZE_CAPTURE)?1:3; // EXECUTE_PURCHASE : CREATE_PREAUTORIZATION
 
         $formFields = [];
-
-        $ClientPaycomet = new Client($merchant_code,$merchant_terminal,$merchant_pass,"");
-
+        
         $function_txt = "";
 
         // Payment/Preauthorization with Saved Card or jetIframe
@@ -1035,9 +855,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             $formFields['TOKEN_USER'] = $TokenUser;
 
             if ($api_key != "") {
-
                 $merchantData = $this->_helper->getMerchantData($order,self::METHOD_ID);
-
                 try {
                     $apiRest = new ApiRest($api_key);
                     $response = $apiRest->form(
@@ -1070,22 +888,12 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     $response["url"] = "";
                     $response["error"]  = $response->errorCode;
                 }
-
             } else {
-                if ($OPERATION==1) {
-                    $function_txt = "ExecutePurchaseTokenUrl";
-                    $response = $ClientPaycomet->ExecutePurchaseTokenUrl($fieldOrderId, $amount, $orderCurrencyCode, $IdUser,$TokenUser, $language, "", $Secure, null, $this->getURLOK($order), $this->_helper->getURLKO($order), "");
-                } else if ($OPERATION==3) {
-                    $function_txt = "ExecutePreauthorizationTokenUrl";
-                    $response = $ClientPaycomet->ExecutePreauthorizationTokenUrl($fieldOrderId, $amount, $orderCurrencyCode, $IdUser,$TokenUser, $language, "", $Secure, null, $this->getURLOK($order), $this->_helper->getURLKO($order), "");
-                }
+                $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));
             }
-
         // Payment/Preautorization with New Card
         } else {
-
             if ($api_key != "") {
-
                 $merchantData = $this->_helper->getMerchantData($order,self::METHOD_ID);
 
                 try {
@@ -1115,16 +923,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     $response["url"] = "";
                     $response["error"]  = $response->errorCode;
                 }
-
             } else {
-
-                if ($OPERATION==1) {
-                    $function_txt = "ExecutePurchaseUrl";
-                    $response = $ClientPaycomet->ExecutePurchaseUrl($fieldOrderId, $amount, $orderCurrencyCode, $language, "", $Secure, null, $this->getURLOK($order), $this->_helper->getURLKO($order), "");
-                } else if ($OPERATION==3) {
-                    $function_txt = "CreatePreauthorizationUrl";
-                    $response = $ClientPaycomet->CreatePreauthorizationUrl($fieldOrderId, $amount, $orderCurrencyCode, $language, "", $Secure, null, $this->getURLOK($order), $this->_helper->getURLKO($order), "");
-                }
+                $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));
             }
         }
 

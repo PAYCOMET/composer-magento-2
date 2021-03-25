@@ -3,7 +3,7 @@
 namespace Paycomet\Payment\Model\Api;
 
 use Paycomet\Payment\Model\Config\Source\PaymentAction;
-use Paycomet\Bankstore\Client;
+
 use Paycomet\Payment\Observer\DataAssignObserver;
 
 class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPaymentManagementInterface
