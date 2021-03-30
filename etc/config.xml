@@ -13,7 +13,7 @@
                 <payment_cancelled>canceled</payment_cancelled>
                 <iframe_enabled>1</iframe_enabled>
                 <iframe_mode>lightbox</iframe_mode>
-                <iframe_height>440</iframe_height>
+                <iframe_height>340</iframe_height>
                 <lang></lang>
                 <payment_desc></payment_desc>
                 <debug_log>0</debug_log>

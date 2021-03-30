@@ -314,7 +314,7 @@ class Data extends AbstractHelper
             $this->logDebug(__("ERROR: PAYCOMET API KEY required"));
         }
 
-        
+
 
         $tokenCardPayment = true;
 
@@ -332,7 +332,7 @@ class Data extends AbstractHelper
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
-    {        
+    {
         $order = $payment->getOrder();
         $realOrderId = $order->getRealOrderId();
         $orderCurrencyCode = $order->getBaseCurrencyCode();
@@ -341,7 +341,7 @@ class Data extends AbstractHelper
         $AuthCode = str_replace("-refund","",$AuthCode);
         $AuthCode = str_replace("-capture","",$AuthCode);
         $storeId = $order->getStoreId();
-        
+
         $merchant_terminal  = trim($this->getConfigData('merchant_terminal',$storeId));
         $api_key            = trim($this->getEncryptedConfigData('api_key',$storeId));
 
@@ -371,7 +371,7 @@ class Data extends AbstractHelper
         } else {
             $this->logDebug(__("ERROR: PAYCOMET API KEY required"));
         }
-        
+
         if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(sprintf('Refund failed. Error ( %s ) - %s', $response['DS_ERROR_ID'], $this->getErrorDesc($response['DS_ERROR_ID'])))
@@ -415,7 +415,7 @@ class Data extends AbstractHelper
         // Uso de Rest
         if ($api_key != "") {
             try {
-                $apiRest = new ApiRest($api_key);                
+                $apiRest = new ApiRest($api_key);
 
                 $cancelPreautorization = $apiRest->cancelPreautorization(
                     $realOrderId,

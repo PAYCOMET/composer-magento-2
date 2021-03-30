@@ -881,6 +881,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                         '',
                         [
                             'terminal' => $merchant_terminal,
+                            'methods' => [1],
                             'order' => $fieldOrderId,
                             'amount' => $amount,
                             'currency' => $orderCurrencyCode,

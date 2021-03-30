@@ -73,14 +73,19 @@ class Info extends \Magento\Payment\Block\Info
         $data = $this->checkAndSet($data, $result, 'Result');
         $data = $this->checkAndSet($data, $authCode, 'Auth Code');
         $data = $this->checkAndSet($data, $ErrorID, 'Error Id');
-        $data = $this->checkAndSet($data, $ErrorDescription, 'Error Description');
+        if ($ErrorID) {
+            $data = $this->checkAndSet($data, $ErrorDescription, 'Error Description');
+        }
         
         $data = $this->checkAndSet($data, $Scoring, 'Fraud Filter Result');
+        
         if ($cardDigits) {
             $data[(string) __('Card Number')] = sprintf('xxxx-%s', $cardDigits);
         }
-        $data[(string) __('3D Secure Status')] = $this->_is3DSecure($SecurePayment);
-        
+
+        if ($SecurePayment)
+            $data[(string) __('3D Secure Status')] = $this->_is3DSecure($SecurePayment);
+
 
         return $transport->setData(array_merge($data, $transport->getData()));
     }
