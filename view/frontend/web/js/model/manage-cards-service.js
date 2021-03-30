@@ -8,14 +8,19 @@ define(
         'use strict';
         var iframeHeight = ko.observable('640px');
         var iframeWidth = ko.observable('100%');
+        
         var iframeUrl = ko.observable($('#paycomet-iframe').val());
+        var jetId = ko.observable($('#paycomet-jetid').val());
         var displayMessage =  ko.observable(false);
+
        
         
         return {
             iframeHeight: iframeHeight,
             iframeWidth: iframeWidth,
             iframeUrl: iframeUrl,
+            jetId: jetId,
+            
             displayMessage: displayMessage,
 
             iframeResize: function(event) {

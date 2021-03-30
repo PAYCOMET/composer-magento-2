@@ -343,30 +343,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             // Si es pago con Token o jetIframe guardamos los datos del token en el pedido
             $order->setPaycometToken($idUser."|".$tokenUser);
             $order->save();
-
-            // Verifiy 3D Secure Payment
-            $Secure = ($this->_helper->isSecureTransaction($order,$amount))?1:0;
-
-            // Non Secure Payment with Token Card
-            if (!$Secure){
-
-                $payment_action = trim($this->_helper->getConfigData('payment_action'));
-                switch ($payment_action){
-                    case PaymentAction::AUTHORIZE_CAPTURE:
-                        throw new \Magento\Framework\Exception\LocalizedException(__('jetToken card failed'));
-                        $this->capture($payment,$order->getBaseGrandTotal());
-                        break;
-                    case PaymentAction::AUTHORIZE:
-                        $this->authorize($payment,$order->getBaseGrandTotal());
-                        break;
-                }
-
-                // Set order as PROCESSING
-                $stateObject->setState(Order::STATE_PROCESSING);
-                $stateObject->setStatus(Order::STATE_PROCESSING);
-
-                return $this;
-            }
         }
 
         // New Card or Token Card with 3D SecurePayment
@@ -836,7 +812,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $quote->setIsActive(1)->setReservedOrderId(null);
         $quoteRepository->save($quote);
 
-        $Secure = ($this->_helper->isSecureTransaction($order,$amount))?1:0;
+        $Secure = 1;
 
         $OPERATION = ($payment_action==PaymentAction::AUTHORIZE_CAPTURE)?1:3; // EXECUTE_PURCHASE : CREATE_PREAUTORIZATION
 

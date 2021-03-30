@@ -274,6 +274,53 @@ class Data extends AbstractHelper
     }
 
 
+    public function addUserToken($jetToken){
+
+        $merchant_terminal  = trim($this->getConfigData('merchant_terminal'));
+        $api_key            = trim($this->getEncryptedConfigData('api_key'));
+
+            // Uso de Rest
+        if ($api_key != "") {
+            try {
+                $apiRest = new ApiRest($api_key);
+                $tokenCard = $apiRest->addUser(
+                    $merchant_terminal,
+                    $jetToken,
+                    '',
+                    '',
+                    '',
+                    2
+                );
+                $response = array();
+                $response["DS_RESPONSE"] = ($tokenCard->errorCode > 0)? 0 : 1;
+
+                if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__('jetToken card failed'));
+                }
+
+                if ($response["DS_RESPONSE"]==1) {
+                    $response["IdUser"] = $tokenCard->idUser ?? 0;
+                    $response["TokenUser"] = $tokenCard->tokenUser ?? '';
+                }
+
+                $customerId = $this->getCustomerId();
+                $storeId = $this->_storeManager->getStore()->getId();
+
+                $this->_handleCardStorage($response, $customerId, $storeId);
+            } catch (Exception $e) {
+                throw new \Magento\Framework\Exception\LocalizedException(__('jetToken card failed'));
+            }
+        } else {
+            $this->logDebug(__("ERROR: PAYCOMET API KEY required"));
+        }
+
+        
+
+        $tokenCardPayment = true;
+
+    }
+
+
     /**
      * Refund specified amount for payment.
      *
@@ -468,56 +515,6 @@ class Data extends AbstractHelper
         }
 
         return $dataResponse;
-
-    }
-
-
-    public function isSecureTransaction($order,$total_amount=0){
-
-        $terminales = trim($this->getConfigData('merchant_terminales'));
-        $secure_first = trim($this->getConfigData('secure_first'));
-        $secure_amount = trim($this->getConfigData('secure_amount'));
-
-        $payment  = $order->getPayment();
-
-        $hash = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_TOKENCARD);
-        $jetIframe = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_JETTOKEN);
-
-        $paymentNewCard = true;
-        // Si pago con Token y NO pago con jetIframe
-        if ( (isset($hash) && $hash!="") || !($jetIframe!="")) {
-            $paymentNewCard = false;
-        }
-
-        $orderCurrencyCode = $order->getBaseCurrencyCode();
-        $amount = $this->amountFromMagento($order->getBaseGrandTotal(), $orderCurrencyCode);
-
-        if ($secure_amount>0) {
-            $secure_amount = $this->amountFromMagento($secure_amount, $orderCurrencyCode);
-        }
-
-        // Transaccion Segura:
-        // Si solo tiene Terminal Seguro
-        if ($terminales==0){
-            return true;
-        }
-        // Si esta definido que el pago es 3d secure y no estamos usando una tarjeta tokenizada
-        if ($secure_first && $paymentNewCard){
-            return true;
-        }
-
-        $total_amount = ($total_amount==0)?$amount:$total_amount;
-
-        // Si se supera el importe maximo para compra segura
-        if ($terminales==2 && ($secure_amount!="" && $secure_amount < $total_amount)){
-            return true;
-        }
-
-        // Si esta definido como que la primera compra es Segura y es la primera compra aunque este tokenizada
-        if ($terminales==2 && $secure_first && !$paymentNewCard && $this->isFirstPurchaseToken($order->getPayment()))
-            return true;
-
-        return false;
     }
 
 
@@ -993,10 +990,8 @@ class Data extends AbstractHelper
                         'userInteraction' => 1,
                         'secure' => $Secure,
                         'merchantData' => $this->getMerchantData($order, $methodId),
-                        //'urlOk' => $this->getURLOK($order),
-                        //'urlKo' => $this->getURLKO($order)
-                        'urlOk' => "http://magento222.test/",
-                        'urlKo' => "http://magento222.test/"
+                        'urlOk' => $this->getURLOK($order),
+                        'urlKo' => $this->getURLKO($order)
                     ]
                 );
                 if ($response->errorCode==0) {

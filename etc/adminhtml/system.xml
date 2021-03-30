@@ -2,30 +2,22 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="payment">
-            <group id="paycomet_payment_section" translate="label comment" type="text" sortOrder="101" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>PAYCOMET</label>
-                <comment><![CDATA[Accept credit/debit cards in your Magento store.<br/>]]></comment>
-                <fieldset_css>complex paycomet-section</fieldset_css>
-                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-                <attribute type="expanded">1</attribute>
-                <attribute type="displayIn">recommended_solutions</attribute>
-                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enabled</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <config_path>payment/paycomet_payment/active</config_path>
-                </field>
-
+            <group id="paycomet_payment_section" translate="label comment" type="text" sortOrder="101" showInDefault="1" showInWebsite="1" showInStore="1">                
                 <group id="paycomet_payment" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>
-                        <![CDATA[PAYCOMET Payment Gateway]]>
-                    </label>
-
+                    <label>PAYCOMET</label>
+                    <comment><![CDATA[Accept credit/debit cards in your Magento store.<br/>]]></comment>
+                    <fieldset_css>complex paycomet-section</fieldset_css>
+                    <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
+                    <attribute type="expanded">1</attribute>
+                    <attribute type="displayIn">recommended_solutions</attribute>
+                    <attribute type="activity_path">payment/paycomet_payment/active</attribute>                                    
+                    
                     <group id="paycomet_payment_paycomet" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="1">
                         <comment>
                             <![CDATA[Reduce the cost of PCI Compliance and risk of chargebacks with our fully customisable Hosted Checkout, Card Storage and Fraud Management solution with Magento 2. If you need a sandbox account please click <a href='https://www.paycomet.com/crear-una-cuenta'>here</a>.]]>
                         </comment>
                         <label>PAYCOMET Settings</label>
-                        <attribute type="expanded">0</attribute>
+                        <attribute type="expanded">1</attribute>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Title</label>
@@ -74,28 +66,7 @@
                                 <field id="integration">1</field>
                             </depends>
                             <config_path>payment/paycomet_payment/jetid</config_path>
-                        </field>
-                        <field id="merchant_terminales" type="select" translate="label" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Terminals available</label>
-                            <source_model>Paycomet\Payment\Model\Config\Source\Terminales</source_model>
-                            <config_path>payment/paycomet_payment/merchant_terminales</config_path>
-                        </field>
-                        <field id="secure_first" type="select" translate="label" sortOrder="36" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Use 3D Secure first purchase</label>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>payment/paycomet_payment/secure_first</config_path>
-                            <depends>
-                                <field id="merchant_terminales">2</field>
-                            </depends>
-                        </field>
-                        <field id="secure_amount" translate="label" sortOrder="37" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Use 3D Secure in purchases above</label>
-                            <frontend_class>validate-number</frontend_class>
-                            <depends>
-                                <field id="merchant_terminales">2</field>
-                            </depends>
-                            <config_path>payment/paycomet_payment/secure_amount</config_path>
-                        </field>
+                        </field>                        
                         <field id="currency" translate="label" type="select" sortOrder="38" showInDefault="1" showInWebsite="1" showInStore="0"  canRestore="1">
                             <label>Accepted Currency</label>
                             <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
@@ -105,9 +76,17 @@
                         <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
                             <config_path>payment/paycomet_payment/sort_order</config_path>
-                        </field>
-
+                        </field>                        
                     </group>
+
+                    <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/paycomet_payment/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet"/>
+                        </requires>
+                    </field>
 
                     <group id="paycomet_payment_advanced" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="2">
                         <comment>
@@ -168,7 +147,7 @@
                         <field id="form_footer" type="textarea" translate="label" sortOrder="47" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Ecommerce Info</label>
                             <tooltip>Data to show below the payment form</tooltip>
-                            <config_path>payment/paycomet_payment/form_footer</config_path>
+                            <config_path>payment/paycomet_payment/form_footer</config_path>                            
                             <depends>
                                 <field id="iframe_enabled">1</field>
                             </depends>
