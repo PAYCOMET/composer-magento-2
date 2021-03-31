@@ -34,7 +34,7 @@ class Info extends \Magento\Payment\Block\Info
         $cardCountry = $this->getInfo()->getAdditionalInformation('CardCountry');
         if ($cardCountry=="")
             $cardCountry = $this->getInfo()->getAdditionalInformation('DS_MERCHANT_CARDCOUNTRY');
-        
+
 
         $bicCode = $this->getInfo()->getAdditionalInformation('BicCode');
         $ErrorID = $this->getInfo()->getAdditionalInformation('ErrorID');
@@ -48,9 +48,9 @@ class Info extends \Magento\Payment\Block\Info
         if ($Currency=="")
             $Currency = $this->getInfo()->getAdditionalInformation('DS_MERCHANT_CURRENCY');
 
-        
+
         $cardDigits = $this->getInfo()->getAdditionalInformation('CARDDIGITS');
-        
+
         $result = $this->getInfo()->getAdditionalInformation('Response');
         if ($result=="")
             $result = $this->getInfo()->getAdditionalInformation('DS_RESPONSE');
@@ -58,7 +58,7 @@ class Info extends \Magento\Payment\Block\Info
         $authCode = $this->getInfo()->getAdditionalInformation('AuthCode');
         if ($authCode=="")
             $authCode = $this->getInfo()->getAdditionalInformation('DS_MERCHANT_AUTHCODE');
-        
+
         $Scoring = $this->getInfo()->getAdditionalInformation('Scoring');
         $SecurePayment = $this->getInfo()->getAdditionalInformation('SecurePayment');
 
@@ -76,9 +76,9 @@ class Info extends \Magento\Payment\Block\Info
         if ($ErrorID) {
             $data = $this->checkAndSet($data, $ErrorDescription, 'Error Description');
         }
-        
+
         $data = $this->checkAndSet($data, $Scoring, 'Fraud Filter Result');
-        
+
         if ($cardDigits) {
             $data[(string) __('Card Number')] = sprintf('xxxx-%s', $cardDigits);
         }
@@ -106,6 +106,6 @@ class Info extends \Magento\Payment\Block\Info
         else
             return 'Not 3D Secure';
 
-        
+
     }
 }

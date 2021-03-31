@@ -42,6 +42,7 @@ define(
             'yandex',
             'mts',
             'beeline',
+            'paysafecard',
             'skrill',
             'webmoney',
             'instantcredit'
