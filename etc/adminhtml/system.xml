@@ -2,997 +2,1074 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="payment">
-            <group id="paycomet_payment" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>PAYCOMET</label>
-                <comment><![CDATA[Accept credit/debit cards in your Magento store.<br/>]]></comment>
-                <fieldset_css>complex paycomet-section</fieldset_css>
-                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-                <attribute type="expanded">1</attribute>
-                <attribute type="displayIn">recommended_solutions</attribute>
-                <attribute type="activity_path">payment/paycomet_payment/active</attribute>
-
+            <group id="paycomet_payment" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">               
                 <group id="paycomet_payment_paycomet" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="1">
-                    <comment>
-                        <![CDATA[Reduce the cost of PCI Compliance and risk of chargebacks with our fully customisable Hosted Checkout, Card Storage and Fraud Management solution with Magento 2. If you need a sandbox account please click <a href='https://www.paycomet.com/crear-una-cuenta'>here</a>.]]>
-                    </comment>
-                    <label>PAYCOMET Settings</label>
+                    <label>PAYCOMET</label>
+                    <comment><![CDATA[Accept credit/debit cards in your Magento store.<br/>]]></comment>
+                    <fieldset_css>complex paycomet-section</fieldset_css>
+                    <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
                     <attribute type="expanded">1</attribute>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_payment/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="integration" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Integration</label>
-                        <source_model>Paycomet\Payment\Model\Config\Source\Integration</source_model>
-                        <config_path>payment/paycomet_payment/integration</config_path>
-                    </field>
-                    <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Payment Action</label>
-                        <source_model>Paycomet\Payment\Model\Config\Source\PaymentAction</source_model>
-                        <config_path>payment/paycomet_payment/payment_action</config_path>
-                    </field>
+                    <attribute type="displayIn">recommended_solutions</attribute>
+                    <attribute type="activity_path">payment/paycomet_payment/active</attribute>
 
-                    <field id="api_key" translate="label" type="obscure" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>API Key</label>
-                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                        <config_path>payment/paycomet_payment/api_key</config_path>
-                        <validate>required-entry no-whitespace</validate>
-                    </field>
+                    <group id="paycomet_payment_paycomet_required" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="1">
+                        <comment>
+                            <![CDATA[Reduce the cost of PCI Compliance and risk of chargebacks with our fully customisable Hosted Checkout, Card Storage and Fraud Management solution with Magento 2. If you need a sandbox account please click <a href='https://www.paycomet.com/crear-una-cuenta'>here</a>.]]>
+                        </comment>
+                        <label>PAYCOMET Settings</label>
+                        <attribute type="expanded">1</attribute>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        <field id="title" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_payment/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="integration" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Integration</label>
+                            <source_model>Paycomet\Payment\Model\Config\Source\Integration</source_model>
+                            <config_path>payment/paycomet_payment/integration</config_path>
+                        </field>
+                        <field id="payment_action" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Payment Action</label>
+                            <source_model>Paycomet\Payment\Model\Config\Source\PaymentAction</source_model>
+                            <config_path>payment/paycomet_payment/payment_action</config_path>
+                        </field>
 
-                    <field id="merchant_code" translate="label" type="text" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Client Code</label>
-                        <config_path>payment/paycomet_payment/merchant_code</config_path>
-                        <validate>required-entry no-whitespace</validate>
-                    </field>
-                    <field id="merchant_terminal" translate="label" type="text" sortOrder="32" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Terminal number</label>
-                        <frontend_class>validate-number</frontend_class>
-                        <config_path>payment/paycomet_payment/merchant_terminal</config_path>
-                        <validate>required-entry no-whitespace</validate>
-                    </field>
-                    <field id="merchant_pass" translate="label" type="obscure" sortOrder="33" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Password</label>
-                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                        <config_path>payment/paycomet_payment/merchant_pass</config_path>
-                        <validate>required-entry no-whitespace</validate>
-                    </field>
-                    <field id="jetid" translate="label" type="obscure" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>JET ID</label>
-                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                        <depends>
-                            <field id="integration">1</field>
-                        </depends>
-                        <config_path>payment/paycomet_payment/jetid</config_path>
-                    </field>
-                    <field id="iframe_enabled" translate="label" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Iframe Enabled</label>
-                        <tooltip><![CDATA[Iframe is displayed on the checkout page and contains the PAYCOMET Payments page. Otherwise it will redirect to the PAYCOMET Payments page for payment and return afterwards.]]></tooltip>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <config_path>payment/paycomet_payment/iframe_enabled</config_path>
-                        <depends>
-                            <field id="integration">0</field>
-                        </depends>
-                    </field>
-                    <field id="iframe_mode" translate="label" type="select" sortOrder="36" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Iframe Mode</label>
-                        <tooltip>Lightbox is a popup on the checkout page which contains the PAYCOMET Payments page in the box. Embedded is part of the checkout page.</tooltip>
-                        <source_model>Paycomet\Payment\Model\Config\Source\IframeMode</source_model>
-                        <config_path>payment/paycomet_payment/iframe_mode</config_path>
-                        <depends>
-                            <field id="integration">0</field>
-                            <field id="iframe_enabled">1</field>
-                        </depends>
-                    </field>
-                    <field id="iframe_height" translate="label" type="text" sortOrder="37" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Iframe Height (px)</label>
-                        <tooltip>Iframe height in pixels (Min 340)</tooltip>
-                        <frontend_class>validate-digits</frontend_class>
-                        <validate>validate-digits-range digits-range-340-1400</validate>
-                        <config_path>payment/paycomet_payment/iframe_height</config_path>
-                        <depends>
-                            <field id="integration">0</field>
-                            <field id="iframe_enabled">1</field>
-                        </depends>
-                    </field>
-                    <field id="form_footer" type="textarea" translate="label" sortOrder="38" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Ecommerce Info</label>
-                        <tooltip>Data to show below the payment form</tooltip>
-                        <config_path>payment/paycomet_payment/form_footer</config_path>
-                        <depends>
-                            <field id="integration">0</field>
-                            <field id="iframe_enabled">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0"  canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_payment/currency</config_path>
-                    </field>
+                        <field id="api_key" translate="label" type="obscure" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>API Key</label>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <config_path>payment/paycomet_payment/api_key</config_path>
+                            <validate>required-entry no-whitespace</validate>
+                        </field>
 
-                    <field id="sort_order" type="text" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_payment/sort_order</config_path>
-                    </field>
-                </group>
+                        <field id="merchant_code" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Client Code</label>
+                            <config_path>payment/paycomet_payment/merchant_code</config_path>
+                            <validate>required-entry no-whitespace</validate>
+                        </field>
+                        <field id="merchant_terminal" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Terminal number</label>
+                            <frontend_class>validate-number</frontend_class>
+                            <config_path>payment/paycomet_payment/merchant_terminal</config_path>
+                            <validate>required-entry no-whitespace</validate>
+                        </field>
+                        <field id="merchant_pass" translate="label" type="obscure" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Password</label>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <config_path>payment/paycomet_payment/merchant_pass</config_path>
+                            <validate>required-entry no-whitespace</validate>
+                        </field>
+                        <field id="jetid" translate="label" type="obscure" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>JET ID</label>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <depends>
+                                <field id="integration">1</field>
+                            </depends>
+                            <config_path>payment/paycomet_payment/jetid</config_path>
+                        </field>
+                        <field id="iframe_enabled" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Iframe Enabled</label>
+                            <tooltip><![CDATA[Iframe is displayed on the checkout page and contains the PAYCOMET Payments page. Otherwise it will redirect to the PAYCOMET Payments page for payment and return afterwards.]]></tooltip>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/paycomet_payment/iframe_enabled</config_path>
+                            <depends>
+                                <field id="integration">0</field>
+                            </depends>
+                        </field>
+                        <field id="iframe_mode" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Iframe Mode</label>
+                            <tooltip>Lightbox is a popup on the checkout page which contains the PAYCOMET Payments page in the box. Embedded is part of the checkout page.</tooltip>
+                            <source_model>Paycomet\Payment\Model\Config\Source\IframeMode</source_model>
+                            <config_path>payment/paycomet_payment/iframe_mode</config_path>
+                            <depends>
+                                <field id="integration">0</field>
+                                <field id="iframe_enabled">1</field>
+                            </depends>
+                        </field>
+                        <field id="iframe_height" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Iframe Height (px)</label>
+                            <tooltip>Iframe height in pixels (Min 340)</tooltip>
+                            <frontend_class>validate-digits</frontend_class>
+                            <validate>validate-digits-range digits-range-340-1400</validate>
+                            <config_path>payment/paycomet_payment/iframe_height</config_path>
+                            <depends>
+                                <field id="integration">0</field>
+                                <field id="iframe_enabled">1</field>
+                            </depends>
+                        </field>
+                        <field id="form_footer" type="textarea" translate="label" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Ecommerce Info</label>
+                            <tooltip>Data to show below the payment form</tooltip>
+                            <config_path>payment/paycomet_payment/form_footer</config_path>
+                            <depends>
+                                <field id="integration">0</field>
+                                <field id="iframe_enabled">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0"  canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_payment/currency</config_path>
+                        </field>
+                    </group>
 
-                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enabled</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <config_path>payment/paycomet_payment/active</config_path>
-                    <requires>
-                        <group id="paycomet_payment_paycomet"/>
-                    </requires>
-                </field>
-
-                <group id="paycomet_payment_advanced" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="2">
-                    <comment>
-                        <![CDATA[These settings allow you to configure various options.]]>
-                    </comment>
-                    <label>Advanced Settings</label>
-                    <attribute type="expanded">0</attribute>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-
-                    <field id="card_offer_save" translate="label" type="select" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Offer to save card</label>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <config_path>payment/paycomet_payment/card_offer_save</config_path>
-                    </field>
-                    <field id="card_manage" translate="label" type="select" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Manage cards in My Account</label>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <config_path>payment/paycomet_payment/card_manage</config_path>
-                    </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>New order status</label>
-                        <tooltip>Status given to newly created orders before payment result is returned.</tooltip>
-                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
-                        <config_path>payment/paycomet_payment/order_status</config_path>
-                    </field>
-                    <field id="payment_cancelled" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Cancelled order status</label>
-                        <tooltip>Status given to orders when payment fails.</tooltip>
-                        <source_model>Paycomet\Payment\Model\Config\Source\Cancelled</source_model>
-                        <config_path>payment/paycomet_payment/payment_cancelled</config_path>
-                    </field>                    
-                    <field id="debug_log" translate="label" type="select" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Enable debug logging</label>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <config_path>payment/paycomet_payment/debug_log</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_country_specific" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="3">
-                    <label>Country Specific Settings</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_payment/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_payment/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                </group>
-                <group id="paycomet_payment_paypal" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="4">
-                    <label>PAYCOMET - Paypal</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="active" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/paycomet_payment/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
+                    </field>
+
+                    <field id="activepaypal" translate="label" type="select" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Paypal</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_paypal/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_paypal/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_paypal/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_paypal/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_paypal/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_paypal/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_bizum" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="5">
-                    <label>PAYCOMET - Bizum</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+
+                    <field id="activebizum" translate="label" type="select" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Bizum</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_bizum/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_bizum/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_bizum/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_bizum/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_bizum/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_bizum/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_ideal" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="6">
-                    <label>PAYCOMET - Ideal</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+
+                    <field id="activeideal" translate="label" type="select" sortOrder="23" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Ideal</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_ideal/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_ideal/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_ideal/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_ideal/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_ideal/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_ideal/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_klarna" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="7">
-                    <label>PAYCOMET - Klarna</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+
+                    <field id="activeklarna" translate="label" type="select" sortOrder="24" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Klarna</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_klarna/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_klarna/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_klarna/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_klarna/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_klarna/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_klarna/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_giropay" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="8">
-                    <label>PAYCOMET - Giropay</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+
+                    <field id="activegiropay" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Giropay</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_giropay/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_giropay/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_giropay/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_giropay/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_giropay/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_giropay/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_mybank" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="9">
-                    <label>PAYCOMET - MyBank</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+
+                    <field id="activemybank" translate="label" type="select" sortOrder="26" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - MyBank</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_mybank/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_mybank/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_mybank/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_mybank/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_mybank/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_mybank/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_multibanco" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="10">
-                    <label>PAYCOMET - Multibanco</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+
+                    <field id="activemultibanco" translate="label" type="select" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Multibanco</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_multibanco/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_multibanco/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_multibanco/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_multibanco/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_multibanco/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_multibanco/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_trustly" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="11">
-                    <label>PAYCOMET - Trustly</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+
+                    <field id="activetrustly" translate="label" type="select" sortOrder="28" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Trustly</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_trustly/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_trustly/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_trustly/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_trustly/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_trustly/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_trustly/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_przelewy24" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="12">
-                    <label>PAYCOMET - Przelewy24</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+
+                    <field id="activeprzelewy24" translate="label" type="select" sortOrder="29" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Przelewy24</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_przelewy24/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_przelewy24/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_przelewy24/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_przelewy24/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_przelewy24/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_przelewy24/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_bancontact" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="13">
-                    <label>PAYCOMET - Bancontact</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+                    <field id="activebancontact" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Bancontact</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_bancontact/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_bancontact/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_bancontact/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_bancontact/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_bancontact/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_bancontact/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_eps" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="14">
-                    <label>PAYCOMET - EPS</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+                    <field id="activeeps" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - EPS</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_eps/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_eps/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_eps/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_eps/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_eps/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_eps/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_tele2" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="15">
-                    <label>PAYCOMET - Tele2</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+                    <field id="activetele2" translate="label" type="select" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Tele2</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_tele2/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_tele2/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_tele2/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_tele2/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_tele2/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_tele2/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_paysera" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="16">
-                    <label>PAYCOMET - Paysera</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+                    <field id="activepaysera" translate="label" type="select" sortOrder="32" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Paysera</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_paysera/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_paysera/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_paysera/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_paysera/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_paysera/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_paysera/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_postfinance" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="17">
-                    <label>PAYCOMET - PostFinance</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+                    <field id="activepostfinance" translate="label" type="select" sortOrder="33" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Postfinance</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_postfinance/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_postfinance/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_postfinance/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_postfinance/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_postfinance/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_postfinance/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_qiwi" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="18">
-                    <label>PAYCOMET - QIWI</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+                    <field id="activeqiwi" translate="label" type="select" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - QIWI</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_qiwi/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_qiwi/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_qiwi/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_qiwi/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_qiwi/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_qiwi/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_yandex" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="19">
-                    <label>PAYCOMET - Yandex Money</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+                    <field id="activeyandex" translate="label" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Yandex Money</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_yandex/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_yandex/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_yandex/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_yandex/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_yandex/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_yandex/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_mts" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="20">
-                    <label>PAYCOMET - MTS</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+                    <field id="activemts" translate="label" type="select" sortOrder="36" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - MTS</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_mts/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_mts/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_mts/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_mts/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_mts/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_mts/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_beeline" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="21">
-                    <label>PAYCOMET - Beeline</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+                    <field id="activebeeline" translate="label" type="select" sortOrder="37" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Beeline</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_beeline/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_beeline/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_beeline/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_beeline/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_beeline/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_beeline/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_paysafecard" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="22">
-                    <label>PAYCOMET - Paysafecard</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+                    <field id="activepaysafecard" translate="label" type="select" sortOrder="38" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Paysafecard</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_paysafecard/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_paysafecard/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_paysafecard/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_paysafecard/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_paysafecard/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_paysafecard/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_skrill" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="23">
-                    <label>PAYCOMET - Skrill</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+                    <field id="activeskrill" translate="label" type="select" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Skrill</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_skrill/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_skrill/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_skrill/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_skrill/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_skrill/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_skrill/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_webmoney" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="24">
-                    <label>PAYCOMET - WebMoney</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+                    <field id="activewebmoney" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - WebMoney</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_webmoney/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_webmoney/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_webmoney/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_webmoney/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_webmoney/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_webmoney/sort_order</config_path>
-                    </field>
-                </group>
-                <group id="paycomet_payment_instantcredit" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="25">
-                    <label>PAYCOMET - Instant Credit</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enabled</label>
+                    <field id="activeinstantcredit" translate="label" type="select" sortOrder="41" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Instant Credit</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_instantcredit/active</config_path>
+                        <requires>
+                            <group id="paycomet_payment_paycomet_required"/>
+                        </requires>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Title</label>
-                        <config_path>payment/paycomet_instantcredit/title</config_path>
-                        <validate>required-entry</validate>
-                    </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Applicable Countries</label>
-                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/paycomet_instantcredit/allowspecific</config_path>
-                    </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Payment from Specific Countries</label>
-                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <can_be_empty>1</can_be_empty>
-                        <config_path>payment/paycomet_instantcredit/specificcountry</config_path>
-                        <depends>
-                            <field id="allowspecific">1</field>
-                        </depends>
-                    </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_instantcredit/currency</config_path>
-                    </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
-                        <config_path>payment/paycomet_instantcredit/sort_order</config_path>
-                    </field>
+               
+
+                    <group id="paycomet_payment_advanced" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="500">
+                        <comment>
+                            <![CDATA[These settings allow you to configure various options.]]>
+                        </comment>
+                        <label>Advanced Settings</label>
+                        <attribute type="expanded">0</attribute>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+
+                        <field id="card_offer_save" translate="label" type="select" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Offer to save card</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/paycomet_payment/card_offer_save</config_path>
+                        </field>
+                        <field id="card_manage" translate="label" type="select" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Manage cards in My Account</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/paycomet_payment/card_manage</config_path>
+                        </field>
+                        <field id="order_status" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>New order status</label>
+                            <tooltip>Status given to newly created orders before payment result is returned.</tooltip>
+                            <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                            <config_path>payment/paycomet_payment/order_status</config_path>
+                        </field>
+                        <field id="payment_cancelled" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Cancelled order status</label>
+                            <tooltip>Status given to orders when payment fails.</tooltip>
+                            <source_model>Paycomet\Payment\Model\Config\Source\Cancelled</source_model>
+                            <config_path>payment/paycomet_payment/payment_cancelled</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_payment/sort_order</config_path>
+                        </field>
+                        <field id="debug_log" translate="label" type="select" sortOrder="32" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Enable debug logging</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/paycomet_payment/debug_log</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_country_specific" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="501">
+                        <label>Country Specific Settings</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_payment/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_payment/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_paypal" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="502">
+                        <label>PAYCOMET - Paypal</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_paypal/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_paypal/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_paypal/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_paypal/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_paypal/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_bizum" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="503">
+                        <label>PAYCOMET - Bizum</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_bizum/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_bizum/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_bizum/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_bizum/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_bizum/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_ideal" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="504">
+                        <label>PAYCOMET - Ideal</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_ideal/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_ideal/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_ideal/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="505" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_ideal/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_ideal/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_klarna" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="505">
+                        <label>PAYCOMET - Klarna</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_klarna/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_klarna/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_klarna/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_klarna/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_klarna/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_giropay" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="506">
+                        <label>PAYCOMET - Giropay</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_giropay/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_giropay/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_giropay/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_giropay/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_giropay/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_mybank" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="507">
+                        <label>PAYCOMET - MyBank</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_mybank/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_mybank/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_mybank/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_mybank/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_mybank/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_multibanco" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="508">
+                        <label>PAYCOMET - Multibanco</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_multibanco/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_multibanco/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_multibanco/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_multibanco/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_multibanco/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_trustly" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="509">
+                        <label>PAYCOMET - Trustly</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_trustly/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_trustly/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_trustly/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_trustly/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_trustly/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_przelewy24" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="510">
+                        <label>PAYCOMET - Przelewy24</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_przelewy24/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_przelewy24/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_przelewy24/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_przelewy24/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_przelewy24/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_bancontact" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="511">
+                        <label>PAYCOMET - Bancontact</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_bancontact/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_bancontact/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_bancontact/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_bancontact/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_bancontact/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_eps" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="512">
+                        <label>PAYCOMET - EPS</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_eps/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_eps/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_eps/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_eps/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_eps/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_tele2" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="513">
+                        <label>PAYCOMET - Tele2</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_tele2/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_tele2/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_tele2/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_tele2/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_tele2/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_paysera" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="514">
+                        <label>PAYCOMET - Paysera</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_paysera/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_paysera/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_paysera/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_paysera/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_paysera/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_postfinance" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="515">
+                        <label>PAYCOMET - PostFinance</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_postfinance/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_postfinance/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_postfinance/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_postfinance/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_postfinance/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_qiwi" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="516">
+                        <label>PAYCOMET - QIWI</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_qiwi/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_qiwi/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_qiwi/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_qiwi/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_qiwi/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_yandex" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="517">
+                        <label>PAYCOMET - Yandex Money</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_yandex/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_yandex/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_yandex/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_yandex/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_yandex/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_mts" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="518">
+                        <label>PAYCOMET - MTS</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_mts/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_mts/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_mts/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_mts/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_mts/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_beeline" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="519">
+                        <label>PAYCOMET - Beeline</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_beeline/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_beeline/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_beeline/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_beeline/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_beeline/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_paysafecard" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="520">
+                        <label>PAYCOMET - Paysafecard</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>            
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_paysafecard/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_paysafecard/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_paysafecard/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_paysafecard/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_paysafecard/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_skrill" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="521">
+                        <label>PAYCOMET - Skrill</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_skrill/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_skrill/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_skrill/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_skrill/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_skrill/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_webmoney" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="522">
+                        <label>PAYCOMET - WebMoney</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_webmoney/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_webmoney/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_webmoney/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_webmoney/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_webmoney/sort_order</config_path>
+                        </field>
+                    </group>
+                    <group id="paycomet_payment_instantcredit" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="523">
+                        <label>PAYCOMET - Instant Credit</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>                    
+                        <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/paycomet_instantcredit/title</config_path>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/paycomet_instantcredit/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/paycomet_instantcredit/specificcountry</config_path>
+                            <depends>
+                                <field id="allowspecific">1</field>
+                            </depends>
+                        </field>
+                        <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                            <label>Accepted Currency</label>
+                            <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                            <config_path>payment/paycomet_instantcredit/currency</config_path>
+                        </field>
+                        <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <config_path>payment/paycomet_instantcredit/sort_order</config_path>
+                        </field>
+                    </group>
                 </group>
             </group>
         </section>
