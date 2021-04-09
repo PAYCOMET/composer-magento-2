@@ -820,6 +820,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         
         $function_txt = "";
 
+        $dataResponse = array();
+
         // Payment/Preauthorization with Saved Card or jetIframe
         if ($order->getPaycometToken() != ""){
             $paycometToken = explode("|",$order->getPaycometToken());
@@ -866,6 +868,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 }
             } else {
                 $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));
+                $dataResponse["url"] = "";
+                $dataResponse["error"]  = 1004;
+                return $dataResponse;
             }
         // Payment/Preautorization with New Card
         } else {
@@ -900,12 +905,14 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     $response["url"] = "";
                     $response["error"]  = $response->errorCode;
                 }
-            } else {
+            } else {                
                 $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));
+                $dataResponse["url"] = "";
+                $dataResponse["error"]  = 1004;
+                return $dataResponse;
             }
         }
-
-        $dataResponse = array();
+        
         if ($response->DS_ERROR_ID==0) {
             $dataResponse["url"] = $response->URL_REDIRECT;
             $dataResponse["error"]  = 0;
