@@ -70,8 +70,9 @@ class SessionResult extends \Magento\Framework\App\Action\Action
             $this->messageManager->addError(
                 __('Your payment was unsuccessful. Please try again or use a different card / payment method.'),
                 'PAYCOMET_messages'
-            );
+            );            
             $this->_redirect('checkout/cart');
+            
             return;
         }
 

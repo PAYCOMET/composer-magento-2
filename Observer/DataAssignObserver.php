@@ -15,15 +15,17 @@ use Magento\Quote\Api\Data\PaymentInterface;
  */
 class DataAssignObserver extends AbstractDataAssignObserver
 {
-    const PAYCOMET_SAVECARD = 'saveCard';
-    const PAYCOMET_TOKENCARD = 'paycometCard';
+    const PAYCOMET_SAVECARD     = 'saveCard';
+    const PAYCOMET_TOKENCARD    = 'paycometCard';
+    const PAYCOMET_JETTOKEN     = 'paycometJetToken';
 
     /**
      * @var array
      */
     protected $additionalInformationList = [
         self::PAYCOMET_SAVECARD,
-        self::PAYCOMET_TOKENCARD
+        self::PAYCOMET_TOKENCARD,
+        self::PAYCOMET_JETTOKEN
     ];
 
     /**
@@ -46,6 +48,11 @@ class DataAssignObserver extends AbstractDataAssignObserver
                 $paymentInfo->setAdditionalInformation(
                     $additionalInformationKey,
                     $additionalData[$additionalInformationKey]
+                );
+            } else {
+                $paymentInfo->setAdditionalInformation(
+                    $additionalInformationKey,
+                    ''
                 );
             }
         }

@@ -4,7 +4,10 @@
                name="payment[method]"
                class="radio"
                data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
-        <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text: getTitle()"></span></label>
+        <label data-bind="attr: {'for': getCode()}" class="label">            
+            <img class="payment-icon" data-bind="attr: { src: require.toUrl('')+'Paycomet_Payment/img/'+getCode()+'.png', alt: getTitle()}">
+            <span data-bind="text: getTitle()"></span>
+        </label>
     </div>
     <div class="payment-method-content">
         <div class="payment-method-billing-address">
@@ -37,14 +40,76 @@
                                optionsText: 'desc'">
             </select>
         </div>
-        <br/>
 
-        <div data-bind="visible: isOfferSave()">
+        <div id="paycomet_savecards" data-bind="visible: isOfferSave()">            
             <input type="checkbox" name="payment[' + getCode() + '][paycomet_card]" id="paycomet_savecard">
             <label for="paycomet_savecard" data-bind="text: $t('Save card for future purchases.')"></label>
-            <span class="paycomet-pci" data-bind="text: $t('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS).')"></span>
+            <span class="paycomet-pci" data-bind="text: $t('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS).')"></span>            
         </div>
-                   
+
+        <!-- Boton Principal -->
+        <div class="actions-toolbar">
+            <div class="primary" data-bind="visible: isVisibleButton()">
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="click: continueProcess, enable: (getCode() == isChecked())"
+                        disabled>
+                    <span data-bind="text: $t('Place Order')"></span>
+                </button>
+            </div>
+        </div>
+
+        <form role="form" id="paycometPaymentForm" method="POST" class="" data-bind="afterRender: jetIframeLoad, visible: isVisibleJetIframe()" action="javascript:jetAction();" >
+            <div class="paycomet_jet">
+                <ul>
+                    <li>
+                        <label for="cardNumber" data-bind="text: $t('Credit card number')"></label>
+                        <div id="paycomet-pan">
+                            <input required="required" paycomet-style="width: 78%; width: 78%; border: 1px solid #e5e5e5; height: 32px; display: inline-block; color: #333;font-size: 18px; padding: 0 5px;" paycomet-name="pan">
+                        </div>
+                    </li>
+                    <li class="vertical">
+                        <ul>
+                            <li>
+                                <label><span class="hidden-xs" data-bind="text: $t('Expiration')"></span> </label>
+                                <input maxlength="5" placeholder="mm/yy" id="expiry_date" pattern="[0-9]{2}/+[0-9]{2}" type="text" data-bind="event:{change: buildED, input: expiryDate }">
+                                <input type="hidden" data-paycomet="dateMonth" maxlength="2"  value="">
+                                <input type="hidden" data-paycomet="dateYear" maxlength="2" value="">
+                            </li>
+                            <li>
+                                <label data-toggle="tooltip" title="" data-bind="text: $t('CVV')"></label>
+                                <div id="paycomet-cvc2">
+                                    <input paycomet-name="cvc2" paycomet-style="border: 1px solid #e5e5e5; height: 32px; display: inline-block; color: #333;font-size: 18px; padding: 0 5px;" class="form-control" required="required" type="text">
+                                </div>
+                            </li>
+                            <small class="help" data-bind="text: $t('The CVV is a numerical code, usually 3 digits behind the card')"></small>                            
+                        </ul>
+                    </li>
+                    <input type="hidden" class="paytpv_cardholdername" data-paycomet="cardHolderName" width="360" maxlength="50" value="NONAME" onclick="this.value='';">
+                </ul>
+
+                <div class="mage-error" id="paymentErrorMsg" generated="true"></div>
+
+                <input type="hidden" data-paycomet="jetID" data-bind="value: getJetId()"></input>
+                <input type="hidden" data-paycomet="cardHolderName" value="Noname">
+                <button type="hidden" id="submit_jet" data-bind="click: continueToPayment"></button>
+            </div>
+
+            <!-- Boton jetIframe -->
+            <div class="payment-method-content">
+                <div class="actions-toolbar">
+                    <div class="primary">
+                        <button class="action primary checkout"
+                                type="submit"
+                                data-bind="enable: (getCode() == isChecked())"
+                                disabled>
+                            <span data-bind="text: $t('Place Order')"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
         <div data-bind="visible: isInAction()">
             <!-- ko if: isLightboxReady() -->
             <div id="paycomet-iframe-container">
@@ -86,16 +151,5 @@
             <!-- /ko -->
         </div>
 
-        <div class="actions-toolbar" data-bind="visible: !isInAction()">
-            <div class="primary">
-                <button class="action primary checkout"
-                        type="submit"
-                        data-bind="click: continueToPayment, enable: (getCode() == isChecked())"
-                        disabled>
-                    <span data-bind="text: $t('Place Order')"></span>
-                </button>
-            </div>
-        </div>
-                
     </div>
 </div>

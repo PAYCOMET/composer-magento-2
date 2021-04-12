@@ -55,4 +55,6 @@ $_cards = $block->getPaycometCards();
        }
 </script>
 <input type="hidden" id="paycomet-iframe" value="<?php echo $block->escapeHtml($block->getIframeUrl());?>" />
+<input type="hidden" id="paycomet-integration" value="<?php echo $block->escapeHtml($block->getIntegration());?>" />
+<input type="hidden" id="paycomet-jetid" value="<?php echo $block->escapeHtml($block->getJetId());?>" />
 </div>
