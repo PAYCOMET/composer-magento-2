@@ -1005,6 +1005,7 @@ class Data extends AbstractHelper
             }
         } else {
             $this->logDebug(__("ERROR: PAYCOMET API KEY required"));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Error: 1004'));
         }
     }
 

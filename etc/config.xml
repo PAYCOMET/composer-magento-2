@@ -6,7 +6,7 @@
                 <active>0</active>
                 <model>Paycomet\Payment\Model\PaymentMethod</model>                
                 <title>PAYCOMET</title>
-                <environment>sandbox</environment>
+                <integration>0</integration>   
                 <card_offer_save>1</card_offer_save>
                 <card_manage>1</card_manage>                
                 <order_status>pending</order_status>
@@ -36,7 +36,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_paypal>
             <paycomet_bizum>
                 <active>0</active>
@@ -45,7 +45,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_bizum>
             <paycomet_ideal>
                 <active>0</active>
@@ -54,7 +54,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_ideal>
             <paycomet_klarna>
                 <active>0</active>
@@ -63,7 +63,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_klarna>
             <paycomet_giropay>
                 <active>0</active>
@@ -72,7 +72,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_giropay>
             <paycomet_mybank>
                 <active>0</active>
@@ -81,7 +81,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_mybank>
             <paycomet_multibanco>
                 <active>0</active>
@@ -90,7 +90,7 @@
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_multibanco>
             <paycomet_trustly>
                 <active>0</active>
@@ -99,7 +99,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_trustly>
             <paycomet_przelewy24>
                 <active>0</active>
@@ -108,7 +108,7 @@
                 <payment_action>authorize</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_przelewy24>
             <paycomet_bancontact>
                 <active>0</active>
@@ -117,7 +117,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_bancontact>
             <paycomet_eps>
                 <active>0</active>
@@ -126,7 +126,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_eps>
             <paycomet_tele2>
                 <active>0</active>
@@ -135,7 +135,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_tele2>
             <paycomet_paysera>
                 <active>0</active>
@@ -144,7 +144,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_paysera>
             <paycomet_postfinance>
                 <active>0</active>
@@ -153,7 +153,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_postfinance>
             <paycomet_qiwi>
                 <active>0</active>
@@ -162,7 +162,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_qiwi>
             <paycomet_yandex>
                 <active>0</active>
@@ -171,7 +171,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_yandex>
             <paycomet_mts>
                 <active>0</active>
@@ -180,7 +180,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_mts>
             <paycomet_beeline>
                 <active>0</active>
@@ -189,7 +189,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_beeline>
             <paycomet_paysafecard>
                 <active>0</active>
@@ -198,7 +198,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_paysafecard>
             <paycomet_skrill>
                 <active>0</active>
@@ -207,7 +207,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_skrill>
             <paycomet_webmoney>
                 <active>0</active>
@@ -216,7 +216,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_webmoney>
             <paycomet_instantcredit>
                 <active>0</active>
@@ -225,7 +225,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
                 <currency>EUR</currency>
-                <sort_order></sort_order>
+                <sort_order>1</sort_order>
             </paycomet_instantcredit>
         </payment>
     </default>
