@@ -5,9 +5,9 @@ define(
         'ko',
         'jquery',
         'Magento_Checkout/js/view/payment/default',
-        'Paycomet_Payment/js/action/set-payment-method',        
+        'Paycomet_Payment/js/action/set-payment-method',
         'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/model/payment/additional-validators',        
+        'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer',
@@ -17,16 +17,16 @@ define(
     function(ko, $, Component, setPaymentMethodAction, quote,
         additionalValidators, fullScreenLoader, errorProcessor, customer, $t,url) {
         'use strict';
-        var paymentMethod = ko.observable(null);                
+        var paymentMethod = ko.observable(null);
 
         return Component.extend({
             self: this,
             defaults: {
                 template: 'Paycomet_Payment/payment/apm/paycomet-form'
-            },            
+            },
 
             initialize: function() {
-                this._super();                
+                this._super();
             },
             getData: function () {
                 var data = {
@@ -35,7 +35,13 @@ define(
                 };
 
                 return data;
-            },            
+            },
+
+
+            placeOrder: function (data, event) {
+                this.continueToPayment();
+            },
+
 
             /** Redirect */
             continueToPayment: function(){
@@ -59,8 +65,8 @@ define(
             },
             validate: function() {
                 return true;
-            },            
-            
+            },
+
         });
     },
 

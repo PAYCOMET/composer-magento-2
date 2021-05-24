@@ -47,6 +47,11 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.1: 
+
+- Compatibilidad con uso de prefijos en tablas.
+- Mejoras de código
+
 > 2.4.0: 
 
 - **API Key [OBLIGATORIA]**: Debe dar de alta una API Key en su área de cliente de PAYCOMET e indicarla en el Plugin para poder operar.

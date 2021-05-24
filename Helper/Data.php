@@ -1437,7 +1437,7 @@ class Data extends AbstractHelper
 
         $select = $connection->select()
             ->from(
-                ['token' => 'paycomet_token'],
+                ['token' => $connection->getTableName('paycomet_token')],
                 ['iduser', 'tokenuser']
             )
             ->where($where);
