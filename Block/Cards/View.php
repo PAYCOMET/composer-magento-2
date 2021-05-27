@@ -109,7 +109,7 @@ class View extends \Magento\Framework\View\Element\Template
         $connection = $resource->getConnection();
         $select = $connection->select()
             ->from(
-                ['token' => $connection->getTableName('paycomet_token')],
+                ['token' => $resource->getTableName('paycomet_token')],
                 ['token_id', 'customer_id', 'hash', 'iduser', 'tokenuser', 'cc', 'brand' , 'expiry' , 'desc']
             )
             ->where('customer_id = ?', $this->_customerSession->getCustomerId());

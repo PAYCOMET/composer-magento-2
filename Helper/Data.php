@@ -821,17 +821,17 @@ class Data extends AbstractHelper
 
         try {
 
+            $resource = $this->_objectManager->get('Magento\Framework\App\ResourceConnection');
+
             $orderCollection = $this->_objectManager->get('Magento\Sales\Model\Order')->getCollection()
             ->addFieldToFilter('customer_id', array('eq' => $id_customer))
             ->getSelect()
-            ->joinLeft('sales_order_address', "main_table.entity_id = sales_order_address.parent_id",array('customer_address_id'))
-            ->where("sales_order_address.customer_address_id = $id_address_delivery ")
+            ->joinLeft($resource->getTableName('sales_order_address'), "main_table.entity_id = " . $resource->getTableName('sales_order_address'). ".parent_id",array('customer_address_id'))
+            ->where($resource->getTableName('sales_order_address'). ".customer_address_id = $id_address_delivery ")
             ->limit('1')
             ->order('created_at ASC');
 
-            $resource = $this->_objectManager->get('Magento\Framework\App\ResourceConnection');
             $connection = $resource->getConnection();
-
             $results = $connection->fetchAll($orderCollection);
 
             if (sizeof($results)>0) {
@@ -1437,7 +1437,7 @@ class Data extends AbstractHelper
 
         $select = $connection->select()
             ->from(
-                ['token' => $connection->getTableName('paycomet_token')],
+                ['token' => $resource->getTableName('paycomet_token')],
                 ['iduser', 'tokenuser']
             )
             ->where($where);

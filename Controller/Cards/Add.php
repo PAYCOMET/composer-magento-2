@@ -72,6 +72,6 @@ class Add extends \Magento\Framework\App\Action\Action
 
         $where = implode(' AND ', $conds);
 
-        return $connection->delete("paycomet_token", $where);
+        return $connection->delete($resource->getTableName('paycomet_token'), $where);
     }
 }

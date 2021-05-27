@@ -726,7 +726,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         $select = $connection->select()
             ->from(
-        		['token' => $connection->getTableName('paycomet_token')],
+        		['token' => $resource->getTableName('paycomet_token')],
                 ['hash', 'cc', 'brand' , 'desc']
             )
             ->where('customer_id = ?', $this->_helper->getCustomerId())

@@ -77,6 +77,6 @@ class Update extends \Magento\Framework\App\Action\Action
 
         $where = implode(' AND ', $conds);
 
-        $connection->update("paycomet_token", $data, $where);
+        $connection->update($resource->getTableName('paycomet_token'), $data, $where);
     }
 }

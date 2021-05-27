@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.2: 
+
+- Fix compatibilidad uso de prefijos en tablas.
+
 > 2.4.1: 
 
 - Compatibilidad con uso de prefijos en tablas.
