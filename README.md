@@ -47,6 +47,11 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.3: 
+
+- Cambio para que los pedidos de los APMs se queden en Pending Payment hasta que se pagan o se cancelan.
+- No se envía mail de confirmación de pedido hasta que no se procesa el pago.
+
 > 2.4.2: 
 
 - Fix compatibilidad uso de prefijos en tablas.

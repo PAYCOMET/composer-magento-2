@@ -2,14 +2,9 @@
 
 namespace Paycomet\Payment\Model\Apm\Bizum;
 
-use Paycomet\Payment\Model\Config\Source\DMFields;
-use Paycomet\Payment\Model\Config\Source\FraudMode;
-use Paycomet\Payment\Model\Config\Source\PaymentAction;
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
-use Paycomet\Bankstore\ApiRest;
-use Paycomet\Payment\Observer\DataAssignObserver;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 
@@ -267,11 +262,22 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $payment = $this->getInfoInstance();
         $order = $payment->getOrder();
 
+        /*
+         * do not send order confirmation mail after order creation wait for
+         * result confirmation from PAYCOMET
+        */
+        $order->setCanSendNewEmailFlag(false);
+
         // Obtenemos la challenge del APM
         $challengUrl = $this->_helper->getAPMPaycometUrl($order, self::METHOD_ID);
 
         // Se la asignamos para redirigir al final
         $payment->setAdditionalInformation("DS_CHALLENGE_URL", $challengUrl);
+
+        // Initialize order to PENDING_PAYMENT
+        $stateObject->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
+        $stateObject->setStatus(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
+        $stateObject->setIsNotified(false);
 
         return $this;
 
