@@ -22,6 +22,11 @@ class View extends \Magento\Framework\View\Element\Template
     protected $_postDataHelper;
 
     /**
+     * @var \Paycomet\Payment\Helper\Data
+     */
+    private $_helper;
+
+    /**
      * View constructor.
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -31,6 +36,7 @@ class View extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Customer\Model\Session $customerSession,
+        \Paycomet\Payment\Helper\Data $helper,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -38,6 +44,7 @@ class View extends \Magento\Framework\View\Element\Template
         $this->_postDataHelper = $postDataHelper;
         $this->_isScopePrivate = true;
         $this->_customerSession = $customerSession;
+        $this->_helper = $helper;
     }
 
     /**
@@ -51,6 +58,31 @@ class View extends \Magento\Framework\View\Element\Template
         );
     }
 
+
+    /**
+     * @return string
+     */
+    public function getIntegration()
+    {
+        return $this->_helper->getConfigData('integration');
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getJetId()
+    {        
+        return $this->_helper->getEncryptedConfigData('jetid');
+    }
+
+    public function getAddCard($hash)
+    {
+        $url = $this->_urlBuilder->getUrl('paycomet_payment/cards/add');
+        $params = [];
+        
+        return $this->_postDataHelper->getPostData($url, $params);
+    }
 
     public function getUpdateParams($hash)
     {
@@ -77,7 +109,7 @@ class View extends \Magento\Framework\View\Element\Template
         $connection = $resource->getConnection();
         $select = $connection->select()
             ->from(
-                ['token' => 'paycomet_token'],
+                ['token' => $resource->getTableName('paycomet_token')],
                 ['token_id', 'customer_id', 'hash', 'iduser', 'tokenuser', 'cc', 'brand' , 'expiry' , 'desc']
             )
             ->where('customer_id = ?', $this->_customerSession->getCustomerId());

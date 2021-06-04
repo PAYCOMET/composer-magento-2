@@ -20,8 +20,31 @@ class PaycometConfigProvider implements ConfigProviderInterface
     /**
      * @var string[]
      */
+    // APMs
     protected $_methodCodes = [
         'paycomet_payment',
+        'paycomet_paypal',
+        'paycomet_bizum',
+        'paycomet_ideal',
+        'paycomet_klarna',
+        'paycomet_giropay',
+        'paycomet_mybank',
+        'paycomet_multibanco',
+        'paycomet_trustly',
+        'paycomet_przelewy24',
+        'paycomet_bancontact',
+        'paycomet_eps',
+        'paycomet_tele2',
+        'paycomet_paysera',
+        'paycomet_postfinance',
+        'paycomet_qiwi',
+        'paycomet_yandex',
+        'paycomet_mts',
+        'paycomet_beeline',
+        'paycomet_paysafecard',
+        'paycomet_skrill',
+        'paycomet_webmoney',
+        'paycomet_instantcredit'
     ];
 
     /**
@@ -64,28 +87,38 @@ class PaycometConfigProvider implements ConfigProviderInterface
      * @return array
      */
     public function getConfig()
-    {
-        $config = [
-            'payment' => [
-                'paycomet_payment' => [
-                ],
-            ],
-        ];
+    {       
 
+        // Por cada metodo definimos las propiedades
         foreach ($this->_methodCodes as $code) {
-            if ($this->methods[$code]->isAvailable()) {
-                $config['payment'] [$code]['redirectUrl'] = $this->getMethodRedirectUrl($code);
-                $config['payment'] [$code]['iframeEnabled'] = $this->_helper->getConfigData('iframe_enabled');
-                $config['payment'] [$code]['iframeMode'] = $this->_helper->getConfigData('iframe_mode');
-                $config['payment'] [$code]['iframeHeight'] = $this->_helper->getConfigData('iframe_height');
-                $config['payment'] [$code]['card_offer_save'] = ($this->_helper->getConfigData('card_offer_save') && $this->_helper->getCustomerId());
-                $config['payment'] [$code]['paycometCards'] = $this->getPaycometToken($code);
-                $config['payment'] [$code]['form_footer'] = nl2br($this->_escaper->escapeHtml($this->_helper->getConfigData('form_footer')));
-                $config['payment'] [$code]['integration'] = $this->_helper->getConfigData('integration');
-                $config['payment'] [$code]['jetid'] = $this->_helper->getEncryptedConfigData('jetid');
+            $config['payment'][$code] = []; // Inicializamos el array
+
+            // Si está habilitado el método de pago
+            if ($this->methods[$code]->isAvailable()) { 
+                switch ($code) {
+                    case 'paycomet_payment':
+                        $config['payment'] [$code]['redirectUrl'] = $this->getMethodRedirectUrl($code);
+                        $config['payment'] [$code]['iframeEnabled'] = $this->_helper->getConfigData('iframe_enabled');
+                        $config['payment'] [$code]['iframeMode'] = $this->_helper->getConfigData('iframe_mode');
+                        $config['payment'] [$code]['iframeHeight'] = $this->_helper->getConfigData('iframe_height');
+                        $config['payment'] [$code]['card_offer_save'] = ($this->_helper->getConfigData('card_offer_save') && $this->_helper->getCustomerId());
+                        $config['payment'] [$code]['paycometCards'] = $this->getPaycometToken($code);
+                        $config['payment'] [$code]['form_footer'] = nl2br($this->_escaper->escapeHtml($this->_helper->getConfigData('form_footer')));
+                        $config['payment'] [$code]['integration'] = $this->_helper->getConfigData('integration');
+                        $config['payment'] [$code]['jetid'] = $this->_helper->getEncryptedConfigData('jetid');
+                        $config['payment'] [$code]['isActive'] = $this->_helper->getConfigData('active');
+
+                        break;
+                    
+                    // 'Apms'                    
+                    default: 
+                        $config['payment'] [$code]['redirectUrl'] = $this->getMethodRedirectUrl($code);
+                        $config['payment'] [$code]['isActive'] = $this->_helper->getConfigData('active');
+                        break;
+                    
+                }
             }
         }
-
 
         return $config;
     }

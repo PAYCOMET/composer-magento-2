@@ -43,3 +43,26 @@ Stores > Configuration > Sales > Payment Methods > PAYCOMET
 More details are available in the PAYCOMET:
 
 https://docs.paycomet.com/es/modulos-de-pago/magento2
+
+
+## Release Notes
+
+> 2.4.3: 
+
+- Cambio para que los pedidos de los APMs se queden en Pending Payment hasta que se pagan o se cancelan.
+- No se envía mail de confirmación de pedido hasta que no se procesa el pago.
+
+> 2.4.2: 
+
+- Fix compatibilidad uso de prefijos en tablas.
+
+> 2.4.1: 
+
+- Compatibilidad con uso de prefijos en tablas.
+- Mejoras de código
+
+> 2.4.0: 
+
+- **API Key [OBLIGATORIA]**: Debe dar de alta una API Key en su área de cliente de PAYCOMET e indicarla en el Plugin para poder operar.
+- Integración jetIframe: Se añade la integración jetIframe.
+- Métodos de Pago alternativos: Se añade la posibilidad de activar diferentes métodos de pago alternativos que deberá tener configurados en su área de cliente de PAYCOMET.

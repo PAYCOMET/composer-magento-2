@@ -6,7 +6,56 @@
     <span for="paycomet_showcarddata" class="paycomet-pci" data-bind="text: $t('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS).')"></span>
     
 
-    <div data-bind="if: displayMessage">
+    <form role="form" id="paycometPaymentForm" method="POST" class="" data-bind="visible: isVisibleJetIframe(), afterRender: jetIframeLoad" action="/paycomet_payment/cards/add" >
+            <br/>
+            <div class="paycomet_jet">
+                <ul>
+                    <li>
+                        <label for="cardNumber" data-bind="text: $t('Credit card number')"></label>
+                        <div id="paycomet-pan">
+                            <input required="required" paycomet-style="width: 78%; width: 78%; border: 1px solid #e5e5e5; height: 32px; display: inline-block; color: #333;font-size: 18px; padding: 0 5px;" paycomet-name="pan">
+                        </div>
+                    </li>
+                    <li class="vertical">
+                        <ul>
+                            <li>
+                                <label><span class="hidden-xs" data-bind="text: $t('Expiration')"></span> </label>
+                                <input maxlength="5" placeholder="mm/yy" id="expiry_date" pattern="[0-9]{2}/+[0-9]{2}" type="text" data-bind="event:{change: buildED, input: expiryDate }">
+                                <input type="hidden" data-paycomet="dateMonth" maxlength="2"  value="">
+                                <input type="hidden" data-paycomet="dateYear" maxlength="2" value="">
+                            </li>
+                            <li>
+                                <label data-toggle="tooltip" title="" data-bind="text: $t('CVV')"></label>
+                                <div id="paycomet-cvc2">
+                                    <input paycomet-name="cvc2" paycomet-style="border: 1px solid #e5e5e5; height: 32px; display: inline-block; color: #333;font-size: 18px; padding: 0 5px;" class="form-control" required="required" type="text">
+                                </div>
+                            </li>
+                            <small class="help" data-bind="text: $t('The CVV is a numerical code, usually 3 digits behind the card')"></small>                            
+                        </ul>
+                    </li>
+                    <input type="hidden" class="paytpv_cardholdername" data-paycomet="cardHolderName" width="360" maxlength="50" value="NONAME" onclick="this.value='';">
+                </ul>
+
+                <div class="mage-error" id="paymentErrorMsg" generated="true"></div>
+
+                <input type="hidden" data-paycomet="jetID" data-bind="value: jetId()"></input>
+                <input type="hidden" data-paycomet="cardHolderName" value="Noname">                
+            </div>
+
+            <!-- Boton jetIframe -->
+            <div class="payment-method-content">
+                <div class="">
+                    <div class="primary">
+                        <button class="action primary checkout"
+                                type="submit">
+                            <span data-bind="text: $t('Accept')"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    <div data-bind="if: isVisibleIframe()">
 
         <iframe id="paycomet-iframe"
         class="paycomet_iframe"
@@ -18,4 +67,5 @@
         >
 		</iframe>
     </div>
+
 </div>
