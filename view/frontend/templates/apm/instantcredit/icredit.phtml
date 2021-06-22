@@ -1,0 +1,23 @@
+<?php
+/** @var \Paycomet\Payment\ViewModel\Apm\Instantcredit\OddSimulatorViewModel $viewModel */
+$viewModel = $block->getViewModel();
+$icHelper = $viewModel->getIcHelper();
+?>
+<script>
+    require([
+        'jquery',
+        'domReady',
+        'https://instantcredit.net/simulator/test/ic-simulator.js'
+    ], function($){
+        $(function(){
+            window.hashIcSimulator = "<?= $viewModel->getHash() ?>";
+            window.icSimulatorCustom = {
+                upperLimit:  <?= $icHelper->getUpperLimit() ?>,
+                lowerLimit: <?= $icHelper->getLowerLimit() ?>,
+            };
+
+            // Fire event manually (cause in RequireJS is not fired)
+            document.dispatchEvent(new Event('DOMContentLoaded'));
+        });
+    });
+</script>

@@ -48,10 +48,19 @@ define(
             'instantcredit'
         ];
 
-        for (var i = 0; i < arrAPM.length; i+=1) {            
-            var apm_type = 'paycomet_' + arrAPM[i];            
-            //var apm_component = 'Paycomet_Payment/js/view/payment/method-renderer/apm/'+arrAPM[i]+'/payment-method';
-            var apm_component = 'Paycomet_Payment/js/view/payment/method-renderer/apm/payment-method';
+        for (var i = 0; i < arrAPM.length; i+=1) {
+            var apm_type = 'paycomet_' + arrAPM[i];
+
+            // Personalizacion APM
+            switch (arrAPM[i]) {
+                case 'instantcredit':
+                    var apm_component = 'Paycomet_Payment/js/view/payment/method-renderer/apm/instantcredit/payment-method';
+                    break;
+                default:
+                    var apm_component = 'Paycomet_Payment/js/view/payment/method-renderer/apm/payment-method';
+                    break;
+            }
+
             if (config[apm_type].isActive) {
                 rendererList.push(
                     {

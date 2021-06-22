@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">    
     <body>
+        <referenceContainer name="content">
+            <block name="config-ic" template="Paycomet_Payment::apm/instantcredit/icredit.phtml" ifconfig="payment/paycomet_instantcredit/show_checkout">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Paycomet\Payment\ViewModel\Apm\Instantcredit\OddSimulatorViewModel</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
         <referenceBlock name="checkout.root">
             <arguments>
                 <argument name="jsLayout" xsi:type="array">

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="product.info">
+            <referenceBlock name="bundle.summary">
+                <referenceBlock name="product.info.addtocart.bundle">
+                    <block name="ic.container.simulator" template="Paycomet_Payment::apm/instantcredit/odd_simulator.phtml"
+                           ifconfig="payment/paycomet_instantcredit/show_product_page" cacheable="false">
+                        <arguments>
+                            <argument name="view_model" xsi:type="object">Paycomet\Payment\ViewModel\Apm\Instantcredit\OddSimulatorViewModel</argument>
+                        </arguments>
+                    </block>
+                </referenceBlock>
+            </referenceBlock>
+        </referenceBlock>
+    </body>
+</page>

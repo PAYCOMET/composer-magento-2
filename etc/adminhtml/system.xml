@@ -1258,15 +1258,53 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                        <label>Accepted Currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                        <config_path>payment/paycomet_instantcredit/currency</config_path>
+                    <field id="upper_limit" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Upper limit</label>
+                        <config_path>payment/paycomet_instantcredit/upper_limit</config_path>
                         <depends>
                             <field id="activeinstantcredit">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="lower_limit" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Lower limit</label>
+                        <config_path>payment/paycomet_instantcredit/lower_limit</config_path>
+                        <depends>
+                            <field id="activeinstantcredit">1</field>
+                        </depends>
+                    </field>
+                    <field id="hash" translate="label" type="password" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Hash simulator</label>
+                        <config_path>payment/paycomet_instantcredit/hash</config_path>
+                        <depends>
+                            <field id="activeinstantcredit">1</field>
+                        </depends>
+                    </field>
+                    <field id="show_product_page" translate="label" sortOrder="15" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Show on product page</label>
+                        <depends>
+                            <field id="activeinstantcredit">1</field>
+                        </depends>
+                        <config_path>payment/paycomet_instantcredit/show_product_page</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="show_cart" translate="label" sortOrder="16" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Show on cart</label>
+                        <depends>
+                            <field id="activeinstantcredit">1</field>
+                        </depends>
+                        <config_path>payment/paycomet_instantcredit/show_cart</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="show_checkout" translate="label" sortOrder="17" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Show on checkout</label>
+                        <depends>
+                            <field id="activeinstantcredit">1</field>
+                        </depends>
+                        <config_path>payment/paycomet_instantcredit/show_checkout</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+
+                    <field id="sort_order" type="text" translate="label" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_instantcredit/sort_order</config_path>
                         <depends>
