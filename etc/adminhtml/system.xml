@@ -4,7 +4,7 @@
         <section id="payment">
             <group id="paycomet_payment" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>PAYCOMET</label>
-                <comment><![CDATA[Accept credit/debit cards in your Magento store.<br/>]]></comment>
+                <comment><![CDATA[Accept credit/debit cards and others alternative payment methods in your Magento store.]]></comment>
                 <fieldset_css>complex paycomet-section</fieldset_css>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
                 <attribute type="expanded">1</attribute>
