@@ -4,4 +4,8 @@
     <event name="payment_method_assign_data_paycomet_payment">
         <observer name="paycomet_gateway_data_assign" instance="Paycomet\Payment\Observer\DataAssignObserver" />
     </event>
+    <event name="payment_method_is_active">
+        <!-- Check if payment method is available depending on configuration -->
+        <observer name="paycomet_instantcredit" instance="Paycomet\Payment\Observer\Apm\Instantcredit\PaymentMethodAvailable" />
+    </event>
 </config>

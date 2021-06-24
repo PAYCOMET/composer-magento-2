@@ -1,0 +1,9 @@
+/** Custom styles for odd simulator **/
+.checkout-cart-index .ic-container .ic-simulator .ic_sections_container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.cart-ic-container {
+    display:none;
+}

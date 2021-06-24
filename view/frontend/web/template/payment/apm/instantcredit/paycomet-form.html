@@ -19,7 +19,19 @@
             <div class="payment-method-note">
             </div>
         </fieldset>
-        
+
+        <div class="checkout-ic-container">
+            <div class="extra-text-ic">
+                <!-- ko i18n: 'Quick and paperless process with the confidence of Banco Sabadell. Have your ID at hand to process the financing' --><!--/ko-->
+            </div>
+            <div class="ic-container">
+                <div class="ic-configuration" style="display:none" data-bind="text: window.hashIcSimulator"></div>
+                <div class="ic-simulator" comma data-bind="attr: {amount: getTotalPriceFormatted()}"></div>
+            </div>
+            <!-- ko text: initializeICSimulator() --><!-- /ko -->
+        </div>
+
+
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
             <!-- ko template: getTemplate() --><!-- /ko -->

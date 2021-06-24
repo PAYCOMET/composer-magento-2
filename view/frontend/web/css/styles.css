@@ -142,3 +142,7 @@
 #paycomet_cards, #paycomet_savecards {
     padding-bottom: 15px;
 }
+
+.checkout-index-index .payment-method .checkout-ic-container .extra-text-ic {
+    max-width: 350px;
+}
