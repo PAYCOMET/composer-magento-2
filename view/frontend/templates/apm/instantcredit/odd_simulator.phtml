@@ -1,0 +1,41 @@
+<?php
+/** @var float $price Price to show in simulator */
+$price = ($block->getPrice()) ?: 0.0;
+/** @var \Paycomet\Payment\ViewModel\Apm\Instantcredit\OddSimulatorViewModel $viewModel */
+$viewModel = $block->getViewModel();
+/** @var string $hash Hash odd simulator */
+$hash = $viewModel->getHash();
+
+
+$renderIn = $block->getRenderIn();
+if ($renderIn === 'cart') {
+    $price = $viewModel->getQuoteGrandTotal();
+}
+
+$icHelper = $viewModel->getIcHelper();
+$price = $viewModel->getPriceFormatted($price);
+
+if ($hash): ?>
+<div class="ic-container">
+    <div class="ic-configuration" style="display:none"><?= $hash ?></div>
+    <div class="ic-simulator" comma amount="<?= $price ?>"></div>
+</div>
+<script>
+    require([
+        'jquery',
+        'domReady',
+        'https://instantcredit.net/simulator/test/ic-simulator.js'
+    ], function($, domr, icsimulator){
+        $(function(){
+            window.icSimulatorCustom = {
+                upperLimit:  <?= $icHelper->getUpperLimit() ?>,
+                lowerLimit: <?= $icHelper->getLowerLimit() ?>,
+            };
+
+            // Fire event manually (cause in RequireJS is not fired)
+            document.dispatchEvent(new Event('DOMContentLoaded'));
+        });
+    });
+</script>
+
+<?php endif ?>

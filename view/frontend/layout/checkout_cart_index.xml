@@ -1,7 +1,24 @@
 <?xml version="1.0"?>
 
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Paycomet_Payment::css/apm/instantcredit/ic-simulator.css" rel="stylesheet" type="text/css"  />
+    </head>
     <body>
+        <referenceContainer name="checkout.cart.container">
+            <referenceContainer name="cart.summary">
+                <container name="cart.ic.container" htmlTag="div" htmlClass="cart-ic-container" before="checkout.cart.methods.bottom">
+                    <block class="Paycomet\Payment\Block\Apm\Instantcredit\Element\Template"
+                           name="ic.container.simulator.second" template="Paycomet_Payment::apm/instantcredit/odd_simulator.phtml"
+                           ifconfig="payment/paycomet_instantcredit/show_cart" cacheable="false" after="checkout.cart.form">
+                        <arguments>
+                            <argument name="view_model" xsi:type="object">Paycomet\Payment\ViewModel\Apm\Instantcredit\OddSimulatorViewModel</argument>
+                            <argument name="render_in" xsi:type="string">cart</argument>
+                        </arguments>
+                    </block>
+                </container>
+            </referenceContainer>
+        </referenceContainer>
         <referenceContainer name="page.messages">
             <block class="Paycomet\Payment\Block\Process\Result\Messages" name="paycomet.cart.displaymessages" />
         </referenceContainer>
