@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.4: 
+
+- Simulador de cuotas APM Instant Credit
+
 > 2.4.3: 
 
 - Cambio para que los pedidos de los APMs se queden en Pending Payment hasta que se pagan o se cancelan.
