@@ -46,7 +46,6 @@ define(
 
                 try {
                     var data = JSON.parse(event);
-                    alert(data);
                     if (data.iframe && window.checkoutConfig.payment[quote.paymentMethod().method].iframeEnabled === '1') {
                         if (this.iframeHeight() != data.iframe.height && data.iframe.height != '0px') {
                             this.iframeHeight(data.iframe.height);
