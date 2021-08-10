@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.5: 
+
+- Fix Alert
+
 > 2.4.4: 
 
 - Simulador de cuotas APM Instant Credit
