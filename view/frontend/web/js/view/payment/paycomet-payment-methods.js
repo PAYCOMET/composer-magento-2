@@ -24,7 +24,6 @@ define(
 
         // APMs
         var arrAPM = [
-            'paypal',
             'bizum',
             'ideal',
             'klarna',

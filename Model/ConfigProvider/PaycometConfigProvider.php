@@ -23,7 +23,6 @@ class PaycometConfigProvider implements ConfigProviderInterface
     // APMs
     protected $_methodCodes = [
         'paycomet_payment',
-        'paycomet_paypal',
         'paycomet_bizum',
         'paycomet_ideal',
         'paycomet_klarna',
@@ -111,7 +110,7 @@ class PaycometConfigProvider implements ConfigProviderInterface
                         break;
                     
                     // 'Apms'                    
-                    default: 
+                    default:
                         $config['payment'] [$code]['redirectUrl'] = $this->getMethodRedirectUrl($code);
                         $config['payment'] [$code]['isActive'] = $this->_helper->getConfigData('active');
                         break;

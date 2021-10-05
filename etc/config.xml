@@ -29,15 +29,6 @@
                 <environment>production</environment>
                 <sort_order>0</sort_order>
             </paycomet_payment>
-            <paycomet_paypal>
-                <active>0</active>
-                <title>PAYCOMET - Paypal</title>
-                <model>Paycomet\Payment\Model\Apm\Paypal\PaymentMethod</model>
-                <payment_action>authorize_capture</payment_action>
-                <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
-                <currency>EUR</currency>
-                <sort_order>1</sort_order>
-            </paycomet_paypal>
             <paycomet_bizum>
                 <active>0</active>
                 <title>PAYCOMET - Bizum</title>

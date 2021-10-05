@@ -144,7 +144,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      *
      * @param \Magento\Framework\App\RequestInterface                      $request
      * @param \Magento\Framework\UrlInterface                              $urlBuilder
-     * @param \Paycomet\Payment\Helper\Data                              $helper
+     * @param \Paycomet\Payment\Helper\Data                                 $helper
      * @param \Magento\Store\Model\StoreManagerInterface                   $storeManager
      * @param \Magento\Framework\Locale\ResolverInterface                  $resolver
      * @param \Magento\Framework\Model\Context                             $context
@@ -154,7 +154,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      * @param \Magento\Payment\Helper\Data                                 $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface           $scopeConfig
      * @param \Magento\Payment\Model\Method\Logger                         $logger
-     * @param \Paycomet\Payment\Logger\Logger                            $paycometLogger
+     * @param \Paycomet\Payment\Logger\Logger                               $paycometLogger
      * @param \Magento\Framework\App\ProductMetadataInterface              $productMetadata
      * @param \Magento\Framework\Module\ResourceInterface                  $resourceInterface
      * @param \Magento\Checkout\Model\Session                              $session

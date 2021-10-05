@@ -47,11 +47,11 @@ define(
             continueToPayment: function(){
 
                 if (this.validate() && additionalValidators.validate()){
-
+                    var method = this.getCode();
                     setPaymentMethodAction() // Place Order
                         .done(
                             function(response){
-                                $.mage.redirect(window.checkoutConfig.payment["paycomet_payment"].redirectUrl);
+                                $.mage.redirect(window.checkoutConfig.payment[method].redirectUrl);
                             }
                         ).fail(
                             function(response){
