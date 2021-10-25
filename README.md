@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.7: 
+
+- Se permite poner pedidos On-hold
+
 > 2.4.6: 
 
 - Fix pago con Apm sin tener pago con tarjeta Activo
