@@ -294,29 +294,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount) {}
 
+    public function acceptPayment(\Magento\Payment\Model\InfoInterface $payment){}
 
-
-
-    /**
-     * Accept under review payment.
-     *
-     * @param \Magento\Payment\Model\InfoInterface $payment
-     *
-     * @return $this
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function acceptPayment(\Magento\Payment\Model\InfoInterface $payment)
-    {
-        throw new \Magento\Framework\Exception\LocalizedException(__('Acept Paaym'));
-        return $this;
-    }
-
-    public function hold(\Magento\Payment\Model\InfoInterface $payment)
-    {
-        throw new \Magento\Framework\Exception\LocalizedException(__('Hold Paaym'));
-        return $this;
-    }
+    public function hold(\Magento\Payment\Model\InfoInterface $payment){}
 
 
     /**
