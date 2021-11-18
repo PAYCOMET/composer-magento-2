@@ -53,13 +53,14 @@ class Process extends \Magento\Payment\Block\Form
         try {
             $order = $this->_order;
             if ($order->getPayment()) {
+                $payment = $order->getPayment();
                 // If not asigned paycomet_payment method to order
-                if ($order->getPayment()->getMethodInstance()->getCode() != "paycomet_payment") {
+                if ($payment->getMethodInstance()->getCode() != "paycomet_payment") {
                     $payment = $order->getPayment();
                     $payment->setMethod('paycomet_payment');
                     $payment->save();
-                }                
-                $result = $this->_order->getPayment()->getMethodInstance()->getFormPaycometUrl();
+                }
+                $result = $payment->getMethodInstance()->getFormPaycometUrl();
             }
         } catch (Exception $e) {
             // do nothing for now

@@ -24,7 +24,7 @@ if ($hash): ?>
     require([
         'jquery',
         'domReady',
-        'https://instantcredit.net/simulator/test/ic-simulator.js'
+        '<?= $viewModel->getSimulatorUrl() ?>'
     ], function($, domr, icsimulator){
         $(function(){
             window.icSimulatorCustom = {

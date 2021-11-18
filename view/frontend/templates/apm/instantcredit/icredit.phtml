@@ -7,7 +7,7 @@ $icHelper = $viewModel->getIcHelper();
     require([
         'jquery',
         'domReady',
-        'https://instantcredit.net/simulator/test/ic-simulator.js'
+        '<?= $viewModel->getSimulatorUrl() ?>'
     ], function($){
         $(function(){
             window.hashIcSimulator = "<?= $viewModel->getHash() ?>";
