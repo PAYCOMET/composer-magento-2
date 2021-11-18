@@ -32,6 +32,9 @@ class OddSimulatorViewModel implements \Magento\Framework\View\Element\Block\Arg
      */
     private $icHelper;
 
+    const SIMULATOR_URL       = "https://instantcredit.net/simulator/ic-simulator.js";
+    const SIMULATOR_URL_TEST  = "https://instantcredit.net/simulator/test/ic-simulator.js";
+
     /**
      * OddSimulatorViewModel constructor.
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -118,6 +121,20 @@ class OddSimulatorViewModel implements \Magento\Framework\View\Element\Block\Arg
     public function getProduct()
     {
         return $this->registry->registry('current_product');
+    }
+
+
+    /**
+     * Get IC simulator URL
+     * @return return
+     */
+    public function getSimulatorUrl()
+    {
+        if ($this->scopeConfig->getValue('payment/paycomet_instantcredit/simulatorenvironment') == 1) {
+            return self::SIMULATOR_URL_TEST;
+        } else {
+            return self::SIMULATOR_URL;
+        }
     }
 
 }
