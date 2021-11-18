@@ -1222,6 +1222,11 @@
                             <field id="activeinstantcredit">1</field>
                         </depends>
                     </field>
+                    <field id="simulatorenvironment" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Environment Simulator</label>
+                        <source_model>Paycomet\Payment\Model\Config\Source\ICSimulator</source_model>
+                        <config_path>payment/paycomet_instantcredit/simulatorenvironment</config_path>
+                    </field>
                     <field id="hash" translate="label" type="password" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Hash simulator</label>
                         <config_path>payment/paycomet_instantcredit/hash</config_path>
