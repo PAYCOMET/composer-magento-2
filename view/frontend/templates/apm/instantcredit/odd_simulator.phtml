@@ -15,6 +15,9 @@ if ($renderIn === 'cart') {
 $icHelper = $viewModel->getIcHelper();
 $price = $viewModel->getPriceFormatted($price);
 
+// If APM InstantCredit not enable, return
+if (!$icHelper->getIsEnabled()) return;
+
 if ($hash): ?>
 <div class="ic-container">
     <div class="ic-configuration" style="display:none"><?= $hash ?></div>

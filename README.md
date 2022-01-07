@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.9: 
+
+- Mejoras de código.
+
 > 2.4.8: 
 
 - Instant Credit: Posibilidad de configurar el simulador en Test y cambio de logo
