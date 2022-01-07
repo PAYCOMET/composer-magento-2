@@ -2,6 +2,10 @@
 /** @var \Paycomet\Payment\ViewModel\Apm\Instantcredit\OddSimulatorViewModel $viewModel */
 $viewModel = $block->getViewModel();
 $icHelper = $viewModel->getIcHelper();
+
+// If APM InstantCredit not enable, return
+if (!$icHelper->getIsEnabled()) return;
+
 ?>
 <script>
     require([
