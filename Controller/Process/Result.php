@@ -103,7 +103,7 @@ class Result extends \Magento\Framework\App\Action\Action
         }catch (\Exception $e) {
             $this->_logger->critical($e);
         }
-        
+
     }
 
     /**
@@ -126,11 +126,11 @@ class Result extends \Magento\Framework\App\Action\Action
         if (!$authStatus) {
 
             $this->_logger->critical(__('Invalid response received from gateway.'));
-            
+
             return false;
         }
 
-             
+
         $transaction_type = $response['TransactionType'];
         switch ($transaction_type){
             // add_user
@@ -141,7 +141,7 @@ class Result extends \Magento\Framework\App\Action\Action
                 break;
 
             // refund -> not processed in notification
-            case 2: 
+            case 2:
                 break;
 
             default:
@@ -150,7 +150,7 @@ class Result extends \Magento\Framework\App\Action\Action
 
                 if ($incrementId) {
                     $order = $this->_getOrder($incrementId);
-                    if ($order->getId()) {                        
+                    if ($order->getId()) {
                         // process the response
                         return $this->_paymentManagement->processResponse($order, $response);
                     } else {
@@ -166,7 +166,7 @@ class Result extends \Magento\Framework\App\Action\Action
 
                 break;
         }
-        
+
     }
 
     /**
@@ -193,11 +193,11 @@ class Result extends \Magento\Framework\App\Action\Action
 
                 $merchant_code = $this->_helper->getConfigData('merchant_code',$storeId);
                 $merchant_terminal = $this->_helper->getConfigData('merchant_terminal',$storeId);
-                $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass',$storeId);                 
+                $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass',$storeId);
                 $sign = $response['NotificationHash'];
                 $datetime = $response['DateTime'];
 
-                $local_sign = hash('sha512',$merchant_code.$merchant_terminal.$transaction_type.$ref.$datetime.md5($merchant_pass));                
+                $local_sign = hash('sha512',$merchant_code.$merchant_terminal.$transaction_type.$ref.$datetime.md5($merchant_pass));
 
                 break;
 
@@ -207,8 +207,8 @@ class Result extends \Magento\Framework\App\Action\Action
 
                 $merchant_code = $this->_helper->getConfigData('merchant_code',$storeId);
                 $merchant_terminal = $this->_helper->getConfigData('merchant_terminal',$storeId);
-                $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass',$storeId);     
-            
+                $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass',$storeId);
+
                 $sign = $response['NotificationHash'];
                 $amount = $response['Amount'];
                 $currency = $response['Currency'];
@@ -217,12 +217,12 @@ class Result extends \Magento\Framework\App\Action\Action
                 $local_sign = hash('sha512',$merchant_code.$merchant_terminal.$transaction_type.$ref.$amount.$currency.md5($merchant_pass).$bankdatetime.$resp);
 
                 break;
-            
-        } 
-        
-       
+
+        }
+
+
         //Check to see if hashes match or not
-        if (strcmp($sign, $local_sign) != 0) {            
+        if (strcmp($sign, $local_sign) != 0) {
             return false;
         }
 
