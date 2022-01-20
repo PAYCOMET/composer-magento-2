@@ -220,7 +220,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $this->_objectManager = $objectmanager;
         $this->_remoteAddress = $remoteAddress;
     }
-    
+
     public function getAcceptedCurrencyCodes() {
         return array($this->getConfigData('currency'));
     }
@@ -258,7 +258,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     {
         $payment = $this->getInfoInstance();
         $order = $payment->getOrder();
-             
+
         /*
          * do not send order confirmation mail after order creation wait for
          * result confirmation from PAYCOMET
@@ -293,7 +293,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         // Fin Pago mediante tarjeta tokenizada ------------------------------------------------------
         } if (isset($jetToken) && $jetToken!=""){
-            
+
             $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));
             $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
 
@@ -339,7 +339,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         // If a Payment with Saved Card or JetIframe
         if ($tokenCardPayment){
-            
+
             // Si es pago con Token o jetIframe guardamos los datos del token en el pedido
             $order->setPaycometToken($idUser."|".$tokenUser);
             $order->save();
@@ -381,9 +381,10 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         }
         $IdUser = $data["iduser"];
         $TokenUser = $data["tokenuser"];
-        
-        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));
-        $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
+
+        $storeId = $order->getStoreId();
+        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal',$storeId));
+        $api_key            = trim($this->_helper->getEncryptedConfigData('api_key',$storeId));
 
         $methodId = 1;
         $secure = 0;
@@ -486,9 +487,11 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $realOrderId = $order->getRealOrderId();
         $currencyCode = $order->getBaseCurrencyCode();
 
-        $amount = $this->_helper->amountFromMagento($amount, $currencyCode);    
-        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));        
-        $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
+        $amount = $this->_helper->amountFromMagento($amount, $currencyCode);
+
+        $storeId = $order->getStoreId();
+        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal',$storeId));
+        $api_key            = trim($this->_helper->getEncryptedConfigData('api_key',$storeId));
 
         $TransactionType = $payment->getAdditionalInformation('TransactionType');
         switch ($TransactionType){
@@ -770,7 +773,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     {
 
         $order = $this->_session->getLastRealOrder();
-        
+
         $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));
         $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
 
@@ -800,7 +803,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $OPERATION = ($payment_action==PaymentAction::AUTHORIZE_CAPTURE)?1:3; // EXECUTE_PURCHASE : CREATE_PREAUTORIZATION
 
         $formFields = [];
-        
+
         $function_txt = "";
 
         $dataResponse = array();
@@ -888,14 +891,14 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     $response["url"] = "";
                     $response["error"]  = $response->errorCode;
                 }
-            } else {                
+            } else {
                 $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));
                 $dataResponse["url"] = "";
                 $dataResponse["error"]  = 1004;
                 return $dataResponse;
             }
         }
-        
+
         if ($response->DS_ERROR_ID==0) {
             $dataResponse["url"] = $response->URL_REDIRECT;
             $dataResponse["error"]  = 0;

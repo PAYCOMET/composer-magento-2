@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.10: 
+
+- Mejoras en Preautorizaciones de Multitienda.
+
 > 2.4.9: 
 
 - Mejoras de código.
