@@ -777,7 +777,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));
         $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
 
-        $payment_action = trim($this->_helper->getConfigData('payment_action'));
+        $payment_action     = trim($this->_helper->getConfigData('payment_action'));
+
+        $dcc                = $this->_helper->getConfigData('dcc');
 
         $realOrderId = $order->getRealOrderId();
         //$fieldOrderId = $realOrderId.'_'.$timestamp;
@@ -802,101 +804,72 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         $OPERATION = ($payment_action==PaymentAction::AUTHORIZE_CAPTURE)?1:3; // EXECUTE_PURCHASE : CREATE_PREAUTORIZATION
 
+        // DCC OPERATION
+        if ($OPERATION == 1 && $dcc) {
+            $OPERATION = 116;
+        }
+
         $formFields = [];
 
         $function_txt = "";
 
         $dataResponse = array();
 
-        // Payment/Preauthorization with Saved Card or jetIframe
-        if ($order->getPaycometToken() != ""){
-            $paycometToken = explode("|",$order->getPaycometToken());
+        if ($api_key != "") {
 
-            $IdUser = $paycometToken[0];
-            $TokenUser = $paycometToken[1];
+            $merchantData = $this->_helper->getMerchantData($order,self::METHOD_ID);
+            
+            $paymentData = [
+                'terminal' => $merchant_terminal,
+                'methods' => [1],
+                'order' => $fieldOrderId,
+                'amount' => $amount,
+                'currency' => $orderCurrencyCode,
+                'userInteraction' => 1,
+                'secure' => $Secure,
+                'merchantData' => $merchantData,
+                'urlOk' => $this->_helper->getURLOK($order),
+                'urlKo' => $this->_helper->getURLKO($order)
+            ];
 
-            $formFields['IDUSER'] = $IdUser;
-            $formFields['TOKEN_USER'] = $TokenUser;
+            // Payment/Preauthorization with Saved Card or jetIframe add idUser/tokenUser to paymentData
+            if ($order->getPaycometToken() != ""){
+                $paycometToken = explode("|",$order->getPaycometToken());
 
-            if ($api_key != "") {
-                $merchantData = $this->_helper->getMerchantData($order,self::METHOD_ID);
-                try {
-                    $apiRest = new ApiRest($api_key);
-                    $response = $apiRest->form(
-                        $OPERATION,
-                        $language,
-                        $merchant_terminal,
-                        '',
-                        [
-                            'terminal' => $merchant_terminal,
-                            'methods' => [1],
-                            'order' => $fieldOrderId,
-                            'amount' => $amount,
-                            'currency' => $orderCurrencyCode,
-                            'userInteraction' => 1,
-                            'secure' => $Secure,
-                            'idUser' => $IdUser,
-                            'tokenUser' => $TokenUser,
-                            'merchantData' => $merchantData,
-                            'urlOk' => $this->_helper->getURLOK($order),
-                            'urlKo' => $this->_helper->getURLKO($order)
-                        ]
-                    );
+                $IdUser = $paycometToken[0];
+                $TokenUser = $paycometToken[1];
 
-                    if ($response->errorCode==0) {
-                        $response->URL_REDIRECT = $response->challengeUrl;
-                    }
-                    $response->DS_ERROR_ID = $response->errorCode;
+                $formFields['IDUSER'] = $IdUser;
+                $formFields['TOKEN_USER'] = $TokenUser;
 
-                } catch (Exception $e) {
-                    $response["url"] = "";
-                    $response["error"]  = $response->errorCode;
-                }
-            } else {
-                $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));
-                $dataResponse["url"] = "";
-                $dataResponse["error"]  = 1004;
-                return $dataResponse;
+                $paymentData['idUser'] = $IdUser;
+                $paymentData['tokenUser'] = $TokenUser;
             }
-        // Payment/Preautorization with New Card
+
+            try {
+                $apiRest = new ApiRest($api_key);
+                $response = $apiRest->form(
+                    $OPERATION,
+                    $language,
+                    $merchant_terminal,
+                    '',
+                    $paymentData
+                );
+
+                if ($response->errorCode==0) {
+                    $response->URL_REDIRECT = $response->challengeUrl;
+                }
+                $response->DS_ERROR_ID = $response->errorCode;
+
+            } catch (Exception $e) {
+                $response["url"] = "";
+                $response["error"]  = $response->errorCode;
+            }
         } else {
-            if ($api_key != "") {
-                $merchantData = $this->_helper->getMerchantData($order,self::METHOD_ID);
-
-                try {
-                    $apiRest = new ApiRest($api_key);
-                    $response = $apiRest->form(
-                        $OPERATION,
-                        $language,
-                        $merchant_terminal,
-                        '',
-                        [
-                            'terminal' => $merchant_terminal,
-                            'methods' => [1],
-                            'order' => $fieldOrderId,
-                            'amount' => $amount,
-                            'currency' => $orderCurrencyCode,
-                            'userInteraction' => 1,
-                            'secure' => $Secure,
-                            'merchantData' => $merchantData,
-                            'urlOk' => $this->_helper->getURLOK($order),
-                            'urlKo' => $this->_helper->getURLKO($order)
-                        ]
-                    );
-                    if ($response->errorCode==0) {
-                        $response->URL_REDIRECT = $response->challengeUrl;
-                    }
-                    $response->DS_ERROR_ID = $response->errorCode;
-                } catch (Exception $e) {
-                    $response["url"] = "";
-                    $response["error"]  = $response->errorCode;
-                }
-            } else {
-                $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));
-                $dataResponse["url"] = "";
-                $dataResponse["error"]  = 1004;
-                return $dataResponse;
-            }
+            $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));
+            $dataResponse["url"] = "";
+            $dataResponse["error"]  = 1004;
+            return $dataResponse;
         }
 
         if ($response->DS_ERROR_ID==0) {
