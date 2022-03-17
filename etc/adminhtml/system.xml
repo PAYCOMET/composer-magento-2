@@ -70,6 +70,11 @@
                         </depends>
                         <validate>required-entry no-whitespace</validate>
                     </field>
+                    <field id="dcc" translate="label" type="select" sortOrder="8a" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>DCC</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/paycomet_payment/dcc</config_path>
+                    </field>
                     <field id="iframe_enabled" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Iframe Enabled</label>
                         <tooltip><![CDATA[Iframe is displayed on the checkout page and contains the PAYCOMET Payments page. Otherwise it will redirect to the PAYCOMET Payments page for payment and return afterwards.]]></tooltip>
