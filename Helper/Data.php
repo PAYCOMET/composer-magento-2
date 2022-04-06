@@ -14,7 +14,6 @@ use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
  */
 class Data extends AbstractHelper
 {
-    const METHOD_CODE = 'paycomet_payment';
     const CUSTOMER_ID = 'customer';
 
     /**
@@ -271,6 +270,59 @@ class Data extends AbstractHelper
         $sha1hash = $this->signFields("$timestamp.$merchant_code.$orderid.$result");
 
         return ['timestamp' => $timestamp, 'order_id' => $orderid, 'result' => $result, 'hash' => $sha1hash];
+    }
+
+
+    public function callExecutePurchase($order, $methodId){
+        $storeId = $order->getStoreId();
+        $merchant_terminal  = trim($this->getConfigData('merchant_terminal',$storeId));
+        $api_key            = trim($this->getEncryptedConfigData('api_key',$storeId));
+
+        $realOrderId = $order->getRealOrderId();
+
+        if ($api_key != "") {
+            $merchantData = $this->getMerchantData($order, $methodId);
+            $apiRest = new ApiRest($api_key);
+            try {
+
+                $orderCurrencyCode = $order->getBaseCurrencyCode();
+                $amount = $this->amountFromMagento($order->getBaseGrandTotal(), $orderCurrencyCode);
+
+                $secure = 1;
+                $userInteraction = 1;
+                $notifyDirectPayment = 1;
+
+                return $apiRest->executePurchase(
+                    $merchant_terminal,
+                    $realOrderId,
+                    $amount,
+                    $orderCurrencyCode,
+                    $methodId,
+                    $this->_remoteAddress->getRemoteAddress(),
+                    $secure,
+                    '',
+                    '',
+                    $this->getURLOK($order),
+                    $this->getURLKO($order),
+                    '',
+                    '',
+                    '',
+                    $userInteraction,
+                    [],
+                    '',
+                    '',
+                    $merchantData,
+                    $notifyDirectPayment
+                );
+
+            } catch (Exception $e) {
+            }
+        }
+
+        $objAux = $this->objectFactory->create();
+        $objAux->setData('errorCode', 104);
+        return $objAux;
+
     }
 
 
@@ -848,14 +900,18 @@ class Data extends AbstractHelper
 
     private function getShoppingCart($order)
     {
-
+        $orderCurrencyCode = $order->getBaseCurrencyCode();
 		$shoppingCartData = array();
+        $amountAux = 0;
 
         foreach ($order->getAllItems() as $key=>$item) {
-            $shoppingCartData[$key]["sku"] = $item->getSku();
-			$shoppingCartData[$key]["quantity"] = number_format($item->getQtyOrdered(), 0, '.', '');
-			$shoppingCartData[$key]["unitPrice"] = number_format($item->getPrice()*100, 0, '.', '');
+            $shoppingCartData[$key]["sku"] = $item->getProductId();
+            $shoppingCartData[$key]["articleType"] = 5;
+			$shoppingCartData[$key]["quantity"] = (int) $item->getQtyOrdered();
+			$shoppingCartData[$key]["unitPrice"] = $this->amountFromMagento($item->getPrice(), $orderCurrencyCode);
             $shoppingCartData[$key]["name"] = $item->getName();
+
+            $amountAux += $shoppingCartData[$key]["unitPrice"] * $shoppingCartData[$key]["quantity"];
 
             $product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($item->getProductId());
 
@@ -867,10 +923,37 @@ class Data extends AbstractHelper
                 $arrCat[] = $_cat->getName();
             }
 
-			$shoppingCartData[$key]["category"] = implode("|",$arrCat);
-         }
+			$shoppingCartData[$key]["category"] = strip_tags(implode("|",$arrCat));
+        }
 
-		return array("shoppingCart"=>array_values($shoppingCartData));
+        // Shipping Cost
+        $shippingAmount = $order->getShippingAmount();
+        if ((int)$shippingAmount > 0) {
+            $key++;
+            $shoppingCartData[$key]["sku"] = "1";
+            $shoppingCartData[$key]["articleType"] = "6";
+			$shoppingCartData[$key]["quantity"] = 1;
+			$shoppingCartData[$key]["unitPrice"] = $this->amountFromMagento($shippingAmount, $orderCurrencyCode);
+            $shoppingCartData[$key]["name"] = "Package Shipping Cost";
+
+            $amountAux += $shoppingCartData[$key]["unitPrice"] * $shoppingCartData[$key]["quantity"];
+        }
+
+        // Impuestos. Si la suma de amountAux < Total, el resto de impuestos
+        $amountTotal = $order->getBaseGrandTotal();
+
+        // Se calculan los impuestos
+        $tax = $amountTotal - $amountAux;
+        if ($tax > 0) {
+            $key++;
+            $shoppingCartData[$key]["sku"] = "1";
+            $shoppingCartData[$key]["articleType"] = "11";
+            $shoppingCartData[$key]["quantity"] = 1;
+            $shoppingCartData[$key]["unitPrice"] = $this->amountFromMagento($tax, $orderCurrencyCode);
+            $shoppingCartData[$key]["name"] = "Tax";
+        }
+
+		return array("shoppingCart"=>$shoppingCartData);
 	}
 
     private function getMerchantData2($order){
@@ -1258,9 +1341,10 @@ class Data extends AbstractHelper
      *
      * @return mixed
      */
-    public function getConfigData($field, $storeId = null)
+    public function getConfigData($field, $storeId = null, $paymentMethodCode = \Paycomet\Payment\Model\PaymentMethod::METHOD_CODE)
     {
-        return $this->getConfig($field, self::METHOD_CODE, $storeId);
+        $this->_paycometLogger->debug($field . "--" . $paymentMethodCode);
+        return $this->getConfig($field, $paymentMethodCode, $storeId);
     }
 
     /**
@@ -1271,9 +1355,9 @@ class Data extends AbstractHelper
      *
      * @return mixed
      */
-    public function getConfigDataFlag($field, $storeId = null)
+    public function getConfigDataFlag($field, $storeId = null, $paymentMethodCode = \Paycomet\Payment\Model\PaymentMethod::METHOD_CODE)
     {
-        return $this->getConfig($field, self::METHOD_CODE, $storeId, true);
+        return $this->getConfig($field, $paymentMethodCode, $storeId, true);
     }
 
     /**

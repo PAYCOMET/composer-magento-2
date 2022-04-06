@@ -68,6 +68,9 @@
          <method name="paycomet_instantcredit">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="paycomet_klarnapayments">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
 
     </methods>
 </payment>

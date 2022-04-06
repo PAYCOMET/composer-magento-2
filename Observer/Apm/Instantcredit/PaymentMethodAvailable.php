@@ -39,7 +39,7 @@ class PaymentMethodAvailable implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
 
-        if($observer->getEvent()->getMethodInstance()->getCode()== PaymentMethod::METHOD_CODE){
+        if($observer->getEvent()->getMethodInstance()->getCode() == PaymentMethod::METHOD_CODE){
             $grandTotal = $this->_session->getQuote()->getGrandTotal();
 
             if (!$this->_icHelper->getIsEnabled() || !$this->_icHelper->isBetweenLimits($grandTotal)) {

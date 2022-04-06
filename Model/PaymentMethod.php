@@ -2,8 +2,6 @@
 
 namespace Paycomet\Payment\Model;
 
-use Paycomet\Payment\Model\Config\Source\DMFields;
-use Paycomet\Payment\Model\Config\Source\FraudMode;
 use Paycomet\Payment\Model\Config\Source\PaymentAction;
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\Method\ConfigInterface;
@@ -17,13 +15,12 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 {
     const METHOD_ID = 1;
     const METHOD_CODE = 'paycomet_payment';
+
+    protected $_code = self::METHOD_CODE;
+
     const NOT_AVAILABLE = 'N/A';
 
     /**
-     * @var string
-     */
-    protected $_code = self::METHOD_CODE;
-
     /**
      * @var GUEST_ID , used when order is placed by guests
      */
