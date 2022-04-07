@@ -35,10 +35,10 @@ class Process extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         // If Token Payment and AuthCode -> got to Success
-        try{
+        try {
             $order = $this->_checkoutSession->getLastRealOrder();
             $payment = $order->getPayment();
-           
+
             // Verify is processed -> Exist AuthCode
             if (isset($payment) && $payment->getAdditionalInformation('DS_MERCHANT_AUTHCODE')){
                 return $this->_redirect('checkout/onepage/success');
@@ -48,16 +48,16 @@ class Process extends \Magento\Framework\App\Action\Action
             if (isset($payment) && $payment->getAdditionalInformation('DS_CHALLENGE_URL')){
                 return $this->_redirect($payment->getAdditionalInformation('DS_CHALLENGE_URL'));
             }
-            
+
             if (!$order->getId()){
                 return;
             }
-            
+
             // End Token Payment verification
-        }catch (\Exception $e){ 
+        } catch (\Exception $e){
             return;
         }
-        
+
         $this->_view->loadLayout();
         $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();

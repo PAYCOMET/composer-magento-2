@@ -15,10 +15,10 @@ class Csrf
         $request,
         $action
     ) {
-        
+
         if ($request->getModuleName() == 'paycomet_payment') {
             return;
         }
-        $proceed($request, $action); 
+        $proceed($request, $action);
     }
 }

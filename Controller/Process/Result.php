@@ -73,7 +73,7 @@ class Result extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-	try{
+	    try {
             $response = $this->getRequest()->getParams();
             unset($response["TransactionName"]);
 
@@ -88,7 +88,7 @@ class Result extends \Magento\Framework\App\Action\Action
                     $result = $this->_handleResponse($response);
 
                 // URL OK,KO
-                }else{
+                } else {
                     $sessionParams = $response;
                     // Process URL OK/KO
                     $params['returnUrl'] = $this->_url->getUrl('paycomet_payment/process/sessionresult', $sessionParams);
@@ -100,7 +100,7 @@ class Result extends \Magento\Framework\App\Action\Action
                 }
 
             }
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
 

@@ -51,10 +51,10 @@ class InstallData implements InstallDataInterface
         $setup->startSetup();
 
         $salesInstaller->addAttribute('order', 'paycomet_token', ['type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT, 'length'=> 100, 'visible' => false,'nullable' => true,]);
-        
+
 
         $setup->endSetup();
 
-        
+
     }
 }
