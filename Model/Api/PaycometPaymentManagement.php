@@ -75,8 +75,6 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
         $this->_customerRepository = $customerRepository;
     }
 
-    
-
     /**
      * {@inheritdoc}
      */
@@ -99,7 +97,7 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
             print "PAYCOMET 1";
             return false;
         }
-    
+
         $this->_helper->CreateTransInvoice($order,$response);
 
         return true;
@@ -112,7 +110,7 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
     public function processResponseAddUser($response)
     {
 
-        if (!$this->_validateResponseFieldsAddUser($response)) {            
+        if (!$this->_validateResponseFieldsAddUser($response)) {
             return false;
         }
 
@@ -123,7 +121,7 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
 
         if (!empty($customerId)) {
             return $this->_helper->_handleCardStorage($response, $customerId, $storeId);
-        }else{
+        } else {
             return false;
         }
     }
@@ -142,7 +140,7 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
             }
         }
     }
-    
+
 
     /**
      * @desc Validates the response fields

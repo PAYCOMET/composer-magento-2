@@ -50,13 +50,13 @@ class Add extends \Magento\Framework\App\Action\Action
      * View cards.
      */
     public function execute()
-    {       
+    {
         $response = $this->getRequest()->getParams();
 
         if ($response["paytpvToken"]) {
             $this->_helper->addUserToken($response["paytpvToken"]);
         }
-        
+
         $this->_redirect('paycomet_payment/cards/view');
     }
 

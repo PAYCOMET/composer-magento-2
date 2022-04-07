@@ -28,7 +28,7 @@ class InstallSchema implements InstallSchemaInterface
          */
         $installer->startSetup();
 
-       
+
         $table = $installer->getConnection()->newTable(
             $installer->getTable('paycomet_token')
         )->addColumn(

@@ -3,7 +3,6 @@
 namespace Paycomet\Payment\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
-use Paycomet\Payment\Model\Config\Source\Environment;
 use Paycomet\Payment\Observer\DataAssignObserver;
 use Paycomet\Payment\Model\Config\Source\PaymentAction;
 use Paycomet\Bankstore\ApiRest;
@@ -198,38 +197,6 @@ class Data extends AbstractHelper
     }
 
 
-
-
-    /**
-     * @desc Check if configuration is set to sandbox mode
-     *
-     * @return bool
-     */
-    public function isSandboxMode()
-    {
-        return $this->getConfigData('environment') == Environment::ENVIRONMENT_SANDBOX;
-    }
-
-    /**
-     * @desc Get payment form url
-     *
-     * @return string
-     */
-    public function getFormUrl()
-    {
-        return $this->getConfigData('payment_url');
-    }
-
-    /**
-     * @desc Get remote api url
-     *
-     * @return string
-     */
-    public function getRemoteApiUrl()
-    {
-        return $this->getConfigData('api_url');
-    }
-
     /**
      * Checkout getURLOK.
      *
@@ -262,7 +229,7 @@ class Data extends AbstractHelper
      *
      * @return array
      */
-    public function _buildAddUserSessionParams($result,$orderid)
+    public function _buildAddUserSessionParams($result, $orderid)
     {
         $result = ($result) ? '1' : '0';
         $timestamp = strftime('%Y%m%d%H%M%S');
@@ -273,7 +240,7 @@ class Data extends AbstractHelper
     }
 
 
-    public function callExecutePurchase($order, $methodId){
+    public function apmExecutePurchase($order, $methodId){
         $storeId = $order->getStoreId();
         $merchant_terminal  = trim($this->getConfigData('merchant_terminal',$storeId));
         $api_key            = trim($this->getEncryptedConfigData('api_key',$storeId));
@@ -315,7 +282,8 @@ class Data extends AbstractHelper
                     $notifyDirectPayment
                 );
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
+                $this->logDebug("Error in apmExecutePurchase: " . $e->getMessage());
             }
         }
 
@@ -359,16 +327,12 @@ class Data extends AbstractHelper
                 $storeId = $this->_storeManager->getStore()->getId();
 
                 $this->_handleCardStorage($response, $customerId, $storeId);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('jetToken card failed'));
             }
         } else {
             $this->logDebug(__("ERROR: PAYCOMET API KEY required"));
         }
-
-
-
-        $tokenCardPayment = true;
 
     }
 
@@ -488,7 +452,7 @@ class Data extends AbstractHelper
                     $response["DS_MERCHANT_AMOUNT"] = $cancelPreautorization->amount;
                 }
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $response["DS_RESPONSE"] = 0;
                 $response["DS_ERROR_ID"] = $cancelPreautorization->errorCode;
             }
@@ -556,7 +520,7 @@ class Data extends AbstractHelper
                     $dataResponse["url"] = $formResponse->challengeUrl;
                 }
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
 
                 $dataResponse["error"]  = $formResponse->errorCode;
                 $this->logDebug("Error in Rest 107: " . $e->getMessage());
@@ -703,9 +667,7 @@ class Data extends AbstractHelper
 
 		$Merchant_EMV3DS["challengeWindowSize"] = 05;
 
-
         return $Merchant_EMV3DS;
-
     }
 
 
@@ -812,7 +774,7 @@ class Data extends AbstractHelper
 	 * @param int $interval intervalo
 	 * @return string $intervalType tipo de intervalo (DAY,MONTH)
 	 **/
-	private function numPurchaseCustomer($id_customer,$valid=1,$interval=1,$intervalType="day")
+	private function numPurchaseCustomer($id_customer, $valid=1, $interval=1, $intervalType="day")
     {
 
         try {
@@ -868,7 +830,7 @@ class Data extends AbstractHelper
 	 * @param int $id_address_delivery direccion de envio
 	 **/
 
-	private function firstAddressDelivery($id_customer,$id_address_delivery)
+	private function firstAddressDelivery($id_customer, $id_address_delivery)
     {
 
         try {
@@ -956,69 +918,6 @@ class Data extends AbstractHelper
 		return array("shoppingCart"=>$shoppingCartData);
 	}
 
-    private function getMerchantData2($order){
-
-        $name = $order->getCustomerFirstname();
-        if (!isset($name) || empty($name)) {
-            if ($order->getBillingAddress()) {
-                $name = $order->getBillingAddress()->getFirstname();
-            }
-        }
-        $lastName = $order->getCustomerLastname();
-        if (!isset($lastName) || empty($lastName)) {
-            if ($order->getBillingAddress()) {
-                $lastName = $order->getBillingAddress()->getLastname();
-            }
-        }
-
-        $Merchant_Data["scoring"]["customer"]["id"] = $order->getCustomerId();
-        $Merchant_Data["scoring"]["customer"]["name"] = $name;
-        $Merchant_Data["scoring"]["customer"]["surname"] = $lastName;
-        $Merchant_Data["scoring"]["customer"]["email"] = $order->getCustomerEmail();
-
-        $shipping = $order->getShippingAddress();
-
-        if ($shipping){
-
-            $Merchant_Data["scoring"]["customer"]["phone"] = $shipping->getTelephone();
-            $Merchant_Data["scoring"]["customer"]["mobile"] = "";
-            $Merchant_Data["scoring"]["customer"]["firstBuy"] = $this->getFirstOrder($order);
-
-            $lastName = $shipping->getLastname();
-            $lastName = isset($lastName) && !empty($lastName) ? ' '.$lastName : '';
-            $city = $shipping->getCity();
-            $state = $shipping->getRegionCode();
-            $postalCode = $shipping->getPostcode();
-            $country = $shipping->getCountryId();
-            $phone = $shipping->getTelephone();
-            $street = $shipping->getStreet();
-
-            $Merchant_Data["scoring"]["shipping"]["address"]["streetAddress"] = isset($street[0]) ? $street[0] : self::NOT_AVAILABLE;
-            $Merchant_Data["scoring"]["shipping"]["address"]["extraAddress"] = isset($street[1]) ? $street[1] : self::NOT_AVAILABLE;
-            $Merchant_Data["scoring"]["shipping"]["address"]["city"] = isset($city) ? $city : self::NOT_AVAILABLE;
-            $Merchant_Data["scoring"]["shipping"]["address"]["postalCode"] = isset($postalCode) ? $postalCode : self::NOT_AVAILABLE;
-            $Merchant_Data["scoring"]["shipping"]["address"]["state"] = isset($state) ? $state : self::NOT_AVAILABLE;
-            $Merchant_Data["scoring"]["shipping"]["address"]["country"] = isset($country) ? $country : self::NOT_AVAILABLE;
-
-            // Time
-            $Merchant_Data["scoring"]["shipping"]["time"] = "";
-        }
-
-        $billing = $order->getBillingAddress();
-        $street = $billing->getStreet();
-
-        $Merchant_Data["scoring"]["billing"]["address"]["streetAddress"] = isset($street[0]) ? $street[0] : self::NOT_AVAILABLE;
-        $Merchant_Data["scoring"]["billing"]["address"]["extraAddress"] = isset($street[1]) ? $street[1] : self::NOT_AVAILABLE;
-        $Merchant_Data["scoring"]["billing"]["address"]["city"] = $billing->getCity();
-        $Merchant_Data["scoring"]["billing"]["address"]["postalCode"] = $billing->getPostcode();
-        $Merchant_Data["scoring"]["billing"]["address"]["state"] = $billing->getRegionCode();
-        $Merchant_Data["scoring"]["billing"]["address"]["country"] = $billing->getCountryId();
-
-        $Merchant_Data["futureData"] = "";
-
-        return urlencode(base64_encode(json_encode($Merchant_Data)));
-    }
-
 
     /**
      * @return String URL
@@ -1041,7 +940,7 @@ class Data extends AbstractHelper
         $amount = $this->amountFromMagento($order->getBaseGrandTotal(), $orderCurrencyCode);
 
         $shopperLocale = $this->_resolver->getLocale();
-        $language_data = explode("_",$shopperLocale);
+        $language_data = explode("_", $shopperLocale);
         $language = $language_data[0];
 
         /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
@@ -1083,7 +982,7 @@ class Data extends AbstractHelper
                     throw new \Magento\Framework\Exception\LocalizedException(__('Error: ' . $response->errorCode));
                 }
                 $response->DS_ERROR_ID = $response->errorCode;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Error: ' . $e->getCode()));
             }
         } else {
@@ -1190,9 +1089,6 @@ class Data extends AbstractHelper
      */
     public function stripFields($response)
     {
-        if ($this->isSandboxMode()) {
-            return $response;
-        }
         $returnedFields = [];
         $excludedFields = [];
 
@@ -1206,24 +1102,6 @@ class Data extends AbstractHelper
         return $returnedFields;
     }
 
-    /**
-     * @desc Trims the response card digits field to only contain the last 4
-     *
-     * @param array $response
-     *
-     * @return array
-     */
-    public function trimCardDigits($response)
-    {
-        if (isset($response['CARDDIGITS']) && strlen($response['CARDDIGITS']) > 4) {
-            $response['CARDDIGITS'] = substr($response['CARDDIGITS'], -4);
-        }
-        if (isset($response['SAVED_PMT_DIGITS']) && strlen($response['SAVED_PMT_DIGITS']) > 4) {
-            $response['SAVED_PMT_DIGITS'] = substr($response['SAVED_PMT_DIGITS'], -4);
-        }
-
-        return $response;
-    }
 
     /**
      * @desc Strips and trims the response and returns a new array of fields
@@ -1234,25 +1112,8 @@ class Data extends AbstractHelper
      */
     public function stripTrimFields($response)
     {
-        $fields = $this->stripFields($response);
+        return $this->stripFields($response);
 
-        return $this->trimCardDigits($fields);
-    }
-
-    /**
-     * @desc Strips and trims the xml and returns the new xml
-     *
-     * @param string $xml
-     *
-     * @return string
-     */
-    public function stripXML($xml)
-    {
-        $patterns = ['/(<sha1hash>).+(<\/sha1hash>)/',
-                      '/(<md5hash>).+(<\/md5hash>)/',
-                      '/(<refundhash>).+(<\/refundhash>)/', ];
-
-        return preg_replace($patterns, '', $xml);
     }
 
     /**
@@ -1416,7 +1277,6 @@ class Data extends AbstractHelper
             //Set information
             $this->setAdditionalInfo($payment, $paymentData);
 
-
             switch ($type) {
                 case \Magento\Sales\Model\Order\Payment\Transaction::TYPE_CAPTURE:
                     $message = __('Captured amount of %1',$order->getBaseCurrency()->formatTxt($order->getGrandTotal()));
@@ -1449,7 +1309,7 @@ class Data extends AbstractHelper
             $this->_addHistoryComment($order, $message);
 
             return $transaction->save()->getTransactionId();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Create Transaction error'));
         }
     }
@@ -1473,14 +1333,12 @@ class Data extends AbstractHelper
                 ->pay()
                 ->save();
 
-
         $message = __(
             'Invoiced amount of %1 Transaction ID: %2',
             $order->getBaseCurrency()->formatTxt($amount),
             $pasref
         );
         $this->_addHistoryComment($order, $message);
-
     }
 
 
@@ -1531,9 +1389,6 @@ class Data extends AbstractHelper
 
     }
 
-    /*
-    @@ TODO
-    */
     public function getFirstOrder($order)
     {
 
@@ -1552,7 +1407,6 @@ class Data extends AbstractHelper
 
     public function isFirstPurchaseToken($payment)
     {
-
         $data = $this->getTokenData($payment);
 
         if (isset($data['iduser']) && isset($data['tokenuser'])) {
@@ -1574,9 +1428,8 @@ class Data extends AbstractHelper
     }
 
 
-    public function CreateTransInvoice($order,$response)
+    public function CreateTransInvoice($order, $response)
     {
-
         $payment = $order->getPayment();
 
         // Gateway Response
@@ -1694,7 +1547,7 @@ class Data extends AbstractHelper
      */
     private function addCustomerCard($customerId,$IdUser,$TokenUser,$response)
     {
-        try{
+        try {
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); // Instance of object manager
             $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
             $connection = $resource->getConnection();
@@ -1717,8 +1570,6 @@ class Data extends AbstractHelper
         }
 
     }
-
-
 
 
     public function getErrorDesc($code)

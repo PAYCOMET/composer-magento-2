@@ -197,7 +197,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         */
         $order->setCanSendNewEmailFlag(false);
         try {
-            $executePurchaseResponse = $this->_helper->callExecutePurchase($order, static::METHOD_ID);
+            $executePurchaseResponse = $this->_helper->apmExecutePurchase($order, static::METHOD_ID);
             if ($executePurchaseResponse->errorCode==0 && $executePurchaseResponse->challengeUrl) {
                 //throw new \Magento\Framework\Exception\LocalizedException(__('Error: ' . $executePurchaseResponse->challengeUrl));
                 $challengeUrl = $executePurchaseResponse->challengeUrl;
@@ -208,8 +208,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
             // Se la asignamos para redirigir al final
             $payment->setAdditionalInformation("DS_CHALLENGE_URL", $challengeUrl);
-        } catch (Exception $e) {
-            $this->_helper->logDebug('Error callExecutePurchase');
+        } catch (\Exception $e) {
+            $this->_helper->logDebug('Error apmExecutePurchase' . $e->getMessage());
+            throw new \Magento\Framework\Exception\LocalizedException(__('Error: ' . $executePurchaseResponse->errorCode));
         }
 
         // Initialize order to PENDING_PAYMENT
@@ -267,7 +268,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     }
 
 
-
     /**
      * Checkout redirect URL.
      *
@@ -278,7 +278,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      */
     public function getCheckoutRedirectUrl()
     {
-
         return $this->_urlBuilder->getUrl(
             'paycomet_payment/process/process',
             ['_secure' => $this->_getRequest()->isSecure()]

@@ -27,7 +27,6 @@
                 <can_refund>1</can_refund>
                 <payment_action>authorize_capture</payment_action>
                 <currency>EUR</currency>
-                <environment>production</environment>
                 <sort_order>0</sort_order>
             </paycomet_payment>
             <paycomet_bizum>

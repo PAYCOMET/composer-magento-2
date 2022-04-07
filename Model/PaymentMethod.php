@@ -318,7 +318,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                         $response["DS_TOKEN_USER"] = $tokenCard->tokenUser ?? '';
                     }
 
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     throw new \Magento\Framework\Exception\LocalizedException(__('jetToken card failed'));
                 }
             } else {
@@ -432,7 +432,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     return $this;
                 }
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $response["DS_RESPONSE"] = 0;
                 $response["DS_ERROR_ID"] = $createPreauthorizationResponse->errorCode;
             }
@@ -520,7 +520,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                             $response["DS_MERCHANT_AMOUNT"] = $confirmPreautorization->amount;
                         }
 
-                    } catch (Exception $e) {
+                    } catch (\Exception $e) {
                         $response["DS_RESPONSE"] = 0;
                         $response["DS_ERROR_ID"] = $confirmPreautorization->errorCode;
                     }
@@ -608,7 +608,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                             $payment->setAdditionalInformation("DS_CHALLENGE_URL", $response["DS_CHALLENGE_URL"]);
                             return $this;
                         }
-                    } catch (Exception $e) {
+                    } catch (\Exception $e) {
                         $response["DS_RESPONSE"] = 0;
                         $response["DS_ERROR_ID"] = $executePurchaseResponse->errorCode;
                     }
@@ -858,7 +858,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 }
                 $response->DS_ERROR_ID = $response->errorCode;
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $response["url"] = "";
                 $response["error"]  = $response->errorCode;
             }
