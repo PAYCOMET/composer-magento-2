@@ -45,6 +45,7 @@ class PaycometConfigProvider implements ConfigProviderInterface
         'paycomet_webmoney',
         'paycomet_instantcredit',
         'paycomet_klarnapayments',
+        'paycomet_paypal'
     ];
 
     /**

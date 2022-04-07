@@ -5,6 +5,9 @@
         <method name="paycomet_payment">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="paycomet_paypal">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
         <method name="paycomet_bizum">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
