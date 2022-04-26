@@ -62,7 +62,7 @@ class Process extends \Magento\Payment\Block\Form
                 }
                 $result = $payment->getMethodInstance()->getFormPaycometUrl();
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // do nothing for now
             throw($e);
         }

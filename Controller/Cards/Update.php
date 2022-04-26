@@ -47,9 +47,6 @@ class Update extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-
-
-
         $response = $this->getRequest()->getParams();
         $hash = $response["item"];
         $customer_id = $this->_customerSession->getCustomerId();
@@ -58,8 +55,6 @@ class Update extends \Magento\Framework\App\Action\Action
         $this->updatePaycometCard($hash,$customer_id,$card_desc);
 
         $this->_redirect('paycomet_payment/cards/view');
-        
-        
     }
 
 
@@ -68,8 +63,6 @@ class Update extends \Magento\Framework\App\Action\Action
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
         $connection = $resource->getConnection();
-
-
 
         $data = array("desc"=>$card_desc);
         $conds[] = $connection->quoteInto("hash" . ' = ?', $hash);

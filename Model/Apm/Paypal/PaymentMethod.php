@@ -1,14 +1,14 @@
 <?php
 
-namespace Paycomet\Payment\Model\Apm\Tele2;
+namespace Paycomet\Payment\Model\Apm\Paypal;
 
 class PaymentMethod extends \Paycomet\Payment\Model\Apm\PaymentMethod
 {
-    const METHOD_ID = 21;
-    const METHOD_CODE = 'paycomet_tele2';
+    const METHOD_ID = 10;
+    const METHOD_CODE = 'paycomet_paypal';
 
     protected $_code = self::METHOD_CODE;
-    
+
     protected $_canAuthorize = false;
     protected $_canCapture = false;
     protected $_canCapturePartial = false;

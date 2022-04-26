@@ -44,7 +44,9 @@ define(
             'paysafecard',
             'skrill',
             'webmoney',
-            'instantcredit'
+            'instantcredit',
+            'klarnapayments',
+            'paypal'
         ];
 
         for (var i = 0; i < arrAPM.length; i+=1) {

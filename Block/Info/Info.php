@@ -106,6 +106,5 @@ class Info extends \Magento\Payment\Block\Info
         else
             return 'Not 3D Secure';
 
-
     }
 }

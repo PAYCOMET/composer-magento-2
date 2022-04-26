@@ -38,24 +38,20 @@ class Success extends \Magento\Framework\View\Element\Template
      */
     protected function _toHtml()
     {
-        $customerId = $this->_customerSession->getCustomerId();
         $order = $this->_checkoutSession->getLastRealOrder();
         if (!$order) {
             return '';
         }
         if ($order->getId()) {
             if ($order->getPayment()->getMethodInstance()->getCode() == 'paycomet_payment') {
-                $fields = $order->getPayment()->getAdditionalInformation();
                 $this->addData(
                     [
                     'is_paycomet' => true,
                     ]
                 );
-
                 return parent::_toHtml();
             }
         }
-
         return '';
     }
 }

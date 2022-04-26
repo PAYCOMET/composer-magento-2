@@ -52,10 +52,10 @@ class Remove extends \Magento\Framework\App\Action\Action
 
         $hash = $response["item"];
         $customer_id = $this->_customerSession->getCustomerId();
-        
+
 
         $this->deletePaycometCard($hash,$customer_id);
-        
+
         $this->_redirect('paycomet_payment/cards/view');
     }
 
