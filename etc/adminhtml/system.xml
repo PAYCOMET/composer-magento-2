@@ -36,46 +36,50 @@
                         <source_model>Paycomet\Payment\Model\Config\Source\PaymentAction</source_model>
                         <config_path>payment/paycomet_payment/payment_action</config_path>
                     </field>
-
-                    <field id="api_key" translate="label" type="obscure" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="create_invoice" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Create Invoice</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/paycomet_payment/create_invoice</config_path>
+                    </field>
+                    <field id="api_key" translate="label" type="obscure" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>API Key</label>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <config_path>payment/paycomet_payment/api_key</config_path>
                         <validate>required-entry no-whitespace</validate>
                     </field>
 
-                    <field id="merchant_code" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="merchant_code" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Client Code</label>
                         <config_path>payment/paycomet_payment/merchant_code</config_path>
                         <validate>required-entry no-whitespace</validate>
                     </field>
-                    <field id="merchant_terminal" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="merchant_terminal" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Terminal number</label>
                         <frontend_class>validate-number</frontend_class>
                         <config_path>payment/paycomet_payment/merchant_terminal</config_path>
                         <validate>required-entry no-whitespace</validate>
                     </field>
-                    <field id="merchant_pass" translate="label" type="obscure" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="merchant_pass" translate="label" type="obscure" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Password</label>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <config_path>payment/paycomet_payment/merchant_pass</config_path>
                         <validate>required-entry no-whitespace</validate>
                     </field>
-                    <field id="jetid" translate="label" type="obscure" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="jetid" translate="label" type="obscure" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>JET ID</label>
-                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>                        
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <config_path>payment/paycomet_payment/jetid</config_path>
                         <depends>
                             <field id="integration">1</field>
                         </depends>
                         <validate>required-entry no-whitespace</validate>
                     </field>
-                    <field id="dcc" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="dcc" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>DCC</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_payment/dcc</config_path>
                     </field>
-                    <field id="iframe_enabled" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="iframe_enabled" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Iframe Enabled</label>
                         <tooltip><![CDATA[Iframe is displayed on the checkout page and contains the PAYCOMET Payments page. Otherwise it will redirect to the PAYCOMET Payments page for payment and return afterwards.]]></tooltip>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -84,7 +88,7 @@
                             <field id="integration">0</field>
                         </depends>
                     </field>
-                    <field id="iframe_mode" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="iframe_mode" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Iframe Mode</label>
                         <tooltip>Lightbox is a popup on the checkout page which contains the PAYCOMET Payments page in the box. Embedded is part of the checkout page.</tooltip>
                         <source_model>Paycomet\Payment\Model\Config\Source\IframeMode</source_model>
@@ -94,7 +98,7 @@
                             <field id="iframe_enabled">1</field>
                         </depends>
                     </field>
-                    <field id="iframe_height" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="iframe_height" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Iframe Height (px)</label>
                         <tooltip>Iframe height in pixels (Min 340)</tooltip>
                         <frontend_class>validate-digits</frontend_class>
@@ -105,7 +109,7 @@
                             <field id="iframe_enabled">1</field>
                         </depends>
                     </field>
-                    <field id="form_footer" type="textarea" translate="label" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="form_footer" type="textarea" translate="label" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Ecommerce Info</label>
                         <tooltip>Data to show below the payment form</tooltip>
                         <config_path>payment/paycomet_payment/form_footer</config_path>
@@ -114,7 +118,7 @@
                             <field id="iframe_enabled">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_payment/currency</config_path>
@@ -1372,7 +1376,7 @@
                         </depends>
                     </field>
                 </group>
-            
+
             </group>
         </section>
     </system>
