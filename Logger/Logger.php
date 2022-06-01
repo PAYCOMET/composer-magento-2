@@ -3,6 +3,6 @@
 namespace Paycomet\Payment\Logger;
 
 // @codingStandardsIgnoreFile
-class Logger extends \MonoLog\Logger
+class Logger extends \Monolog\Logger
 {
 }

@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.14: 
+
+- Mejoras de codigo. Llamada al formulario de pago.
+
 > 2.4.13: 
 
 - Se añade APM KlarnaPayments y Paypal
