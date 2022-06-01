@@ -64,6 +64,7 @@
         border="0"
         data-bind="attr: {src: iframeUrl()}, style: {width: iframeWidth(), height: iframeHeight()}"
         onload="jQuery('body').trigger('processStop');"
+        sandbox="allow-top-navigation allow-scripts allow-same-origin allow-forms"
         >
 		</iframe>
     </div>
