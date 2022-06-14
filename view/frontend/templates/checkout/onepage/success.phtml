@@ -12,3 +12,18 @@
         window.top.location = "<?php echo $block->escapeXssInUrl($params['returnUrl']); ?>";
     <?php endif; ?>
 </script>
+
+
+<?php if ($block->getData('code') == "paycomet_multibanco") :?>
+    <p><?php echo $block->getData('title');?></p>
+    <p>
+        <span class="paycoment-icon-left">
+            <img class="payment-icon" src="<?php echo $block->getData('img_src');?>" title="<?php echo $block->getData('title');?>">
+        </span>
+        <span>
+            <strong><?=__("Entity");?>:</strong>  <?php echo $block->getData('Entity');?>
+            <br/>
+            <strong><?=__("Reference");?>:</strong> <?php echo $block->getData('Reference');?>
+        </span>
+    </p>
+<?php endif ?>
