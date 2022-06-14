@@ -59,10 +59,10 @@ class Success extends \Magento\Framework\View\Element\Template
 				return parent::_toHtml();
 			}
 			if ($order->getPayment()->getMethodInstance()->getCode() == 'paycomet_multibanco') {
-				$MethodData = $order->getPayment()->getAdditionalInformation('METHOD_DATA');
+				$methodData = $order->getPayment()->getAdditionalInformation('METHOD_DATA');
 
-				if ($MethodData) {
-					$methodData = json_decode($MethodData);
+				if ($methodData) {
+					$methodData = json_decode($methodData);
 
 					$code = $order->getPayment()->getMethodInstance()->getCode();
 					$title = $order->getPayment()->getMethodInstance()->getTitle();

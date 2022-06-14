@@ -31,17 +31,19 @@ class View extends \Magento\Framework\View\Element\Template
         if ($this->_code == 'paycomet_multibanco') {
            
             $methodData = $order->getPayment()->getAdditionalInformation('METHOD_DATA');
-            $methodData = json_decode($methodData);
+            if ($methodData) {
+                $methodData = json_decode($methodData);
 
-            $this->addData(
-                [
-                'code' => $order->getPayment()->getMethodInstance()->getCode(),
-                'title' => $order->getPayment()->getMethodInstance()->getTitle(),
-                'img_src' => $this->getViewFileUrl('Paycomet_Payment::img/apms/'.$this->_code . '.svg'),
-                'Entity' => $methodData->entityNumber,
-                'Reference' => $methodData->referenceNumber
-                ]
-            );
+                $this->addData(
+                    [
+                    'code' => $order->getPayment()->getMethodInstance()->getCode(),
+                    'title' => $order->getPayment()->getMethodInstance()->getTitle(),
+                    'img_src' => $this->getViewFileUrl('Paycomet_Payment::img/apms/'.$this->_code . '.svg'),
+                    'Entity' => $methodData->entityNumber ?? '',
+                    'Reference' => $methodData->referenceNumber ?? ''
+                    ]
+                );
+            }
 
         }
     }

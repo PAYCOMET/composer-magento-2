@@ -64,7 +64,7 @@ class Info extends \Magento\Payment\Block\Info
 
         $MethodName = $this->getInfo()->getAdditionalInformation('MethodName');
 
-        $MethodData = $this->getInfo()->getAdditionalInformation('METHOD_DATA');
+        $methodData = $this->getInfo()->getAdditionalInformation('METHOD_DATA');
 
         $data = $this->checkAndSet($data, $orderId, 'Order Id');
         $data = $this->checkAndSet($data, $MethodName, 'Method');
@@ -88,8 +88,8 @@ class Info extends \Magento\Payment\Block\Info
         if ($SecurePayment)
             $data[(string) __('3D Secure Status')] = $this->_is3DSecure($SecurePayment);
 
-        if ($MethodData){
-            $methodData = json_decode($MethodData);
+        if ($methodData){
+            $methodData = json_decode($methodData);
                         
             if ($methodData->entityNumber) {
                 $data = $this->checkAndSet($data, $methodData->entityNumber, 'Entity');
