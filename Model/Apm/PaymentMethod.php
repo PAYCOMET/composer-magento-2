@@ -208,6 +208,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
             // Se la asignamos para redirigir al final
             $payment->setAdditionalInformation("DS_CHALLENGE_URL", $challengeUrl);
+            $payment->setAdditionalInformation("METHOD_DATA", json_encode($executePurchaseResponse->methodData));
+            
         } catch (\Exception $e) {
             $this->_helper->logDebug('Error apmExecutePurchase' . $e->getMessage());
             throw new \Magento\Framework\Exception\LocalizedException(__('Error: ' . $executePurchaseResponse->errorCode));

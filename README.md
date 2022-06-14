@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.15: 
+
+- APM Multibanco: Se incorporan datos
+
 > 2.4.14: 
 
 - Mejoras de codigo. Llamada al formulario de pago.
