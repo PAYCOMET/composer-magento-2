@@ -211,10 +211,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             // Si tenemos methodData lo almacenamos
             if (isset($executePurchaseResponse->methodData))
                 $payment->setAdditionalInformation("METHOD_DATA", json_encode($executePurchaseResponse->methodData));
-            
         } catch (\Exception $e) {
             $this->_helper->logDebug('Error apmExecutePurchase' . $e->getMessage());
-            throw new \Magento\Framework\Exception\LocalizedException(__('Error: ' . $executePurchaseResponse->errorCode));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Error: ' . $e->getCode()));
         }
 
         // Initialize order to PENDING_PAYMENT
