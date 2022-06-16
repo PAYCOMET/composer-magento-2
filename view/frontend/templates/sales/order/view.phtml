@@ -1,0 +1,18 @@
+<?php if ($block->getCode() == "paycomet_multibanco") :?> 
+<div class="block block-paycomet-information">
+    <div class="block-title">
+        <strong><?php echo $block->getData('title');?></strong>
+    </div>
+    <div class="block-content">
+    
+        <span class="paycoment-icon-left">
+            <img class="payment-icon" src="<?php echo $block->getData('img_src');?>" title="<?php echo $block->getData('title');?>">
+        </span>
+        <span>
+            <strong><?=__("Entity");?>:</strong>  <?php echo $block->getData('Entity');?>
+            <br/>
+            <strong><?=__("Reference");?>:</strong> <?php echo $block->getData('Reference');?>
+        </span>
+    </div>
+</div>
+<?php endif ?>

@@ -146,3 +146,12 @@
 .checkout-index-index .payment-method .checkout-ic-container .extra-text-ic {
     max-width: 350px;
 }
+
+
+.payment-icon{
+    vertical-align: middle;
+}
+
+.paycoment-icon-left{
+    float: left;
+}
