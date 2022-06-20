@@ -1457,7 +1457,7 @@ class Data extends AbstractHelper
         //Add order Transaction
         $this->createTransaction($type, $transactionid, $order, $response);
         //Should we invoice
-        if ($isAutoSettle) {
+        if ($this->getConfigData('create_invoice', $order->getStoreId())) {
             $this->createInvoice($order, $transactionid, $amount);
         }
         //Send order email
