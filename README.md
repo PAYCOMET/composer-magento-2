@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.17: 
+
+- Se añaden variables de Multibanco para poder usar en templates
+
 > 2.4.16: 
 
 - Mejora de código

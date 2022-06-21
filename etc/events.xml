@@ -8,4 +8,7 @@
         <!-- Check if payment method is available depending on configuration -->
         <observer name="paycomet_instantcredit" instance="Paycomet\Payment\Observer\Apm\Instantcredit\PaymentMethodAvailable" />
     </event>
+    <event name="email_order_set_template_vars_before">
+        <observer name="paycomet_mb" instance="Paycomet\Payment\Observer\Apm\Multibanco\ObserverforAddMbVars"/>
+    </event>
 </config>
