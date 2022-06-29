@@ -195,7 +195,15 @@
                             <field id="activebizum">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_bizum/order_status</config_path>
+                        <depends>
+                            <field id="activebizum">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_bizum/allowspecific</config_path>
@@ -203,7 +211,7 @@
                             <field id="activebizum">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -213,7 +221,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_bizum/currency</config_path>
@@ -221,7 +229,7 @@
                             <field id="activebizum">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_bizum/sort_order</config_path>
                         <depends>
@@ -245,7 +253,15 @@
                             <field id="activeideal">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_ideal/order_status</config_path>
+                        <depends>
+                            <field id="activeideal">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_ideal/allowspecific</config_path>
@@ -253,7 +269,7 @@
                             <field id="activeideal">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -263,7 +279,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_ideal/currency</config_path>
@@ -271,7 +287,7 @@
                             <field id="activeideal">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_ideal/sort_order</config_path>
                         <depends>
@@ -295,7 +311,15 @@
                             <field id="activeklarna">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_klarna/order_status</config_path>
+                        <depends>
+                            <field id="activeklarna">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_klarna/allowspecific</config_path>
@@ -303,7 +327,7 @@
                             <field id="activeklarna">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -313,7 +337,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_klarna/currency</config_path>
@@ -321,7 +345,7 @@
                             <field id="activeklarna">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_klarna/sort_order</config_path>
                         <depends>
@@ -345,7 +369,15 @@
                             <field id="activegiropay">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_giropay/order_status</config_path>
+                        <depends>
+                            <field id="activegiropay">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_giropay/allowspecific</config_path>
@@ -353,7 +385,7 @@
                             <field id="activegiropay">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -363,7 +395,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_giropay/currency</config_path>
@@ -371,7 +403,7 @@
                             <field id="activegiropay">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_giropay/sort_order</config_path>
                         <depends>
@@ -395,7 +427,15 @@
                             <field id="activemybank">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_mybank/order_status</config_path>
+                        <depends>
+                            <field id="activemybank">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_mybank/allowspecific</config_path>
@@ -403,7 +443,7 @@
                             <field id="activemybank">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -413,7 +453,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_mybank/currency</config_path>
@@ -421,7 +461,7 @@
                             <field id="activemybank">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_mybank/sort_order</config_path>
                         <depends>
@@ -445,7 +485,15 @@
                             <field id="activemultibanco">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_multibanco/order_status</config_path>
+                        <depends>
+                            <field id="activemultibanco">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_multibanco/allowspecific</config_path>
@@ -453,7 +501,7 @@
                             <field id="activemultibanco">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -463,7 +511,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_multibanco/currency</config_path>
@@ -471,7 +519,7 @@
                             <field id="activemultibanco">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_multibanco/sort_order</config_path>
                         <depends>
@@ -495,7 +543,15 @@
                             <field id="activetrustly">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_trustly/order_status</config_path>
+                        <depends>
+                            <field id="activetrustly">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_trustly/allowspecific</config_path>
@@ -503,7 +559,7 @@
                             <field id="activetrustly">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -513,7 +569,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_trustly/currency</config_path>
@@ -521,7 +577,7 @@
                             <field id="activetrustly">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_trustly/sort_order</config_path>
                         <depends>
@@ -545,7 +601,15 @@
                             <field id="activeprzelewy24">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_przelewy24/order_status</config_path>
+                        <depends>
+                            <field id="activeprzelewy24">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_przelewy24/allowspecific</config_path>
@@ -553,7 +617,7 @@
                             <field id="activeprzelewy24">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -563,7 +627,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_przelewy24/currency</config_path>
@@ -571,7 +635,7 @@
                             <field id="activeprzelewy24">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_przelewy24/sort_order</config_path>
                         <depends>
@@ -595,7 +659,15 @@
                             <field id="activebancontact">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_bancontact/order_status</config_path>
+                        <depends>
+                            <field id="activebancontact">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_bancontact/allowspecific</config_path>
@@ -603,7 +675,7 @@
                             <field id="activebancontact">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -613,7 +685,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_bancontact/currency</config_path>
@@ -621,7 +693,7 @@
                             <field id="activebancontact">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_bancontact/sort_order</config_path>
                         <depends>
@@ -645,7 +717,15 @@
                             <field id="activeeps">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_eps/order_status</config_path>
+                        <depends>
+                            <field id="activeeps">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_eps/allowspecific</config_path>
@@ -653,7 +733,7 @@
                             <field id="activeeps">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -663,7 +743,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_eps/currency</config_path>
@@ -671,7 +751,7 @@
                             <field id="activeeps">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_eps/sort_order</config_path>
                         <depends>
@@ -695,7 +775,15 @@
                             <field id="activetele2">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_tele2/order_status</config_path>
+                        <depends>
+                            <field id="activetele2">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_tele2/allowspecific</config_path>
@@ -703,7 +791,7 @@
                             <field id="activetele2">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -713,7 +801,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_tele2/currency</config_path>
@@ -721,7 +809,7 @@
                             <field id="activetele2">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_tele2/sort_order</config_path>
                         <depends>
@@ -745,7 +833,15 @@
                             <field id="activepaysera">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_paysera/order_status</config_path>
+                        <depends>
+                            <field id="activepaysera">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_paysera/allowspecific</config_path>
@@ -753,7 +849,7 @@
                             <field id="activepaysera">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -763,7 +859,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_paysera/currency</config_path>
@@ -771,7 +867,7 @@
                             <field id="activepaysera">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_paysera/sort_order</config_path>
                         <depends>
@@ -795,7 +891,15 @@
                             <field id="activepostfinance">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_postfinance/order_status</config_path>
+                        <depends>
+                            <field id="activepostfinance">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_postfinance/allowspecific</config_path>
@@ -803,7 +907,7 @@
                             <field id="activepostfinance">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -813,7 +917,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_postfinance/currency</config_path>
@@ -821,7 +925,7 @@
                             <field id="activepostfinance">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_postfinance/sort_order</config_path>
                         <depends>
@@ -845,7 +949,15 @@
                             <field id="activeqiwi">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_qiwi/order_status</config_path>
+                        <depends>
+                            <field id="activeqiwi">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_qiwi/allowspecific</config_path>
@@ -853,7 +965,7 @@
                             <field id="activeqiwi">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -863,7 +975,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_qiwi/currency</config_path>
@@ -871,7 +983,7 @@
                             <field id="activeqiwi">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_qiwi/sort_order</config_path>
                         <depends>
@@ -895,7 +1007,15 @@
                             <field id="activeyandex">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_yandex/order_status</config_path>
+                         <depends>
+                            <field id="activeyandex">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_yandex/allowspecific</config_path>
@@ -903,7 +1023,7 @@
                             <field id="activeyandex">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -913,7 +1033,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_yandex/currency</config_path>
@@ -921,7 +1041,7 @@
                             <field id="activeyandex">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_yandex/sort_order</config_path>
                         <depends>
@@ -945,7 +1065,15 @@
                             <field id="activemts">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_mts/order_status</config_path>
+                        <depends>
+                            <field id="activemts">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_mts/allowspecific</config_path>
@@ -953,7 +1081,7 @@
                             <field id="activemts">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -963,7 +1091,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_mts/currency</config_path>
@@ -971,7 +1099,7 @@
                             <field id="activemts">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_mts/sort_order</config_path>
                         <depends>
@@ -995,7 +1123,15 @@
                             <field id="activebeeline">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_beeline/order_status</config_path>
+                        <depends>
+                            <field id="activebeeline">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_beeline/allowspecific</config_path>
@@ -1003,7 +1139,7 @@
                             <field id="activebeeline">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -1013,7 +1149,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_beeline/currency</config_path>
@@ -1021,7 +1157,7 @@
                             <field id="activebeeline">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_beeline/sort_order</config_path>
                         <depends>
@@ -1045,7 +1181,15 @@
                             <field id="activepaysafecard">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_paysafecard/order_status</config_path>
+                        <depends>
+                            <field id="activepaysafecard">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_paysafecard/allowspecific</config_path>
@@ -1053,7 +1197,7 @@
                             <field id="activepaysafecard">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -1063,7 +1207,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_paysafecard/currency</config_path>
@@ -1071,7 +1215,7 @@
                             <field id="activepaysafecard">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_paysafecard/sort_order</config_path>
                         <depends>
@@ -1095,7 +1239,15 @@
                             <field id="activeskrill">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_skrill/order_status</config_path>
+                        <depends>
+                            <field id="activeskrill">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_skrill/allowspecific</config_path>
@@ -1103,7 +1255,7 @@
                             <field id="activeskrill">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -1113,7 +1265,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_skrill/currency</config_path>
@@ -1121,7 +1273,7 @@
                             <field id="activeskrill">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_skrill/sort_order</config_path>
                         <depends>
@@ -1145,7 +1297,15 @@
                             <field id="activewebmoney">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_webmoney/order_status</config_path>
+                        <depends>
+                            <field id="activewebmoney">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_webmoney/allowspecific</config_path>
@@ -1153,7 +1313,7 @@
                             <field id="activewebmoney">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -1163,7 +1323,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_webmoney/currency</config_path>
@@ -1171,7 +1331,7 @@
                             <field id="activewebmoney">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_webmoney/sort_order</config_path>
                         <depends>
@@ -1195,7 +1355,15 @@
                             <field id="activeinstantcredit">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_instantcredit/order_status</config_path>
+                        <depends>
+                            <field id="activeinstantcredit">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_instantcredit/allowspecific</config_path>
@@ -1203,7 +1371,7 @@
                             <field id="activeinstantcredit">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -1213,33 +1381,33 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="upper_limit" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="upper_limit" translate="label" type="text" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Upper limit</label>
                         <config_path>payment/paycomet_instantcredit/upper_limit</config_path>
                         <depends>
                             <field id="activeinstantcredit">1</field>
                         </depends>
                     </field>
-                    <field id="lower_limit" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="lower_limit" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Lower limit</label>
                         <config_path>payment/paycomet_instantcredit/lower_limit</config_path>
                         <depends>
                             <field id="activeinstantcredit">1</field>
                         </depends>
                     </field>
-                    <field id="simulatorenvironment" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="simulatorenvironment" translate="label" type="select" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Environment Simulator</label>
                         <source_model>Paycomet\Payment\Model\Config\Source\ICSimulator</source_model>
                         <config_path>payment/paycomet_instantcredit/simulatorenvironment</config_path>
                     </field>
-                    <field id="hash" translate="label" type="password" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="hash" translate="label" type="password" sortOrder="17" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Hash simulator</label>
                         <config_path>payment/paycomet_instantcredit/hash</config_path>
                         <depends>
                             <field id="activeinstantcredit">1</field>
                         </depends>
                     </field>
-                    <field id="show_product_page" translate="label" sortOrder="15" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="show_product_page" translate="label" sortOrder="18" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Show on product page</label>
                         <depends>
                             <field id="activeinstantcredit">1</field>
@@ -1247,7 +1415,7 @@
                         <config_path>payment/paycomet_instantcredit/show_product_page</config_path>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
-                    <field id="show_cart" translate="label" sortOrder="16" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="show_cart" translate="label" sortOrder="19" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Show on cart</label>
                         <depends>
                             <field id="activeinstantcredit">1</field>
@@ -1255,7 +1423,7 @@
                         <config_path>payment/paycomet_instantcredit/show_cart</config_path>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
-                    <field id="show_checkout" translate="label" sortOrder="17" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="show_checkout" translate="label" sortOrder="20" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Show on checkout</label>
                         <depends>
                             <field id="activeinstantcredit">1</field>
@@ -1264,7 +1432,7 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
 
-                    <field id="sort_order" type="text" translate="label" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_instantcredit/sort_order</config_path>
                         <depends>
@@ -1288,7 +1456,15 @@
                             <field id="activeklarnapayments">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_klarnapayments/order_status</config_path>
+                        <depends>
+                            <field id="activeklarnapayments">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_klarnapayments/allowspecific</config_path>
@@ -1296,7 +1472,7 @@
                             <field id="activeklarnapayments">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -1306,7 +1482,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_klarnapayments/currency</config_path>
@@ -1314,7 +1490,7 @@
                             <field id="activeklarnapayments">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_klarnapayments/sort_order</config_path>
                         <depends>
@@ -1338,7 +1514,15 @@
                             <field id="activepaypal">1</field>
                         </depends>
                     </field>
-                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_paypal/order_status</config_path>
+                        <depends>
+                            <field id="activepaypal">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                         <config_path>payment/paycomet_paypal/allowspecific</config_path>
@@ -1346,7 +1530,7 @@
                             <field id="activepaypal">1</field>
                         </depends>
                     </field>
-                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                         <can_be_empty>1</can_be_empty>
@@ -1356,7 +1540,7 @@
                             <field id="allowspecific">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_paypal/currency</config_path>
@@ -1364,7 +1548,7 @@
                             <field id="activepaypal">1</field>
                         </depends>
                     </field>
-                    <field id="sort_order" type="text" translate="label" sortOrder="39" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
                         <config_path>payment/paycomet_paypal/sort_order</config_path>
                         <depends>
@@ -1372,7 +1556,6 @@
                         </depends>
                     </field>
                 </group>
-            
             </group>
         </section>
     </system>

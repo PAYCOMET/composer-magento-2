@@ -37,7 +37,7 @@ class ObserverforAddMbVars implements ObserverInterface
                 if ($methodData->entityNumber && $methodData->referenceNumber) {
                     $transport['paycomet_mb_entity'] = $methodData->entityNumber;
                     $transport['paycomet_mb_reference'] = $methodData->referenceNumber;
-                    $transport['paycomet_img_src'] = '/img/apms/' . PaymentMethod::METHOD_CODE . '.svg';
+                    $transport['paycomet_img_src'] = '/img/apms/' . PaymentMethod::METHOD_CODE . '.png';
                 }
             }
         }
