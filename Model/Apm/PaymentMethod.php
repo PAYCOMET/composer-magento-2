@@ -216,9 +216,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             throw new \Magento\Framework\Exception\LocalizedException(__('Error: ' . $e->getCode()));
         }
 
-        // Initialize order to PENDING_PAYMENT
-        $stateObject->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
-        $stateObject->setStatus(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
+        // Initialize order
         $stateObject->setIsNotified(false);
 
         return $this;
