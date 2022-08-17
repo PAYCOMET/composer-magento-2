@@ -154,6 +154,7 @@ define(
                                 fullScreenLoader.stopLoader();
                             }
                         );
+                    $('button.checkout').prop( "disabled", false);
                     return false;
                 }
                 $('button.checkout').prop( "disabled", false);

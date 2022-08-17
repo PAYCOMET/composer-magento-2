@@ -12,6 +12,9 @@
             <values>
                 <value id="paycomet" type="host">www.paycomet.com</value>
                 <value id="paycomet_api" type="host">api.paycomet.com</value>
+                <value id="paycomet_ic" type="host">instantcredit.net</value>
+                <value id="paycomet_ic_t" type="host">test.instantcredit.net</value>
+                <value id="paycomet_ic_g" type="host">code.jquery.com</value>
             </values>
         </policy>
         <policy id="frame-src">
@@ -25,6 +28,30 @@
                 <value id="paycomet" type="host">www.paycomet.com</value>
                 <value id="paycomet_api" type="host">api.paycomet.com</value>
             </values>
-        </policy>  
+        </policy>
+        <policy id="style-src">
+            <values>
+                <value id="paycomet_ic" type="host">instantcredit.net</value>
+                <value id="paycomet_ic_t" type="host">test.instantcredit.net</value>
+            </values>
+        </policy>
+        <policy id="font-src">
+            <values>
+                <value id="paycomet_ic" type="host">instantcredit.net</value>
+                <value id="paycomet_ic_t" type="host">test.instantcredit.net</value>
+            </values>
+        </policy>
+        <policy id="img-src">
+            <values>
+                <value id="paycomet_ic" type="host">instantcredit.net</value>
+                <value id="paycomet_ic_t" type="host">test.instantcredit.net</value>
+            </values>
+        </policy>
+        <policy id="connect-src">
+            <values>
+                <value id="paycomet_ic" type="host">instantcredit.net</value>
+                <value id="paycomet_ic_t" type="host">test.instantcredit.net</value>
+            </values>
+        </policy>
     </policies>
 </csp_whitelist>
