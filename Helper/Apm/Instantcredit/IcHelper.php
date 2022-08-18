@@ -13,7 +13,7 @@ class IcHelper extends AbstractHelper
      */
     public function getIsEnabled()
     {
-        return $this->scopeConfig->getValue('payment/paycomet_instantcredit/active');
+        return $this->scopeConfig->getValue('payment/paycomet_instantcredit/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
 
@@ -23,7 +23,7 @@ class IcHelper extends AbstractHelper
      */
     public function getUpperLimit()
     {
-        return floatval($this->scopeConfig->getValue('payment/paycomet_instantcredit/upper_limit'));
+        return floatval($this->scopeConfig->getValue('payment/paycomet_instantcredit/upper_limit', \Magento\Store\Model\ScopeInterface::SCOPE_STORE));
     }
 
     /**
@@ -32,7 +32,7 @@ class IcHelper extends AbstractHelper
      */
     public function getLowerLimit()
     {
-        return floatval($this->scopeConfig->getValue('payment/paycomet_instantcredit/lower_limit'));
+        return floatval($this->scopeConfig->getValue('payment/paycomet_instantcredit/lower_limit', \Magento\Store\Model\ScopeInterface::SCOPE_STORE));
     }
 
     /**

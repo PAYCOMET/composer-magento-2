@@ -71,7 +71,7 @@ class OddSimulatorViewModel implements \Magento\Framework\View\Element\Block\Arg
      */
     public function showInCart()
     {
-        return $this->scopeConfig->getValue('payment/paycomet_instantcredit/show_cart');
+        return $this->scopeConfig->getValue('payment/paycomet_instantcredit/show_cart', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -80,7 +80,7 @@ class OddSimulatorViewModel implements \Magento\Framework\View\Element\Block\Arg
      */
     public function getHash()
     {
-        return $this->scopeConfig->getValue('payment/paycomet_instantcredit/hash');
+        return $this->scopeConfig->getValue('payment/paycomet_instantcredit/hash', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -130,7 +130,7 @@ class OddSimulatorViewModel implements \Magento\Framework\View\Element\Block\Arg
      */
     public function getSimulatorUrl()
     {
-        if ($this->scopeConfig->getValue('payment/paycomet_instantcredit/simulatorenvironment') == 1) {
+        if ($this->scopeConfig->getValue('payment/paycomet_instantcredit/simulatorenvironment', \Magento\Store\Model\ScopeInterface::SCOPE_STORE) == 1) {
             return self::SIMULATOR_URL_TEST;
         } else {
             return self::SIMULATOR_URL;

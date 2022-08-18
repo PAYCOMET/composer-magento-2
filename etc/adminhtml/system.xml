@@ -179,7 +179,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_bizum" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="503">
+                <group id="paycomet_payment_bizum" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="503">
                     <label>PAYCOMET - Bizum</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activebizum" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -237,7 +237,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_ideal" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="504">
+                <group id="paycomet_payment_ideal" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="504">
                     <label>PAYCOMET - Ideal</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activeideal" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -295,7 +295,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_klarna" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="505">
+                <group id="paycomet_payment_klarna" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="505">
                     <label>PAYCOMET - Klarna</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activeklarna" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -353,7 +353,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_giropay" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="506">
+                <group id="paycomet_payment_giropay" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="506">
                     <label>PAYCOMET - Giropay</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activegiropay" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -411,7 +411,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_mybank" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="507">
+                <group id="paycomet_payment_mybank" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="507">
                     <label>PAYCOMET - MyBank</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activemybank" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -469,7 +469,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_multibanco" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="508">
+                <group id="paycomet_payment_multibanco" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="508">
                     <label>PAYCOMET - Multibanco</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activemultibanco" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -527,7 +527,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_trustly" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="509">
+                <group id="paycomet_payment_trustly" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="509">
                     <label>PAYCOMET - Trustly</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activetrustly" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -585,7 +585,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_przelewy24" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="510">
+                <group id="paycomet_payment_przelewy24" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="510">
                     <label>PAYCOMET - Przelewy24</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activeprzelewy24" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -643,7 +643,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_bancontact" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="511">
+                <group id="paycomet_payment_bancontact" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="511">
                     <label>PAYCOMET - Bancontact</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activebancontact" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -701,7 +701,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_eps" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="512">
+                <group id="paycomet_payment_eps" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="512">
                     <label>PAYCOMET - EPS</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activeeps" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -759,7 +759,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_tele2" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="513">
+                <group id="paycomet_payment_tele2" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="513">
                     <label>PAYCOMET - Tele2</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activetele2" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -817,7 +817,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_paysera" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="514">
+                <group id="paycomet_payment_paysera" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="514">
                     <label>PAYCOMET - Paysera</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activepaysera" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -875,7 +875,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_postfinance" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="515">
+                <group id="paycomet_payment_postfinance" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="515">
                     <label>PAYCOMET - PostFinance</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activepostfinance" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -933,7 +933,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_qiwi" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="516">
+                <group id="paycomet_payment_qiwi" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="516">
                     <label>PAYCOMET - QIWI</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activeqiwi" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -991,7 +991,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_yandex" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="517">
+                <group id="paycomet_payment_yandex" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="517">
                     <label>PAYCOMET - Yandex Money</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activeyandex" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -1049,7 +1049,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_mts" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="518">
+                <group id="paycomet_payment_mts" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="518">
                     <label>PAYCOMET - MTS</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activemts" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -1107,7 +1107,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_beeline" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="519">
+                <group id="paycomet_payment_beeline" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="519">
                     <label>PAYCOMET - Beeline</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activebeeline" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -1165,7 +1165,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_paysafecard" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="520">
+                <group id="paycomet_payment_paysafecard" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="520">
                     <label>PAYCOMET - Paysafecard</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activepaysafecard" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -1223,7 +1223,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_skrill" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="521">
+                <group id="paycomet_payment_skrill" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="521">
                     <label>PAYCOMET - Skrill</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activeskrill" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -1281,7 +1281,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_webmoney" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="522">
+                <group id="paycomet_payment_webmoney" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="522">
                     <label>PAYCOMET - WebMoney</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activewebmoney" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -1339,7 +1339,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_instantcredit" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="523">
+                <group id="paycomet_payment_instantcredit" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="523">
                     <label>PAYCOMET - Instant Credit</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activeinstantcredit" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -1440,7 +1440,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_klarnapayments" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="524">
+                <group id="paycomet_payment_klarnapayments" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="524">
                     <label>PAYCOMET - Klarna Payments</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activeklarnapayments" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -1498,7 +1498,7 @@
                         </depends>
                     </field>
                 </group>
-                <group id="paycomet_payment_paypal" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="525">
+                <group id="paycomet_payment_paypal" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="525">
                     <label>PAYCOMET - Paypal</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activepaypal" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">

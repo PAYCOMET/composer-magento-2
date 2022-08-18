@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.20: 
+
+- Mejoras APM InstantCredit
+
 > 2.4.19: 
 
 - Se añaden a lista blanca dominios para diferentes policies.

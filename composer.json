@@ -2,7 +2,7 @@
     "name": "paycomet/payment",
     "description": "A Magento 2 module for PAYCOMET payments",
     "type": "magento2-module",
-    "version": "2.4.19",
+    "version": "2.4.20",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
