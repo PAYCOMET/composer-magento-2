@@ -13,7 +13,8 @@ define([
             if (typeof icSimulator !== 'undefined' && $(classSimulator).length > 0) {
                 // Remove odd simulator
                 $(classSimulator).empty();
-                let amountValue = quote.totals().grand_total;
+                let amountV = quote.totals().base_grand_total;
+                let amountValue = parseFloat(amountV).toFixed(2);
                 if (icredit.isBetweenLimits(parseFloat(amountValue))) {
                     let valSimulator = amountValue.toString().replace('.', ',');
                     if (parseFloat(amountValue) === parseInt(amountValue)) {
