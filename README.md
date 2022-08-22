@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.21: 
+
+- Mejoras APM InstantCredit. Configuración límites
+
 > 2.4.20: 
 
 - Mejoras APM InstantCredit
