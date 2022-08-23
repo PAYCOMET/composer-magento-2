@@ -232,7 +232,7 @@ class Data extends AbstractHelper
     public function _buildAddUserSessionParams($result, $orderid)
     {
         $result = ($result) ? '1' : '0';
-        $timestamp = strftime('%Y%m%d%H%M%S');
+        $timestamp = date('YmdHMS');
         $merchant_code = $this->getConfigData('merchant_code');
         $sha1hash = $this->signFields("$timestamp.$merchant_code.$orderid.$result");
 
@@ -522,7 +522,7 @@ class Data extends AbstractHelper
 
             } catch (\Exception $e) {
 
-                $dataResponse["error"]  = $formResponse->errorCode;
+                $dataResponse["error"]  = $e->getMessage(); 
                 $this->logDebug("Error in Rest 107: " . $e->getMessage());
             }
 
@@ -815,7 +815,7 @@ class Data extends AbstractHelper
 
         if ($logged) {
 
-            $lastVisited = new \DateTime($this->_session->getLoginAt());
+            $lastVisited = new \DateTime($this->_session->getLoginAt() ?? '');
             $threeDSReqAuthTimestamp = $lastVisited->format('Ymdhm');
 		    $threeDSRequestorAuthenticationInfo["threeDSReqAuthTimestamp"] = $threeDSReqAuthTimestamp;
         }
@@ -902,7 +902,7 @@ class Data extends AbstractHelper
         }
 
         // Impuestos. Si la suma de amountAux < Total, el resto de impuestos
-        $amountTotal = $order->getBaseGrandTotal();
+        $amountTotal = $this->amountFromMagento($order->getBaseGrandTotal(),"EUR");
 
         // Se calculan los impuestos
         $tax = $amountTotal - $amountAux;
@@ -911,7 +911,7 @@ class Data extends AbstractHelper
             $shoppingCartData[$key]["sku"] = "1";
             $shoppingCartData[$key]["articleType"] = "11";
             $shoppingCartData[$key]["quantity"] = 1;
-            $shoppingCartData[$key]["unitPrice"] = $this->amountFromMagento($tax, $orderCurrencyCode);
+            $shoppingCartData[$key]["unitPrice"] = $tax;
             $shoppingCartData[$key]["name"] = "Tax";
         }
 
@@ -1026,7 +1026,7 @@ class Data extends AbstractHelper
      */
     private function _buildSessionParams($result,$order){
         $result = ($result) ? '1' : '0';
-        $timestamp = strftime('%Y%m%d%H%M%S');
+        $timestamp = date('YmdHMS');
         $merchant_code = $this->getConfigData('merchant_code');
         $orderid = $order->getRealOrderId();
         $sha1hash = $this->signFields("$timestamp.$merchant_code.$orderid.$result");
@@ -1231,7 +1231,7 @@ class Data extends AbstractHelper
      */
     public function getEncryptedConfigData($field, $storeId = null)
     {
-        return $this->_encryptor->decrypt(trim($this->getConfigData($field, $storeId)));
+        return $this->_encryptor->decrypt(trim($this->getConfigData($field, $storeId) ?? ''));
     }
 
     /**
