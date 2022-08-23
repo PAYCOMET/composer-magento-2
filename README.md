@@ -49,6 +49,7 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 > 2.4.21: 
 
+- Validación Magento 2.4.4 y php 8.1
 - Mejoras APM InstantCredit. Configuración límites
 
 > 2.4.20: 
