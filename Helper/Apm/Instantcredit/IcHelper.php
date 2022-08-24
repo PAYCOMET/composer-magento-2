@@ -49,6 +49,16 @@ class IcHelper extends AbstractHelper
         if ( $upper == 0 && $lower == 0) {
             return true;
         }
-        return ($price >= $lower && $price <= $upper);
+
+        if ( $lower > 0 && $price < $lower) {
+            return false;
+        }
+
+        if ( $upper > 0 && $price > $upper) {
+            return false;
+        }
+
+        return true;
+
     }
 }

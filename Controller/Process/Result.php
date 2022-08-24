@@ -229,22 +229,6 @@ class Result extends \Magento\Framework\App\Action\Action
         return true;
     }
 
-    /**
-     * Build params for the session redirect.
-     *
-     * @param bool $result
-     *
-     * @return array
-     */
-    private function _buildSessionParams($result){
-        $result = ($result) ? '1' : '0';
-        $timestamp = strftime('%Y%m%d%H%M%S');
-        $merchant_code = $this->_helper->getConfigData('merchant_code');
-        $orderid = $this->_order->getIncrementId();
-        $sha1hash = $this->_helper->signFields("$timestamp.$merchant_code.$orderid.$result");
-
-        return ['timestamp' => $timestamp, 'order_id' => $orderid, 'result' => $result, 'hash' => $sha1hash];
-    }
 
     /**
      * Get order based on increment id.
