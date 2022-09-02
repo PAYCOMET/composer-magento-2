@@ -50,7 +50,7 @@
         <policy id="connect-src">
             <values>
                 <value id="paycomet_ic" type="host">instantcredit.net</value>
-                <value id="paycomet_ic_t" type="host">test.instantcredit.net</value>
+                <value id="paycomet_ic_api" type="host">*.instantcredit.net</value>
             </values>
         </policy>
     </policies>
