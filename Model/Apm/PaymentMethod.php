@@ -216,6 +216,17 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             throw new \Magento\Framework\Exception\LocalizedException(__('Error: ' . $e->getCode()));
         }
 
+        // Estado por defecto pedidos
+        $order_status_default = \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT;
+
+        // Obtenemos el estado para los nuevos pedidos del APM
+        $order_status_apm = trim((string)$this->_helper->getConfigData('order_status', $order->getStoreId(), static::METHOD_CODE));
+        // Si no tiene uno asignado asignamos el valor por defecto, si no Magento asignara el seleccionado
+        if ($order_status_apm == "") {
+            $stateObject->setState($order_status_default);
+            $stateObject->setStatus($order_status_default);
+        }
+
         // Initialize order
         $stateObject->setIsNotified(false);
 
