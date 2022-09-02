@@ -139,7 +139,7 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_payment/card_manage</config_path>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="order_status" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>New order status</label>
                         <tooltip>Status given to newly created orders before payment result is returned.</tooltip>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
@@ -195,7 +195,7 @@
                             <field id="activebizum">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_bizum/order_status</config_path>
@@ -253,7 +253,7 @@
                             <field id="activeideal">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_ideal/order_status</config_path>
@@ -311,7 +311,7 @@
                             <field id="activeklarna">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_klarna/order_status</config_path>
@@ -427,7 +427,7 @@
                             <field id="activemybank">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_mybank/order_status</config_path>
@@ -485,7 +485,7 @@
                             <field id="activemultibanco">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_multibanco/order_status</config_path>
@@ -543,7 +543,7 @@
                             <field id="activetrustly">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_trustly/order_status</config_path>
@@ -601,7 +601,7 @@
                             <field id="activeprzelewy24">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_przelewy24/order_status</config_path>
@@ -659,7 +659,7 @@
                             <field id="activebancontact">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_bancontact/order_status</config_path>
@@ -717,7 +717,7 @@
                             <field id="activeeps">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_eps/order_status</config_path>
@@ -775,7 +775,7 @@
                             <field id="activetele2">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_tele2/order_status</config_path>
@@ -833,7 +833,7 @@
                             <field id="activepaysera">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_paysera/order_status</config_path>
@@ -891,7 +891,7 @@
                             <field id="activepostfinance">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_postfinance/order_status</config_path>
@@ -949,7 +949,7 @@
                             <field id="activeqiwi">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_qiwi/order_status</config_path>
@@ -1007,7 +1007,7 @@
                             <field id="activeyandex">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_yandex/order_status</config_path>
@@ -1065,7 +1065,7 @@
                             <field id="activemts">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_mts/order_status</config_path>
@@ -1123,7 +1123,7 @@
                             <field id="activebeeline">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_beeline/order_status</config_path>
@@ -1181,7 +1181,7 @@
                             <field id="activepaysafecard">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_paysafecard/order_status</config_path>
@@ -1239,7 +1239,7 @@
                             <field id="activeskrill">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_skrill/order_status</config_path>
@@ -1297,7 +1297,7 @@
                             <field id="activewebmoney">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_webmoney/order_status</config_path>
@@ -1355,7 +1355,7 @@
                             <field id="activeinstantcredit">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_instantcredit/order_status</config_path>
@@ -1456,7 +1456,7 @@
                             <field id="activeklarnapayments">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_klarnapayments/order_status</config_path>
@@ -1514,7 +1514,7 @@
                             <field id="activepaypal">1</field>
                         </depends>
                     </field>
-                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>New order status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                         <config_path>payment/paycomet_paypal/order_status</config_path>
