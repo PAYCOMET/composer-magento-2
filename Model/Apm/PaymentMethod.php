@@ -9,15 +9,10 @@ use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod implements GatewayInterface
 {
-    const NOT_AVAILABLE = 'N/A';
-
-    const GUEST_ID = 'guest';
-    const CUSTOMER_ID = 'customer';
-
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Paycomet\Payment\Block\Info\Info';
+    protected $_infoBlockType = '\Paycomet\Payment\Block\Info\Info::class';
 
     /**
      * @var \Paycomet\Payment\Helper\Data
@@ -64,34 +59,41 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      */
     private $_customerRepository;
 
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     private $_objectManager;
 
+    /**
+     * @var RemoteAddress
+     */
     private $_remoteAddress;
 
     /**
      * PaymentMethod constructor.
      *
-     * @param \Magento\Framework\App\RequestInterface                      $request
-     * @param \Magento\Framework\UrlInterface                              $urlBuilder
-     * @param \Paycomet\Payment\Helper\Data                              $helper
-     * @param \Magento\Store\Model\StoreManagerInterface                   $storeManager
-     * @param \Magento\Framework\Locale\ResolverInterface                  $resolver
-     * @param \Magento\Framework\Model\Context                             $context
-     * @param \Magento\Framework\Registry                                  $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory            $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory                 $customAttributeFactory
-     * @param \Magento\Payment\Helper\Data                                 $paymentData
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface           $scopeConfig
-     * @param \Magento\Payment\Model\Method\Logger                         $logger
-     * @param \Paycomet\Payment\Logger\Logger                            $paycometLogger
-     * @param \Magento\Framework\App\ProductMetadataInterface              $productMetadata
-     * @param \Magento\Framework\Module\ResourceInterface                  $resourceInterface
-     * @param \Magento\Checkout\Model\Session                              $session
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface            $customerRepository
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null           $resourceCollection
-     * @param \Magento\Framework\ObjectManagerInterface                    $objectmanager,
-     * @param array                                                        $data
+     * @param \Magento\Framework\App\RequestInterface                       $request
+     * @param \Magento\Framework\UrlInterface                               $urlBuilder
+     * @param \Paycomet\Payment\Helper\Data                                 $helper
+     * @param \Magento\Store\Model\StoreManagerInterface                    $storeManager
+     * @param \Magento\Framework\Locale\ResolverInterface                   $resolver
+     * @param \Magento\Framework\Model\Context                              $context
+     * @param \Magento\Framework\Registry                                   $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory             $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory                  $customAttributeFactory
+     * @param \Magento\Payment\Helper\Data                                  $paymentData
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface            $scopeConfig
+     * @param \Magento\Payment\Model\Method\Logger                          $logger
+     * @param \Paycomet\Payment\Logger\Logger                               $paycometLogger
+     * @param \Magento\Framework\App\ProductMetadataInterface               $productMetadata
+     * @param \Magento\Framework\Module\ResourceInterface                   $resourceInterface
+     * @param \Magento\Checkout\Model\Session                               $session
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface             $customerRepository
+     * @param \Magento\Framework\ObjectManagerInterface                     $objectmanager,
+     * @param RemoteAddress                                                 $remoteAddress
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null  $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null            $resourceCollection
+     * @param array                                                         $data
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -131,7 +133,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             $data
         );
 
-
         $this->_urlBuilder = $urlBuilder;
         $this->_helper = $helper;
         $this->_storeManager = $storeManager;
@@ -151,8 +152,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      *
      * @return array currencies acepted
      */
-    public function getAcceptedCurrencyCodes() {
-        return array($this->getConfigData('currency'));
+    public function getAcceptedCurrencyCodes()
+    {
+        return [$this->getConfigData('currency')];
     }
 
     /**
@@ -180,6 +182,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     }
 
     /**
+     * Initialize
+     *
      * @param string $paymentAction
      * @param object $stateObject
      *
@@ -199,18 +203,21 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         try {
             $executePurchaseResponse = $this->_helper->apmExecutePurchase($order, static::METHOD_ID);
             if ($executePurchaseResponse->errorCode==0 && $executePurchaseResponse->challengeUrl) {
-                //throw new \Magento\Framework\Exception\LocalizedException(__('Error: ' . $executePurchaseResponse->challengeUrl));
                 $challengeUrl = $executePurchaseResponse->challengeUrl;
             } else {
-                $this->_helper->logDebug('Error executePurchaseResponse' . serialize($executePurchaseResponse));
-                throw new \Magento\Framework\Exception\LocalizedException(__('Error: ' . $executePurchaseResponse->errorCode));
+                $serializeData = \Magento\Framework\Serialize\SerializerInterface::serialize($executePurchaseResponse);
+                $this->_helper->logDebug('Error executePurchaseResponse' . $serializeData);
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Error: ' . $executePurchaseResponse->errorCode)
+                );
             }
 
             // Se la asignamos para redirigir al final
             $payment->setAdditionalInformation("DS_CHALLENGE_URL", $challengeUrl);
             // Si tenemos methodData lo almacenamos
-            if (isset($executePurchaseResponse->methodData))
+            if (isset($executePurchaseResponse->methodData)) {
                 $payment->setAdditionalInformation("METHOD_DATA", json_encode($executePurchaseResponse->methodData));
+            }
         } catch (\Exception $e) {
             $this->_helper->logDebug('Error apmExecutePurchase' . $e->getMessage());
             throw new \Magento\Framework\Exception\LocalizedException(__('Error: ' . $e->getCode()));
@@ -220,7 +227,13 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $order_status_default = \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT;
 
         // Obtenemos el estado para los nuevos pedidos del APM
-        $order_status_apm = trim((string)$this->_helper->getConfigData('order_status', $order->getStoreId(), static::METHOD_CODE));
+        $order_status_apm = trim(
+            (string)$this->_helper->getConfigData(
+                'order_status',
+                $order->getStoreId(),
+                static::METHOD_CODE
+            )
+        );
         // Si no tiene uno asignado asignamos el valor por defecto, si no Magento asignara el seleccionado
         if ($order_status_apm == "") {
             $stateObject->setState($order_status_default);
@@ -250,11 +263,25 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         return $this;
     }
 
+    /**
+     * Accept Payment
+     *
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     */
+    public function acceptPayment(\Magento\Payment\Model\InfoInterface $payment)
+    {
+        // do nothing.
+    }
 
-    public function acceptPayment(\Magento\Payment\Model\InfoInterface $payment){}
-
-    public function hold(\Magento\Payment\Model\InfoInterface $payment){}
-
+    /**
+     * Hold
+     *
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     */
+    public function hold(\Magento\Payment\Model\InfoInterface $payment)
+    {
+        // do nothing.
+    }
 
     /**
      * Assign data to info model instance.
@@ -279,7 +306,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         return $this;
     }
 
-
     /**
      * Checkout redirect URL.
      *
@@ -295,7 +321,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             ['_secure' => $this->_getRequest()->isSecure()]
         );
     }
-
 
     /**
      * Retrieve request object.

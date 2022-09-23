@@ -24,11 +24,11 @@ class Process extends \Magento\Payment\Block\Form
     /**
      * Process constructor.
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Sales\Model\OrderFactory                $orderFactory
-     * @param \Magento\Checkout\Model\Session                  $checkoutSession
-     * @param \Paycomet\Payment\Helper\Data                  $helper
-     * @param array                                            $data
+     * @param \Magento\Framework\View\Element\Template\Context  $context
+     * @param \Magento\Sales\Model\OrderFactory                 $orderFactory
+     * @param \Magento\Checkout\Model\Session                   $checkoutSession
+     * @param \Paycomet\Payment\Helper\Data                     $helper
+     * @param array                                             $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -45,6 +45,8 @@ class Process extends \Magento\Payment\Block\Form
     }
 
     /**
+     * Get Form Paycomet URL
+     *
      * @return string
      */
     public function getFormPaycometUrl()
@@ -69,7 +71,6 @@ class Process extends \Magento\Payment\Block\Form
 
         return $result;
     }
-
 
     /**
      * Get order object.

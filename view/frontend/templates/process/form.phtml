@@ -3,10 +3,11 @@
 // Get payment URL response
 $arrResponse = $block->getFormPaycometUrl();
 
-if (!filter_var($arrResponse["url"],FILTER_VALIDATE_URL)) {
-    die(__('Error') . ": " . $arrResponse["error"]);
+if (!filter_var($arrResponse["url"], FILTER_VALIDATE_URL)) {
+    $action == "";
+} else {
+    $action = $arrResponse["url"];
 }
-$action = $arrResponse["url"];
 
 ?>
 
@@ -15,11 +16,15 @@ $action = $arrResponse["url"];
 </head>
 <body>
 
+<form id="paycomet_form" method="POST" action="<?= /* @noEscape */ $action; ?>"></form>
 
-<form id="paycomet_form" method="POST" action="<?php echo $action; ?>"></form>
-<script type="text/javascript">
-     document.getElementById('paycomet_form').submit();
-</script>
+<?php if ($action == ""): ?>
+    <p><?= /* @noEscape */ __('Error') . ": " . /* @noEscape */ $arrResponse["error"];?></p>
+<?php else: ?>
+    <script>
+        document.getElementById('paycomet_form').submit();
+    </script>
+<?php endif; ?>
 
 </body>
 </html>

@@ -11,11 +11,15 @@ class Add extends \Magento\Framework\App\Action\Action
      */
     private $_customerSession;
 
+    /**
+     * @var \Paycomet\Payment\Helper\Data
+     */
     private $_helper;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session       $customerSession
+     * @param \Paycomet\Payment\Helper\Data         $helper
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -60,11 +64,16 @@ class Add extends \Magento\Framework\App\Action\Action
         $this->_redirect('paycomet_payment/cards/view');
     }
 
-
-    public function deletePaycometCard($hash,$customer_id)
+    /**
+     * Delete Paycomet Card
+     *
+     * @param string $hash
+     * @param int $customer_id
+     */
+    public function deletePaycometCard($hash, $customer_id)
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
+        $resource = $objectManager->get('\Magento\Framework\App\ResourceConnection::class');
         $connection = $resource->getConnection();
 
         $conds[] = $connection->quoteInto("hash" . ' = ?', $hash);

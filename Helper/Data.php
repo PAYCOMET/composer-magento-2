@@ -8,12 +8,8 @@ use Paycomet\Payment\Model\Config\Source\PaymentAction;
 use Paycomet\Bankstore\ApiRest;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
-/**
- * @SuppressWarnings(PHPMD.LongVariable)
- */
 class Data extends AbstractHelper
 {
-    const CUSTOMER_ID = 'customer';
 
     /**
      * @var \Magento\Framework\UrlInterface
@@ -105,31 +101,45 @@ class Data extends AbstractHelper
      */
     private $_orderSender;
 
-    /** @var  CustomerInterfaceFactory */
+    /**
+     * @var CustomerInterfaceFactory
+     */
     private $_customerFactory;
 
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     private $_objectManager;
 
+    /**
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
+     */
     protected $_remoteAddress;
 
     /**
      * Data constructor.
      *
-     * @param \Magento\Framework\App\Helper\Context             $context
-     * @param \Magento\Framework\Encryption\EncryptorInterface  $encryptor
-     * @param \Magento\Directory\Model\Config\Source\Country    $country
-     * @param \Magento\Quote\Api\CartRepositoryInterface        $quoteRepository
-     * @param \Magento\Framework\Module\ModuleListInterface     $moduleList
-     * @param \Magento\Store\Model\StoreManagerInterface        $storeManager
-     * @param \Magento\Framework\App\ProductMetadataInterface   $productMetadata
-     * @param \Magento\Framework\Module\ResourceInterface       $resourceInterface
-     * @param \Magento\Framework\Locale\ResolverInterface       $resolver
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Sales\Api\OrderRepositoryInterface       $orderRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder      $searchCriteriaBuilder
-     * @param \Magento\Sales\Model\Order\Email\Sender\OrderSender             $orderSender
-     * @param \Magento\Customer\Model\Session                   $session
-     * @param \Magento\Customer\Model\CustomerFactory           $customerFactory
+     * @param \Magento\Framework\App\Helper\Context                             $context
+     * @param \Magento\Framework\Encryption\EncryptorInterface                  $encryptor
+     * @param \Magento\Directory\Model\Config\Source\Country                    $country
+     * @param \Magento\Quote\Api\CartRepositoryInterface                        $quoteRepository
+     * @param \Magento\Framework\Module\ModuleListInterface                     $moduleList
+     * @param \Magento\Store\Model\StoreManagerInterface                        $storeManager
+     * @param \Paycomet\Payment\Logger\Logger                                   $paycometLogger
+     * @param \Magento\Framework\App\ProductMetadataInterface                   $productMetadata
+     * @param \Magento\Framework\Module\ResourceInterface                       $resourceInterface
+     * @param \Magento\Framework\Locale\ResolverInterface                       $resolver
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface                 $customerRepository
+     * @param \Magento\Sales\Api\OrderRepositoryInterface                       $orderRepository
+     * @param \Magento\Sales\Model\Order\Status\HistoryFactory                  $orderHistoryFactory
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder                      $searchCriteriaBuilder
+     * @param \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface   $transactionBuilder
+     * @param \Paycomet\Payment\Logger\Logger                                   $logger
+     * @param \Magento\Sales\Model\Order\Email\Sender\OrderSender               $orderSender
+     * @param \Magento\Customer\Model\Session                                   $session
+     * @param RemoteAddress                                                     $remoteAddress
+     * @param \Magento\Customer\Model\CustomerFactory                           $customerFactory
+     * @param \Magento\Framework\ObjectManagerInterface                         $objectmanager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -179,7 +189,10 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @desc Sign fields
+     * Sign Fields
+     *
+     * @param string $fields
+     * @param string $account
      *
      * @return string
      */
@@ -196,36 +209,39 @@ class Data extends AbstractHelper
         return sha1($tmp);
     }
 
-
     /**
      * Checkout getURLOK.
      *
+     * @param int $orderid
      * @return string
      */
     private function getAddUserURLOK($orderid)
     {
         return $this->_urlBuilder->getUrl(
-            'paycomet_payment/cards/view',$this->_buildAddUserSessionParams(true,$orderid)
+            'paycomet_payment/cards/view',
+            $this->_buildAddUserSessionParams(true, $orderid)
         );
     }
 
     /**
      * Checkout getURLKO.
      *
+     * @param int $orderid
      * @return string
      */
     private function getAddUserURLKO($orderid)
     {
         return $this->_urlBuilder->getUrl(
-            'paycomet_payment/cards/view',$this->_buildAddUserSessionParams(false,$orderid)
+            'paycomet_payment/cards/view',
+            $this->_buildAddUserSessionParams(false, $orderid)
         );
     }
-
 
     /**
      * Build params for the session redirect.
      *
      * @param bool $result
+     * @param int $orderid
      *
      * @return array
      */
@@ -239,11 +255,19 @@ class Data extends AbstractHelper
         return ['timestamp' => $timestamp, 'order_id' => $orderid, 'result' => $result, 'hash' => $sha1hash];
     }
 
-
-    public function apmExecutePurchase($order, $methodId){
+    /**
+     * Apm Execute Purchase
+     *
+     * @param \Magento\Sales\Mode\Order $order
+     * @param int $methodId
+     *
+     * @return array
+     */
+    public function apmExecutePurchase($order, $methodId)
+    {
         $storeId = $order->getStoreId();
-        $merchant_terminal  = trim($this->getConfigData('merchant_terminal',$storeId));
-        $api_key            = trim($this->getEncryptedConfigData('api_key',$storeId));
+        $merchant_terminal  = trim($this->getConfigData('merchant_terminal', $storeId));
+        $api_key            = trim($this->getEncryptedConfigData('api_key', $storeId));
 
         $realOrderId = $order->getRealOrderId();
 
@@ -290,11 +314,15 @@ class Data extends AbstractHelper
         $objAux = $this->objectFactory->create();
         $objAux->setData('errorCode', 104);
         return $objAux;
-
     }
 
-
-    public function addUserToken($jetToken){
+    /**
+     * Add User Token
+     *
+     * @param string $jetToken
+     */
+    public function addUserToken($jetToken)
+    {
 
         $merchant_terminal  = trim($this->getConfigData('merchant_terminal'));
         $api_key            = trim($this->getEncryptedConfigData('api_key'));
@@ -311,7 +339,7 @@ class Data extends AbstractHelper
                     '',
                     2
                 );
-                $response = array();
+                $response = [];
                 $response["DS_RESPONSE"] = ($tokenCard->errorCode > 0)? 0 : 1;
 
                 if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
@@ -333,9 +361,7 @@ class Data extends AbstractHelper
         } else {
             $this->logDebug(__("ERROR: PAYCOMET API KEY required"));
         }
-
     }
-
 
     /**
      * Refund specified amount for payment.
@@ -354,12 +380,12 @@ class Data extends AbstractHelper
         $orderCurrencyCode = $order->getBaseCurrencyCode();
         $amount = $this->amountFromMagento($amount, $orderCurrencyCode);
         $AuthCode = $payment->getTransactionId();
-        $AuthCode = str_replace("-refund","",$AuthCode);
-        $AuthCode = str_replace("-capture","",$AuthCode);
+        $AuthCode = str_replace("-refund", "", $AuthCode);
+        $AuthCode = str_replace("-capture", "", $AuthCode);
         $storeId = $order->getStoreId();
 
-        $merchant_terminal  = trim($this->getConfigData('merchant_terminal',$storeId));
-        $api_key            = trim($this->getEncryptedConfigData('api_key',$storeId));
+        $merchant_terminal  = trim($this->getConfigData('merchant_terminal', $storeId));
+        $api_key            = trim($this->getEncryptedConfigData('api_key', $storeId));
 
         // Uso de Rest
         if ($api_key != "") {
@@ -377,7 +403,7 @@ class Data extends AbstractHelper
                 $notifyDirectPayment
             );
 
-            $response = array();
+            $response = [];
             $response["DS_RESPONSE"] = ($executeRefundReponse->errorCode > 0)? 0 : 1;
             $response["DS_ERROR_ID"] = $executeRefundReponse->errorCode;
 
@@ -390,15 +416,23 @@ class Data extends AbstractHelper
 
         if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __(sprintf('Refund failed. Error ( %s ) - %s', $response['DS_ERROR_ID'], $this->getErrorDesc($response['DS_ERROR_ID'])))
+                __(
+                    sprintf(
+                        'Refund failed. Error ( %s ) - %s',
+                        $response['DS_ERROR_ID'],
+                        $this->getErrorDesc($response['DS_ERROR_ID'])
+                    )
+                )
             );
         } else {
             $payment->setTransactionId($response['DS_MERCHANT_AUTHCODE'])
                     ->setParentTransactionId($AuthCode)
-                    ->setTransactionAdditionalInfo(\Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS, $response);
+                    ->setTransactionAdditionalInfo(
+                        \Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS,
+                        $response
+                    );
         }
     }
-
 
     /**
      * Refund specified amount for payment.
@@ -419,12 +453,12 @@ class Data extends AbstractHelper
 
         $amount = $this->amountFromMagento($order->getBaseGrandTotal(), $orderCurrencyCode);
         $AuthCode = $payment->getTransactionId();
-        $AuthCode = str_replace("-void","",$payment->getTransactionId());
+        $AuthCode = str_replace("-void", "", $payment->getTransactionId());
 
         $storeId = $order->getStoreId();
 
-        $merchant_terminal  = trim($this->getConfigData('merchant_terminal',$storeId));
-        $api_key            = trim($this->getEncryptedConfigData('api_key',$storeId));
+        $merchant_terminal  = trim($this->getConfigData('merchant_terminal', $storeId));
+        $api_key            = trim($this->getEncryptedConfigData('api_key', $storeId));
 
         $notifyDirectPayment = 2;
 
@@ -443,7 +477,7 @@ class Data extends AbstractHelper
                     $notifyDirectPayment
                 );
 
-                $response = array();
+                $response = [];
                 $response["DS_RESPONSE"] = ($cancelPreautorization->errorCode > 0)? 0 : 1;
                 $response["DS_ERROR_ID"] = $cancelPreautorization->errorCode;
 
@@ -464,16 +498,25 @@ class Data extends AbstractHelper
         $response = (array) $response;
         if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __(sprintf('Cancel Preaut failed. Error ( %s ) - %s', $response['DS_ERROR_ID'], $this->getErrorDesc($response['DS_ERROR_ID'])))
+                __(
+                    sprintf(
+                        'Cancel Preaut failed. Error ( %s ) - %s',
+                        $response['DS_ERROR_ID'],
+                        $this->getErrorDesc($response['DS_ERROR_ID'])
+                    )
+                )
             );
         }
         $payment->setTransactionId($response['DS_MERCHANT_AUTHCODE'])
                 ->setParentTransactionId($AuthCode)
-                ->setTransactionAdditionalInfo(\Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS, $response);
-
+                ->setTransactionAdditionalInfo(
+                    \Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS,
+                    $response
+                );
     }
 
     /**
+     * Get Paycomet AddUser URL
      *
      * @return string paycomet adduser url
      *
@@ -488,13 +531,14 @@ class Data extends AbstractHelper
         $merchant_terminal  = trim($this->getConfigData('merchant_terminal'));
         $api_key            = trim($this->getEncryptedConfigData('api_key'));
 
-        $fieldOrderId = $this->_session->getCustomer()->getId() . "_" . $this->_storeManager->getStore()->getId(); //UserId | StoreId
+        $fieldOrderId = $this->_session->getCustomer()->getId() . "_" .
+            $this->_storeManager->getStore()->getId(); //UserId | StoreId
 
         $shopperLocale = $this->_resolver->getLocale();
-        $language_data = explode("_",$shopperLocale);
+        $language_data = explode("_", $shopperLocale);
         $language = $language_data[0];
 
-        $dataResponse = array();
+        $dataResponse = [];
 
         // REST
         if ($api_key != "") {
@@ -522,7 +566,7 @@ class Data extends AbstractHelper
 
             } catch (\Exception $e) {
 
-                $dataResponse["error"]  = $e->getMessage(); 
+                $dataResponse["error"]  = $e->getMessage();
                 $this->logDebug("Error in Rest 107: " . $e->getMessage());
             }
 
@@ -533,20 +577,32 @@ class Data extends AbstractHelper
         return $dataResponse;
     }
 
-
+    /**
+     * Get Merchant Data
+     *
+     * @param \Magento\Sales\Mode\Order $order
+     * @param int $methodId
+     */
     public function getMerchantData($order, $methodId)
     {
 
         $MERCHANT_EMV3DS = $this->getEMV3DS($order);
-		$SHOPPING_CART = $this->getShoppingCart($order);
+        $SHOPPING_CART = $this->getShoppingCart($order);
 
-        $datos = array_merge($MERCHANT_EMV3DS,$SHOPPING_CART);
+        $datos = array_merge($MERCHANT_EMV3DS, $SHOPPING_CART);
 
         $datos = $this->getMerchatDataMethod($datos, $order, $methodId);
 
         return $datos;
     }
 
+    /**
+     * Get Merchant Data Method
+     *
+     * @param array $datos
+     * @param \Magento\Sales\Mode\Order $order
+     * @param int $methodId
+     */
     private function getMerchatDataMethod($datos, $order, $methodId)
     {
         switch ($methodId) {
@@ -556,22 +612,525 @@ class Data extends AbstractHelper
         return $datos;
     }
 
+    /**
+     * IsoCode to Number
+     *
+     * @param string $code
+     */
     private function isoCodeToNumber($code)
     {
         $isoCodeNumber = 724; // Default value;
-		$arrCode = array("AF" => "004", "AX" => "248", "AL" => "008", "DE" => "276", "AD" => "020", "AO" => "024", "AI" => "660", "AQ" => "010", "AG" => "028", "SA" => "682", "DZ" => "012", "AR" => "032", "AM" => "051", "AW" => "533", "AU" => "036", "AT" => "040", "AZ" => "031", "BS" => "044", "BD" => "050", "BB" => "052", "BH" => "048", "BE" => "056", "BZ" => "084", "BJ" => "204", "BM" => "060", "BY" => "112", "BO" => "068", "BQ" => "535", "BA" => "070", "BW" => "072", "BR" => "076", "BN" => "096", "BG" => "100", "BF" => "854", "BI" => "108", "BT" => "064", "CV" => "132", "KH" => "116", "CM" => "120", "CA" => "124", "QA" => "634", "TD" => "148", "CL" => "52", "CN" => "156", "CY" => "196", "CO" => "170", "KM" => "174", "KP" => "408", "KR" => "410", "CI" => "384", "CR" => "188", "HR" => "191", "CU" => "192", "CW" => "531", "DK" => "208", "DM" => "212", "EC" => "218", "EG" => "818", "SV" => "222", "AE" => "784", "ER" => "232", "SK" => "703", "SI" => "705", "ES" => "724", "US" => "840", "EE" => "233", "ET" => "231", "PH" => "608", "FI" => "246", "FJ" => "242", "FR" => "250", "GA" => "266", "GM" => "270", "GE" => "268", "GH" => "288", "GI" => "292", "GD" => "308", "GR" => "300", "GL" => "304", "GP" => "312", "GU" => "316", "GT" => "320", "GF" => "254", "GG" => "831", "GN" => "324", "GW" => "624", "GQ" => "226", "GY" => "328", "HT" => "332", "HN" => "340", "HK" => "344", "HU" => "348", "IN" => "356", "ID" => "360", "IQ" => "368", "IR" => "364", "IE" => "372", "BV" => "074", "IM" => "833", "CX" => "162", "IS" => "352", "KY" => "136", "CC" => "166", "CK" => "184", "FO" => "234", "GS" => "239", "HM" => "334", "FK" => "238", "MP" => "580", "MH" => "584", "PN" => "612", "SB" => "090", "TC" => "796", "UM" => "581", "VG" => "092", "VI" => "850", "IL" => "376", "IT" => "380", "JM" => "388", "JP" => "392", "JE" => "832", "JO" => "400", "KZ" => "398", "KE" => "404", "KG" => "417", "KI" => "296", "KW" => "414", "LA" => "418", "LS" => "426", "LV" => "428", "LB" => "422", "LR" => "430", "LY" => "434", "LI" => "438", "LT" => "440", "LU" => "442", "MO" => "446", "MK" => "807", "MG" => "450", "MY" => "458", "MW" => "454", "MV" => "462", "ML" => "466", "MT" => "470", "MA" => "504", "MQ" => "474", "MU" => "480", "MR" => "478", "YT" => "175", "MX" => "484", "FM" => "583", "MD" => "498", "MC" => "492", "MN" => "496", "ME" => "499", "MS" => "500", "MZ" => "508", "MM" => "104", "NA" => "516", "NR" => "520", "NP" => "524", "NI" => "558", "NE" => "562", "NG" => "566", "NU" => "570", "NF" => "574", "NO" => "578", "NC" => "540", "NZ" => "554", "OM" => "512", "NL" => "528", "PK" => "586", "PW" => "585", "PS" => "275", "PA" => "591", "PG" => "598", "PY" => "600", "PE" => "604", "PF" => "258", "PL" => "616", "PT" => "620", "PR" => "630", "GB" => "826", "EH" => "732", "CF" => "140", "CZ" => "203", "CG" => "178", "CD" => "180", "DO" => "214", "RE" => "638", "RW" => "646", "RO" => "642", "RU" => "643", "WS" => "882", "AS" => "016", "BL" => "652", "KN" => "659", "SM" => "674", "MF" => "663", "PM" => "666", "VC" => "670", "SH" => "654", "LC" => "662", "ST" => "678", "SN" => "686", "RS" => "688", "SC" => "690", "SL" => "694", "SG" => "702", "SX" => "534", "SY" => "760", "SO" => "706", "LK" => "144", "SZ" => "748", "ZA" => "710", "SD" => "729", "SS" => "728", "SE" => "752", "CH" => "756", "SR" => "740", "SJ" => "744", "TH" => "764", "TW" => "158", "TZ" => "834", "TJ" => "762", "IO" => "086", "TF" => "260", "TL" => "626", "TG" => "768", "TK" => "772", "TO" => "776", "TT" => "780", "TN" => "788", "TM" => "795", "TR" => "792", "TV" => "798", "UA" => "804", "UG" => "800", "UY" => "858", "UZ" => "860", "VU" => "548", "VA" => "336", "VE" => "862", "VN" => "704", "WF" => "876", "YE" => "887", "DJ" => "262", "ZM" => "894", "ZW" => "716");
+        $arrCode = [
+            "AF" => "004",
+            "AX" => "248",
+            "AL" => "008",
+            "DE" => "276",
+            "AD" => "020",
+            "AO" => "024",
+            "AI" => "660",
+            "AQ" => "010",
+            "AG" => "028",
+            "SA" => "682",
+            "DZ" => "012",
+            "AR" => "032",
+            "AM" => "051",
+            "AW" => "533",
+            "AU" => "036",
+            "AT" => "040",
+            "AZ" => "031",
+            "BS" => "044",
+            "BD" => "050",
+            "BB" => "052",
+            "BH" => "048",
+            "BE" => "056",
+            "BZ" => "084",
+            "BJ" => "204",
+            "BM" => "060",
+            "BY" => "112",
+            "BO" => "068",
+            "BQ" => "535",
+            "BA" => "070",
+            "BW" => "072",
+            "BR" => "076",
+            "BN" => "096",
+            "BG" => "100",
+            "BF" => "854",
+            "BI" => "108",
+            "BT" => "064",
+            "CV" => "132",
+            "KH" => "116",
+            "CM" => "120",
+            "CA" => "124",
+            "QA" => "634",
+            "TD" => "148",
+            "CL" => "52",
+            "CN" => "156",
+            "CY" => "196",
+            "CO" => "170",
+            "KM" => "174",
+            "KP" => "408",
+            "KR" => "410",
+            "CI" => "384",
+            "CR" => "188",
+            "HR" => "191",
+            "CU" => "192",
+            "CW" => "531",
+            "DK" => "208",
+            "DM" => "212",
+            "EC" => "218",
+            "EG" => "818",
+            "SV" => "222",
+            "AE" => "784",
+            "ER" => "232",
+            "SK" => "703",
+            "SI" => "705",
+            "ES" => "724",
+            "US" => "840",
+            "EE" => "233",
+            "ET" => "231",
+            "PH" => "608",
+            "FI" => "246",
+            "FJ" => "242",
+            "FR" => "250",
+            "GA" => "266",
+            "GM" => "270",
+            "GE" => "268",
+            "GH" => "288",
+            "GI" => "292",
+            "GD" => "308",
+            "GR" => "300",
+            "GL" => "304",
+            "GP" => "312",
+            "GU" => "316",
+            "GT" => "320",
+            "GF" => "254",
+            "GG" => "831",
+            "GN" => "324",
+            "GW" => "624",
+            "GQ" => "226",
+            "GY" => "328",
+            "HT" => "332",
+            "HN" => "340",
+            "HK" => "344",
+            "HU" => "348",
+            "IN" => "356",
+            "ID" => "360",
+            "IQ" => "368",
+            "IR" => "364",
+            "IE" => "372",
+            "BV" => "074",
+            "IM" => "833",
+            "CX" => "162",
+            "IS" => "352",
+            "KY" => "136",
+            "CC" => "166",
+            "CK" => "184",
+            "FO" => "234",
+            "GS" => "239",
+            "HM" => "334",
+            "FK" => "238",
+            "MP" => "580",
+            "MH" => "584",
+            "PN" => "612",
+            "SB" => "090",
+            "TC" => "796",
+            "UM" => "581",
+            "VG" => "092",
+            "VI" => "850",
+            "IL" => "376",
+            "IT" => "380",
+            "JM" => "388",
+            "JP" => "392",
+            "JE" => "832",
+            "JO" => "400",
+            "KZ" => "398",
+            "KE" => "404",
+            "KG" => "417",
+            "KI" => "296",
+            "KW" => "414",
+            "LA" => "418",
+            "LS" => "426",
+            "LV" => "428",
+            "LB" => "422",
+            "LR" => "430",
+            "LY" => "434",
+            "LI" => "438",
+            "LT" => "440",
+            "LU" => "442",
+            "MO" => "446",
+            "MK" => "807",
+            "MG" => "450",
+            "MY" => "458",
+            "MW" => "454",
+            "MV" => "462",
+            "ML" => "466",
+            "MT" => "470",
+            "MA" => "504",
+            "MQ" => "474",
+            "MU" => "480",
+            "MR" => "478",
+            "YT" => "175",
+            "MX" => "484",
+            "FM" => "583",
+            "MD" => "498",
+            "MC" => "492",
+            "MN" => "496",
+            "ME" => "499",
+            "MS" => "500",
+            "MZ" => "508",
+            "MM" => "104",
+            "NA" => "516",
+            "NR" => "520",
+            "NP" => "524",
+            "NI" => "558",
+            "NE" => "562",
+            "NG" => "566",
+            "NU" => "570",
+            "NF" => "574",
+            "NO" => "578",
+            "NC" => "540",
+            "NZ" => "554",
+            "OM" => "512",
+            "NL" => "528",
+            "PK" => "586",
+            "PW" => "585",
+            "PS" => "275",
+            "PA" => "591",
+            "PG" => "598",
+            "PY" => "600",
+            "PE" => "604",
+            "PF" => "258",
+            "PL" => "616",
+            "PT" => "620",
+            "PR" => "630",
+            "GB" => "826",
+            "EH" => "732",
+            "CF" => "140",
+            "CZ" => "203",
+            "CG" => "178",
+            "CD" => "180",
+            "DO" => "214",
+            "RE" => "638",
+            "RW" => "646",
+            "RO" => "642",
+            "RU" => "643",
+            "WS" => "882",
+            "AS" => "016",
+            "BL" => "652",
+            "KN" => "659",
+            "SM" => "674",
+            "MF" => "663",
+            "PM" => "666",
+            "VC" => "670",
+            "SH" => "654",
+            "LC" => "662",
+            "ST" => "678",
+            "SN" => "686",
+            "RS" => "688",
+            "SC" => "690",
+            "SL" => "694",
+            "SG" => "702",
+            "SX" => "534",
+            "SY" => "760",
+            "SO" => "706",
+            "LK" => "144",
+            "SZ" => "748",
+            "ZA" => "710",
+            "SD" => "729",
+            "SS" => "728",
+            "SE" => "752",
+            "CH" => "756",
+            "SR" => "740",
+            "SJ" => "744",
+            "TH" => "764",
+            "TW" => "158",
+            "TZ" => "834",
+            "TJ" => "762",
+            "IO" => "086",
+            "TF" => "260",
+            "TL" => "626",
+            "TG" => "768",
+            "TK" => "772",
+            "TO" => "776",
+            "TT" => "780",
+            "TN" => "788",
+            "TM" => "795",
+            "TR" => "792",
+            "TV" => "798",
+            "UA" => "804",
+            "UG" => "800",
+            "UY" => "858",
+            "UZ" => "860",
+            "VU" => "548",
+            "VA" => "336",
+            "VE" => "862",
+            "VN" => "704",
+            "WF" => "876",
+            "YE" => "887",
+            "DJ" => "262",
+            "ZM" => "894",
+            "ZW" => "716"
+        ];
 
         if (isset($arrCode[$code])) {
             $isoCodeNumber = $arrCode[$code];
         }
         return $isoCodeNumber;
-
     }
 
+    /**
+     * IsoCode Phone Prefix
+     *
+     * @param string $code
+     */
     private function isoCodePhonePrefix($code)
     {
         $isoCodePhonePrefix = 34;
-        $arrCode = array("AC" => "247", "AD" => "376", "AE" => "971", "AF" => "93","AG" => "268", "AI" => "264", "AL" => "355", "AM" => "374", "AN" => "599", "AO" => "244", "AR" => "54", "AS" => "684", "AT" => "43", "AU" => "61", "AW" => "297", "AX" => "358", "AZ" => "374", "AZ" => "994", "BA" => "387", "BB" => "246", "BD" => "880", "BE" => "32", "BF" => "226", "BG" => "359", "BH" => "973", "BI" => "257", "BJ" => "229", "BM" => "441", "BN" => "673", "BO" => "591", "BR" => "55", "BS" => "242", "BT" => "975", "BW" => "267", "BY" => "375", "BZ" => "501", "CA" => "1", "CC" => "61", "CD" => "243", "CF" => "236", "CG" => "242", "CH" => "41", "CI" => "225", "CK" => "682", "CL" => "56", "CM" => "237", "CN" => "86", "CO" => "57", "CR" => "506", "CS" => "381", "CU" => "53", "CV" => "238", "CX" => "61", "CY" => "392", "CY" => "357", "CZ" => "420", "DE" => "49", "DJ" => "253", "DK" => "45", "DM" => "767", "DO" => "809", "DZ" => "213", "EC" => "593", "EE" => "372", "EG" => "20", "EH" => "212", "ER" => "291", "ES" => "34", "ET" => "251", "FI" => "358", "FJ" => "679", "FK" => "500", "FM" => "691", "FO" => "298", "FR" => "33", "GA" => "241", "GB" => "44", "GD" => "473", "GE" => "995", "GF" => "594", "GG" => "44", "GH" => "233", "GI" => "350", "GL" => "299", "GM" => "220", "GN" => "224", "GP" => "590", "GQ" => "240", "GR" => "30", "GT" => "502", "GU" => "671", "GW" => "245", "GY" => "592", "HK" => "852", "HN" => "504", "HR" => "385", "HT" => "509", "HU" => "36", "ID" => "62", "IE" => "353", "IL" => "972", "IM" => "44", "IN" => "91", "IO" => "246", "IQ" => "964", "IR" => "98", "IS" => "354", "IT" => "39", "JE" => "44", "JM" => "876", "JO" => "962", "JP" => "81", "KE" => "254", "KG" => "996", "KH" => "855", "KI" => "686", "KM" => "269", "KN" => "869", "KP" => "850", "KR" => "82", "KW" => "965", "KY" => "345", "KZ" => "7", "LA" => "856", "LB" => "961", "LC" => "758", "LI" => "423", "LK" => "94", "LR" => "231", "LS" => "266", "LT" => "370", "LU" => "352", "LV" => "371", "LY" => "218", "MA" => "212", "MC" => "377", "MD"  > "533", "MD" => "373", "ME" => "382", "MG" => "261", "MH" => "692", "MK" => "389", "ML" => "223", "MM" => "95", "MN" => "976", "MO" => "853", "MP" => "670", "MQ" => "596", "MR" => "222", "MS" => "664", "MT" => "356", "MU" => "230", "MV" => "960", "MW" => "265", "MX" => "52", "MY" => "60", "MZ" => "258", "NA" => "264", "NC" => "687", "NE" => "227", "NF" => "672", "NG" => "234", "NI" => "505", "NL" => "31", "NO" => "47", "NP" => "977", "NR" => "674", "NU" => "683", "NZ" => "64", "OM" => "968", "PA" => "507", "PE" => "51", "PF" => "689", "PG" => "675", "PH" => "63", "PK" => "92", "PL" => "48", "PM" => "508", "PR" => "787", "PS" => "970", "PT" => "351", "PW" => "680", "PY" => "595", "QA" => "974", "RE" => "262", "RO" => "40", "RS" => "381", "RU" => "7", "RW" => "250", "SA" => "966", "SB" => "677", "SC" => "248", "SD" => "249", "SE" => "46", "SG" => "65", "SH" => "290", "SI" => "386", "SJ" => "47", "SK" => "421", "SL" => "232", "SM" => "378", "SN" => "221", "SO" => "252", "SO" => "252", "SR"  > "597", "ST" => "239", "SV" => "503", "SY" => "963", "SZ" => "268", "TA" => "290", "TC" => "649", "TD" => "235", "TG" => "228", "TH" => "66", "TJ" => "992", "TK" =>  "690", "TL" => "670", "TM" => "993", "TN" => "216", "TO" => "676", "TR" => "90", "TT" => "868", "TV" => "688", "TW" => "886", "TZ" => "255", "UA" => "380", "UG" =>  "256", "US" => "1", "UY" => "598", "UZ" => "998", "VA" => "379", "VC" => "784", "VE" => "58", "VG" => "284", "VI" => "340", "VN" => "84", "VU" => "678", "WF" => "681", "WS" => "685", "YE" => "967", "YT" => "262", "ZA" => "27","ZM" => "260", "ZW" => "263");
+        $arrCode = [
+            "AC" => "247",
+            "AD" => "376",
+            "AE" => "971",
+            "AF" => "93",
+            "AG" => "268",
+            "AI" => "264",
+            "AL" => "355",
+            "AM" => "374",
+            "AN" => "599",
+            "AO" => "244",
+            "AR" => "54",
+            "AS" => "684",
+            "AT" => "43",
+            "AU" => "61",
+            "AW" => "297",
+            "AX" => "358",
+            "AZ" => "374",
+            "AZ" => "994",
+            "BA" => "387",
+            "BB" => "246",
+            "BD" => "880",
+            "BE" => "32",
+            "BF" => "226",
+            "BG" => "359",
+            "BH" => "973",
+            "BI" => "257",
+            "BJ" => "229",
+            "BM" => "441",
+            "BN" => "673",
+            "BO" => "591",
+            "BR" => "55",
+            "BS" => "242",
+            "BT" => "975",
+            "BW" => "267",
+            "BY" => "375",
+            "BZ" => "501",
+            "CA" => "1",
+            "CC" => "61",
+            "CD" => "243",
+            "CF" => "236",
+            "CG" => "242",
+            "CH" => "41",
+            "CI" => "225",
+            "CK" => "682",
+            "CL" => "56",
+            "CM" => "237",
+            "CN" => "86",
+            "CO" => "57",
+            "CR" => "506",
+            "CS" => "381",
+            "CU" => "53",
+            "CV" => "238",
+            "CX" => "61",
+            "CY" => "392",
+            "CY" => "357",
+            "CZ" => "420",
+            "DE" => "49",
+            "DJ" => "253",
+            "DK" => "45",
+            "DM" => "767",
+            "DO" => "809",
+            "DZ" => "213",
+            "EC" => "593",
+            "EE" => "372",
+            "EG" => "20",
+            "EH" => "212",
+            "ER" => "291",
+            "ES" => "34",
+            "ET" => "251",
+            "FI" => "358",
+            "FJ" => "679",
+            "FK" => "500",
+            "FM" => "691",
+            "FO" => "298",
+            "FR" => "33",
+            "GA" => "241",
+            "GB" => "44",
+            "GD" => "473",
+            "GE" => "995",
+            "GF" => "594",
+            "GG" => "44",
+            "GH" => "233",
+            "GI" => "350",
+            "GL" => "299",
+            "GM" => "220",
+            "GN" => "224",
+            "GP" => "590",
+            "GQ" => "240",
+            "GR" => "30",
+            "GT" => "502",
+            "GU" => "671",
+            "GW" => "245",
+            "GY" => "592",
+            "HK" => "852",
+            "HN" => "504",
+            "HR" => "385",
+            "HT" => "509",
+            "HU" => "36",
+            "ID" => "62",
+            "IE" => "353",
+            "IL" => "972",
+            "IM" => "44",
+            "IN" => "91",
+            "IO" => "246",
+            "IQ" => "964",
+            "IR" => "98",
+            "IS" => "354",
+            "IT" => "39",
+            "JE" => "44",
+            "JM" => "876",
+            "JO" => "962",
+            "JP" => "81",
+            "KE" => "254",
+            "KG" => "996",
+            "KH" => "855",
+            "KI" => "686",
+            "KM" => "269",
+            "KN" => "869",
+            "KP" => "850",
+            "KR" => "82",
+            "KW" => "965",
+            "KY" => "345",
+            "KZ" => "7",
+            "LA" => "856",
+            "LB" => "961",
+            "LC" => "758",
+            "LI" => "423",
+            "LK" => "94",
+            "LR" => "231",
+            "LS" => "266",
+            "LT" => "370",
+            "LU" => "352",
+            "LV" => "371",
+            "LY" => "218",
+            "MA" => "212",
+            "MC" => "377",
+            "MD"  > "533",
+            "MD" => "373",
+            "ME" => "382",
+            "MG" => "261",
+            "MH" => "692",
+            "MK" => "389",
+            "ML" => "223",
+            "MM" => "95",
+            "MN" => "976",
+            "MO" => "853",
+            "MP" => "670",
+            "MQ" => "596",
+            "MR" => "222",
+            "MS" => "664",
+            "MT" => "356",
+            "MU" => "230",
+            "MV" => "960",
+            "MW" => "265",
+            "MX" => "52",
+            "MY" => "60",
+            "MZ" => "258",
+            "NA" => "264",
+            "NC" => "687",
+            "NE" => "227",
+            "NF" => "672",
+            "NG" => "234",
+            "NI" => "505",
+            "NL" => "31",
+            "NO" => "47",
+            "NP" => "977",
+            "NR" => "674",
+            "NU" => "683",
+            "NZ" => "64",
+            "OM" => "968",
+            "PA" => "507",
+            "PE" => "51",
+            "PF" => "689",
+            "PG" => "675",
+            "PH" => "63",
+            "PK" => "92",
+            "PL" => "48",
+            "PM" => "508",
+            "PR" => "787",
+            "PS" => "970",
+            "PT" => "351",
+            "PW" => "680",
+            "PY" => "595",
+            "QA" => "974",
+            "RE" => "262",
+            "RO" => "40",
+            "RS" => "381",
+            "RU" => "7",
+            "RW" => "250",
+            "SA" => "966",
+            "SB" => "677",
+            "SC" => "248",
+            "SD" => "249",
+            "SE" => "46",
+            "SG" => "65",
+            "SH" => "290",
+            "SI" => "386",
+            "SJ" => "47",
+            "SK" => "421",
+            "SL" => "232",
+            "SM" => "378",
+            "SN" => "221",
+            "SO" => "252",
+            "SO" => "252",
+            "SR"  > "597",
+            "ST" => "239",
+            "SV" => "503",
+            "SY" => "963",
+            "SZ" => "268",
+            "TA" => "290",
+            "TC" => "649",
+            "TD" => "235",
+            "TG" => "228",
+            "TH" => "66",
+            "TJ" => "992",
+            "TK" =>  "690",
+            "TL" => "670",
+            "TM" => "993",
+            "TN" => "216",
+            "TO" => "676",
+            "TR" => "90",
+            "TT" => "868",
+            "TV" => "688",
+            "TW" => "886",
+            "TZ" => "255",
+            "UA" => "380",
+            "UG" =>  "256",
+            "US" => "1",
+            "UY" => "598",
+            "UZ" => "998",
+            "VA" => "379",
+            "VC" => "784",
+            "VE" => "58",
+            "VG" => "284",
+            "VI" => "340",
+            "VN" => "84",
+            "VU" => "678",
+            "WF" => "681",
+            "WS" => "685",
+            "YE" => "967",
+            "YT" => "262",
+            "ZA" => "27","ZM" => "260",
+            "ZW" => "263"
+        ];
 
         if (isset($arrCode[$code])) {
             $isoCodePhonePrefix = $arrCode[$code];
@@ -579,26 +1138,33 @@ class Data extends AbstractHelper
         return $isoCodePhonePrefix;
     }
 
-
+    /**
+     * Get Emv3DS
+     *
+     * @param \Magento\Sales\Mode\Order $order
+     */
     private function getEMV3DS($order)
     {
 
         $s_cid = $order->getCustomerId();
-        if ($s_cid == "" ) {
+        if ($s_cid == "") {
             $s_cid = 0;
         }
 
-        $Merchant_EMV3DS = array();
+        $Merchant_EMV3DS = [];
 
         $billingAddressData = $order->getBillingAddress();
         $phone = "";
-        if (!empty($billingAddressData))   $phone = $billingAddressData->getTelephone();
-
+        if (!empty($billingAddressData)) {
+            $phone = $billingAddressData->getTelephone();
+        }
 
         $Merchant_EMV3DS["customer"]["id"] = (int)$s_cid;
-		$Merchant_EMV3DS["customer"]["name"] = ($order->getCustomerFirstname())?$order->getCustomerFirstname():$billingAddressData->getFirstname();
-		$Merchant_EMV3DS["customer"]["surname"] = ($order->getCustomerLastname())?$order->getCustomerLastname():$billingAddressData->getLastname();
-		$Merchant_EMV3DS["customer"]["email"] = $order->getCustomerEmail();
+        $Merchant_EMV3DS["customer"]["name"] = ($order->getCustomerFirstname())?
+            $order->getCustomerFirstname():$billingAddressData->getFirstname();
+        $Merchant_EMV3DS["customer"]["surname"] = ($order->getCustomerLastname())?
+            $order->getCustomerLastname():$billingAddressData->getLastname();
+        $Merchant_EMV3DS["customer"]["email"] = $order->getCustomerEmail();
 
         $shippingAddressData = $order->getShippingAddress();
         if ($shippingAddressData) {
@@ -610,9 +1176,9 @@ class Data extends AbstractHelper
 
         if ($phone!="") {
             $phone_prefix = $this->isoCodePhonePrefix($billingAddressData->getCountryId());
-	        if ($phone_prefix!="") {
-                $arrDatosWorkPhone["cc"] = substr(preg_replace("/[^0-9]/", '', $phone_prefix),0,3);
-                $arrDatosWorkPhone["subscriber"] = substr(preg_replace("/[^0-9]/", '', $phone),0,15);
+            if ($phone_prefix!="") {
+                $arrDatosWorkPhone["cc"] = substr(preg_replace("/[^0-9]/", '', $phone_prefix), 0, 3);
+                $arrDatosWorkPhone["subscriber"] = substr(preg_replace("/[^0-9]/", '', $phone), 0, 15);
                 $Merchant_EMV3DS["customer"]["workPhone"] = $arrDatosWorkPhone;
                 $Merchant_EMV3DS["customer"]["mobilePhone"] = $arrDatosWorkPhone;
             }
@@ -620,18 +1186,26 @@ class Data extends AbstractHelper
 
         $Merchant_EMV3DS["customer"]["firstBuy"] = ($this->getFirstOrder($order) == 0)?"no":"si";
 
-        $Merchant_EMV3DS["shipping"]["shipAddrCity"] = ($shippingAddressData)?$shippingAddressData->getCity():"";
-        $Merchant_EMV3DS["shipping"]["shipAddrCountry"] = ($shippingAddressData)?$shippingAddressData->getCountryId():"";
+        $Merchant_EMV3DS["shipping"]["shipAddrCity"] = ($shippingAddressData)?
+            $shippingAddressData->getCity():"";
+        $Merchant_EMV3DS["shipping"]["shipAddrCountry"] = ($shippingAddressData)?
+            $shippingAddressData->getCountryId():"";
 
         if ($Merchant_EMV3DS["shipping"]["shipAddrCountry"]!="") {
-            $Merchant_EMV3DS["shipping"]["shipAddrCountry"] = (int)$this->isoCodeToNumber($Merchant_EMV3DS["shipping"]["shipAddrCountry"]);
+            $Merchant_EMV3DS["shipping"]["shipAddrCountry"] = (int)$this->isoCodeToNumber(
+                $Merchant_EMV3DS["shipping"]["shipAddrCountry"]
+            );
         }
 
         $Merchant_EMV3DS["shipping"]["shipAddrLine1"] = ($shippingAddressData)?$street0:"";
         $Merchant_EMV3DS["shipping"]["shipAddrLine2"] = ($shippingAddressData)?$street1:"";
         $Merchant_EMV3DS["shipping"]["shipAddrLine3"] = ($shippingAddressData)?$street2:"";
-        $Merchant_EMV3DS["shipping"]["shipAddrPostCode"] = ($shippingAddressData)?$shippingAddressData->getPostcode():"";
-        //$Merchant_EMV3DS["shipping"]["shipAddrState"] = ($shippingAddressData)?$shippingAddressData->getRegionId():"";	 // ISO 3166-2
+        $Merchant_EMV3DS["shipping"]["shipAddrPostCode"] = ($shippingAddressData)?
+            $shippingAddressData->getPostcode():"";
+        /*
+        $Merchant_EMV3DS["shipping"]["shipAddrState"] = ($shippingAddressData)?
+            $shippingAddressData->getRegionId():"";     // ISO 3166-2
+        */
 
         // Billing
         if ($billingAddressData) {
@@ -644,58 +1218,68 @@ class Data extends AbstractHelper
         $Merchant_EMV3DS["billing"]["billAddrCity"] = ($billingAddressData)?$billingAddressData->getCity():"";
         $Merchant_EMV3DS["billing"]["billAddrCountry"] = ($billingAddressData)?$billingAddressData->getCountryId():"";
         if ($Merchant_EMV3DS["billing"]["billAddrCountry"]!="") {
-            $Merchant_EMV3DS["billing"]["billAddrCountry"] = (int)$this->isoCodeToNumber($Merchant_EMV3DS["billing"]["billAddrCountry"]);
+            $Merchant_EMV3DS["billing"]["billAddrCountry"] = (int)$this->isoCodeToNumber(
+                $Merchant_EMV3DS["billing"]["billAddrCountry"]
+            );
         }
         $Merchant_EMV3DS["billing"]["billAddrLine1"] = ($billingAddressData)?$street0:"";
         $Merchant_EMV3DS["billing"]["billAddrLine2"] = ($billingAddressData)?$street1:"";
         $Merchant_EMV3DS["billing"]["billAddrLine3"] = ($billingAddressData)?$street2:"";
         $Merchant_EMV3DS["billing"]["billAddrPostCode"] = ($billingAddressData)?$billingAddressData->getPostcode():"";
-        //$Merchant_EMV3DS["billing"]["billAddrState"] = ($billingAddressData)?$billingAddressData->getRegion():"";     // ISO 3166-2
 
+        /* ISO 3166-2
+        $Merchant_EMV3DS["billing"]["billAddrState"] = ($billingAddressData)?$billingAddressData->getRegion():"";
+        */
 
         // acctInfo
-		$Merchant_EMV3DS["acctInfo"] = $this->acctInfo($order);
+        $Merchant_EMV3DS["acctInfo"] = $this->acctInfo($order);
 
-		// threeDSRequestorAuthenticationInfo
+        // threeDSRequestorAuthenticationInfo
         $Merchant_EMV3DS["threeDSRequestorAuthenticationInfo"] = $this->threeDSRequestorAuthenticationInfo();
-
 
         // AddrMatch
         if ($order->getBillingAddress() && $order->getShippingAddress()) {
-		    $Merchant_EMV3DS["addrMatch"] = ($order->getBillingAddress()->getData('customer_address_id') == $order->getShippingAddress()->getData('customer_address_id'))?"Y":"N";
+            $Merchant_EMV3DS["addrMatch"] = (
+                $order->getBillingAddress()->getData('customer_address_id') ==
+                $order->getShippingAddress()->getData('customer_address_id')
+                )?"Y":"N";
         }
 
-		$Merchant_EMV3DS["challengeWindowSize"] = 05;
+        $Merchant_EMV3DS["challengeWindowSize"] = 05;
 
         return $Merchant_EMV3DS;
     }
 
-
+    /**
+     * Acct Info
+     *
+     * @param \Magento\Sales\Mode\Order $order
+     */
     private function acctInfo($order)
     {
 
-		$acctInfoData = array();
-		$date_now = new \DateTime("now");
+        $acctInfoData = [];
+        $date_now = new \DateTime("now");
 
-		$isGuest = $order->getCustomerIsGuest();
-		if ($isGuest) {
-			$acctInfoData["chAccAgeInd"] = "01";
-		} else {
+        $isGuest = $order->getCustomerIsGuest();
+        if ($isGuest) {
+            $acctInfoData["chAccAgeInd"] = "01";
+        } else {
 
             $customer = $this->getCustomerById($order->getCustomerId());
-			$date_customer = new \DateTime( $customer->getCreatedAt());
+            $date_customer = new \DateTime($customer->getCreatedAt());
 
-			$diff = $date_now->diff($date_customer);
-			$dias = $diff->days;
+            $diff = $date_now->diff($date_customer);
+            $dias = $diff->days;
 
-			if ($dias==0) {
-				$acctInfoData["chAccAgeInd"] = "02";
-			} else if ($dias < 30) {
-				$acctInfoData["chAccAgeInd"] = "03";
-			} else if ($dias < 60) {
-				$acctInfoData["chAccAgeInd"] = "04";
-			} else {
-				$acctInfoData["chAccAgeInd"] = "05";
+            if ($dias==0) {
+                $acctInfoData["chAccAgeInd"] = "02";
+            } elseif ($dias < 30) {
+                $acctInfoData["chAccAgeInd"] = "03";
+            } elseif ($dias < 60) {
+                $acctInfoData["chAccAgeInd"] = "04";
+            } else {
+                $acctInfoData["chAccAgeInd"] = "05";
             }
 
             $accChange = new \DateTime($customer->getUpdatedAt());
@@ -707,31 +1291,31 @@ class Data extends AbstractHelper
 
             if ($dias_upd==0) {
                 $acctInfoData["chAccChangeInd"] = "01";
-            } else if ($dias_upd < 30) {
+            } elseif ($dias_upd < 30) {
                 $acctInfoData["chAccChangeInd"] = "02";
-            } else if ($dias_upd < 60) {
+            } elseif ($dias_upd < 60) {
                 $acctInfoData["chAccChangeInd"] = "03";
             } else {
                 $acctInfoData["chAccChangeInd"] = "04";
             }
 
-
             $chAccDate = new \DateTime($customer->getCreatedAt());
             $acctInfoData["chAccDate"] = $chAccDate->format('Ymd');
 
-            $acctInfoData["nbPurchaseAccount"] = $this->numPurchaseCustomer($order->getCustomerId(),1,6,"month");
+            $acctInfoData["nbPurchaseAccount"] = $this->numPurchaseCustomer($order->getCustomerId(), 1, 6, "month");
             //$acctInfoData["provisionAttemptsDay"] = "";
 
-            $acctInfoData["txnActivityDay"] = $this->numPurchaseCustomer($order->getCustomerId(),0,1,"day");
-            $acctInfoData["txnActivityYear"] = $this->numPurchaseCustomer($order->getCustomerId(),0,1,"year");
-
+            $acctInfoData["txnActivityDay"] = $this->numPurchaseCustomer($order->getCustomerId(), 0, 1, "day");
+            $acctInfoData["txnActivityYear"] = $this->numPurchaseCustomer($order->getCustomerId(), 0, 1, "year");
 
             if ($order->getShippingAddress()) {
-                $firstAddressDelivery = $this->firstAddressDelivery($order->getCustomerId(),$order->getShippingAddress()->getData('customer_address_id'));
+                $firstAddressDelivery = $this->firstAddressDelivery(
+                    $order->getCustomerId(),
+                    $order->getShippingAddress()->getData('customer_address_id')
+                );
 
                 if ($firstAddressDelivery!="") {
-
-                    $acctInfoData["shipAddressUsage"] = date("Ymd",strtotime($firstAddressDelivery));
+                    $acctInfoData["shipAddressUsage"] = date("Ymd", strtotime($firstAddressDelivery));
 
                     $date_firstAddressDelivery = new \DateTime($firstAddressDelivery);
                     $diff = $date_now->diff($date_firstAddressDelivery);
@@ -739,22 +1323,27 @@ class Data extends AbstractHelper
 
                     if ($dias_firstAddressDelivery==0) {
                         $acctInfoData["shipAddressUsageInd"] = "01";
-                    } else if ($dias_upd < 30) {
+                    } elseif ($dias_upd < 30) {
                         $acctInfoData["shipAddressUsageInd"] = "02";
-                    } else if ($dias_upd < 60) {
+                    } elseif ($dias_upd < 60) {
                         $acctInfoData["shipAddressUsageInd"] = "03";
                     } else {
                         $acctInfoData["shipAddressUsageInd"] = "04";
                     }
                 }
             }
-
         }
 
-        if ( $order->getShippingAddress() &&
+        if ($order->getShippingAddress() &&
             (
-                ( ($order->getCustomerFirstname() != "") && ( $order->getCustomerFirstname() != $order->getShippingAddress()->getData('firstname') ) ) ||
-                ( ($order->getCustomerLastname() != "") && ( $order->getCustomerLastname() != $order->getShippingAddress()->getData('lastname') ) )
+                (
+                    ($order->getCustomerFirstname() != "") &&
+                    ($order->getCustomerFirstname() != $order->getShippingAddress()->getData('firstname'))
+                ) ||
+                (
+                    ($order->getCustomerLastname() != "") &&
+                    ($order->getCustomerLastname() != $order->getShippingAddress()->getData('lastname'))
+                )
             )
         ) {
             $acctInfoData["shipNameIndicator"] = "02";
@@ -764,17 +1353,18 @@ class Data extends AbstractHelper
 
         $acctInfoData["suspiciousAccActivity"] = "01";
 
-		return $acctInfoData;
+        return $acctInfoData;
     }
 
     /**
-	 * Obtiene transacciones realizadas
-	 * @param int $id_customer codigo cliente
-	 * @param int $valid completadas o no
-	 * @param int $interval intervalo
-	 * @return string $intervalType tipo de intervalo (DAY,MONTH)
-	 **/
-	private function numPurchaseCustomer($id_customer, $valid=1, $interval=1, $intervalType="day")
+     * Obtiene transacciones realizadas
+     *
+     * @param int $id_customer
+     * @param int $valid
+     * @param int $interval
+     * @param string $intervalType
+     */
+    private function numPurchaseCustomer($id_customer, $valid = 1, $interval = 1, $intervalType = "day")
     {
 
         try {
@@ -784,18 +1374,18 @@ class Data extends AbstractHelper
             $from = $from->format('Y-m-d h:m:s');
 
             if ($valid==1) {
-                $orderCollection = $this->_objectManager->get('Magento\Sales\Model\Order')->getCollection()
-                    ->addFieldToFilter('customer_id', array('eq' => array($id_customer)))
-                    ->addFieldToFilter('status', array(
-                        'nin' => array('pending','cancel','canceled','refund'),
-                        'notnull'=>true))
-                    ->addAttributeToFilter('created_at', array('gt' => $from));
+                $orderCollection = $this->_objectManager->get('\Magento\Sales\Model\Order::class')->getCollection()
+                    ->addFieldToFilter('customer_id', ['eq' => [$id_customer]])
+                    ->addFieldToFilter('status', [
+                        'nin' => ['pending','cancel','canceled','refund'],
+                        'notnull'=>true])
+                    ->addAttributeToFilter('created_at', ['gt' => $from]);
             } else {
-                $orderCollection = $this->_objectManager->get('Magento\Sales\Model\Order')->getCollection()
-                    ->addFieldToFilter('customer_id', array('eq' => array($id_customer)))
-                    ->addFieldToFilter('status', array(
-                        'notnull'=>true))
-                    ->addAttributeToFilter('created_at', array('gt' => $from));
+                $orderCollection = $this->_objectManager->get('\Magento\Sales\Model\Order:class')->getCollection()
+                    ->addFieldToFilter('customer_id', ['eq' => [$id_customer]])
+                    ->addFieldToFilter('status', [
+                        'notnull'=>true])
+                    ->addAttributeToFilter('created_at', ['gt' => $from]);
 
             }
             return $orderCollection->getSize();
@@ -804,11 +1394,13 @@ class Data extends AbstractHelper
         }
     }
 
-
+    /**
+     * Get Three DS Request Authentication Info
+     */
     private function threeDSRequestorAuthenticationInfo()
     {
 
-        $threeDSRequestorAuthenticationInfo = array();
+        $threeDSRequestorAuthenticationInfo = [];
 
         $logged = $this->customerIsLogged();
         $threeDSRequestorAuthenticationInfo["threeDSReqAuthMethod"] = ($logged)?"02":"01";
@@ -817,30 +1409,32 @@ class Data extends AbstractHelper
 
             $lastVisited = new \DateTime($this->_session->getLoginAt() ?? '');
             $threeDSReqAuthTimestamp = $lastVisited->format('Ymdhm');
-		    $threeDSRequestorAuthenticationInfo["threeDSReqAuthTimestamp"] = $threeDSReqAuthTimestamp;
+            $threeDSRequestorAuthenticationInfo["threeDSReqAuthTimestamp"] = $threeDSReqAuthTimestamp;
         }
 
-		return $threeDSRequestorAuthenticationInfo;
+        return $threeDSRequestorAuthenticationInfo;
     }
 
-
     /**
-	 * Obtiene Fecha del primer envio a una direccion
-	 * @param int $id_customer codigo cliente
-	 * @param int $id_address_delivery direccion de envio
-	 **/
+     * Obtiene Fecha del primer envio a una direccion
+     *
+     * @param int $id_customer codigo cliente
+     * @param int $id_address_delivery direccion de envio
+     **/
 
-	private function firstAddressDelivery($id_customer, $id_address_delivery)
+    private function firstAddressDelivery($id_customer, $id_address_delivery)
     {
-
         try {
+            $resource = $this->_objectManager->get('\Magento\Framework\App\ResourceConnection::class');
 
-            $resource = $this->_objectManager->get('Magento\Framework\App\ResourceConnection');
-
-            $orderCollection = $this->_objectManager->get('Magento\Sales\Model\Order')->getCollection()
-            ->addFieldToFilter('customer_id', array('eq' => $id_customer))
+            $orderCollection = $this->_objectManager->get('\Magento\Sales\Model\Order::clas')->getCollection()
+            ->addFieldToFilter('customer_id', ['eq' => $id_customer])
             ->getSelect()
-            ->joinLeft($resource->getTableName('sales_order_address'), "main_table.entity_id = " . $resource->getTableName('sales_order_address'). ".parent_id",array('customer_address_id'))
+            ->joinLeft(
+                $resource->getTableName('sales_order_address'),
+                "main_table.entity_id = " . $resource->getTableName('sales_order_address'). ".parent_id",
+                ['customer_address_id']
+            )
             ->where($resource->getTableName('sales_order_address'). ".customer_address_id = $id_address_delivery ")
             ->limit('1')
             ->order('created_at ASC');
@@ -848,7 +1442,7 @@ class Data extends AbstractHelper
             $connection = $resource->getConnection();
             $results = $connection->fetchAll($orderCollection);
 
-            if (sizeof($results)>0) {
+            if (count($results)>0) {
                 $firstOrder = current($results);
                 return $firstOrder["created_at"];
             } else {
@@ -859,33 +1453,37 @@ class Data extends AbstractHelper
         }
     }
 
-
+    /**
+     * Get Shopping Cart
+     *
+     * @param \Magento\Sales\Mode\Order $order
+     */
     private function getShoppingCart($order)
     {
         $orderCurrencyCode = $order->getBaseCurrencyCode();
-		$shoppingCartData = array();
+        $shoppingCartData = [];
         $amountAux = 0;
 
-        foreach ($order->getAllItems() as $key=>$item) {
+        foreach ($order->getAllItems() as $key => $item) {
             $shoppingCartData[$key]["sku"] = $item->getProductId();
             $shoppingCartData[$key]["articleType"] = 5;
-			$shoppingCartData[$key]["quantity"] = (int) $item->getQtyOrdered();
-			$shoppingCartData[$key]["unitPrice"] = $this->amountFromMagento($item->getPrice(), $orderCurrencyCode);
+            $shoppingCartData[$key]["quantity"] = (int) $item->getQtyOrdered();
+            $shoppingCartData[$key]["unitPrice"] = $this->amountFromMagento($item->getPrice(), $orderCurrencyCode);
             $shoppingCartData[$key]["name"] = $item->getName();
 
             $amountAux += $shoppingCartData[$key]["unitPrice"] * $shoppingCartData[$key]["quantity"];
 
-            $product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($item->getProductId());
+            $product = $this->_objectManager->create('\Magento\Catalog\Model\Product::class')->load($item->getProductId());
 
             $cats = $product->getCategoryIds();
 
-            $arrCat = array();
+            $arrCat = [];
             foreach ($cats as $category_id) {
-                $_cat = $this->_objectManager->create('Magento\Catalog\Model\Category')->load($category_id);
+                $_cat = $this->_objectManager->create('\Magento\Catalog\Model\Category::class')->load($category_id);
                 $arrCat[] = $_cat->getName();
             }
 
-			$shoppingCartData[$key]["category"] = strip_tags(implode("|",$arrCat));
+            $shoppingCartData[$key]["category"] = strip_tags(implode("|", $arrCat));
         }
 
         // Shipping Cost
@@ -894,15 +1492,15 @@ class Data extends AbstractHelper
             $key++;
             $shoppingCartData[$key]["sku"] = "1";
             $shoppingCartData[$key]["articleType"] = "6";
-			$shoppingCartData[$key]["quantity"] = 1;
-			$shoppingCartData[$key]["unitPrice"] = $this->amountFromMagento($shippingAmount, $orderCurrencyCode);
+            $shoppingCartData[$key]["quantity"] = 1;
+            $shoppingCartData[$key]["unitPrice"] = $this->amountFromMagento($shippingAmount, $orderCurrencyCode);
             $shoppingCartData[$key]["name"] = "Package Shipping Cost";
 
             $amountAux += $shoppingCartData[$key]["unitPrice"] * $shoppingCartData[$key]["quantity"];
         }
 
         // Impuestos. Si la suma de amountAux < Total, el resto de impuestos
-        $amountTotal = $this->amountFromMagento($order->getBaseGrandTotal(),"EUR");
+        $amountTotal = $this->amountFromMagento($order->getBaseGrandTotal(), "EUR");
 
         // Se calculan los impuestos
         $tax = $amountTotal - $amountAux;
@@ -915,13 +1513,15 @@ class Data extends AbstractHelper
             $shoppingCartData[$key]["name"] = "Tax";
         }
 
-		return array("shoppingCart"=>$shoppingCartData);
-	}
-
+        return ["shoppingCart"=>$shoppingCartData];
+    }
 
     /**
-     * @return String URL
+     * Get APM Paycomet URL
      *
+     * @param \Magento\Sales\Mode\Order $order
+     * @param int $methodId
+     * @return String URL
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAPMPaycometUrl($order, $methodId)
@@ -991,40 +1591,44 @@ class Data extends AbstractHelper
         }
     }
 
-
     /**
      * Checkout getURLOK.
      *
+     * @param \Magento\Sales\Mode\Order $order
      * @return string
      */
     public function getURLOK($order)
     {
         return $this->_urlBuilder->getUrl(
-            'paycomet_payment/process/result',$this->_buildSessionParams(true,$order)
+            'paycomet_payment/process/result',
+            $this->_buildSessionParams(true, $order)
         );
     }
 
     /**
      * Checkout getURLKO.
      *
+     * @param \Magento\Sales\Mode\Order $order
      * @return string
      */
     public function getURLKO($order)
     {
         return $this->_urlBuilder->getUrl(
-            'paycomet_payment/process/result',$this->_buildSessionParams(false,$order)
+            'paycomet_payment/process/result',
+            $this->_buildSessionParams(false, $order)
         );
     }
-
 
     /**
      * Build params for the session redirect.
      *
      * @param bool $result
+     * @param \Magento\Sales\Mode\Order $order
      *
      * @return array
      */
-    private function _buildSessionParams($result,$order){
+    private function _buildSessionParams($result, $order)
+    {
         $result = ($result) ? '1' : '0';
         $timestamp = date('YmdHMS');
         $merchant_code = $this->getConfigData('merchant_code');
@@ -1034,17 +1638,18 @@ class Data extends AbstractHelper
         return ['timestamp' => $timestamp, 'order_id' => $orderid, 'result' => $result, 'hash' => $sha1hash];
     }
 
-
+    /**
+     * Customer Is Logged
+     */
     public function customerIsLogged()
     {
         return $this->_session->isLoggedIn();
     }
 
-
     /**
-     * @desc Logs debug information if enabled
+     * Log Debug
      *
-     * @param mixed
+     * @param string $message
      */
     public function logDebug($message)
     {
@@ -1054,7 +1659,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @desc Cancels the order
+     * Cancel Order
      *
      * @param \Magento\Sales\Mode\Order $order
      */
@@ -1066,10 +1671,9 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @desc Load a quote based on id
+     * Get quoteId
      *
-     * @param $quoteId
-     *
+     * @param object $quoteId
      * @return \Magento\Quote\Model\Quote
      */
     public function getQuote($quoteId)
@@ -1081,7 +1685,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @desc Removes the response fields that we don't want stored
+     * Removes the response fields that we don't want stored
      *
      * @param array $response
      *
@@ -1097,14 +1701,11 @@ class Data extends AbstractHelper
                 $returnedFields[$key] = $field;
             }
         }
-
-
         return $returnedFields;
     }
 
-
     /**
-     * @desc Strips and trims the response and returns a new array of fields
+     * Strips and trims the response and returns a new array of fields
      *
      * @param array $response
      *
@@ -1113,11 +1714,10 @@ class Data extends AbstractHelper
     public function stripTrimFields($response)
     {
         return $this->stripFields($response);
-
     }
 
     /**
-     * @desc Converts the magento decimal amount into a int one used by Paycomet
+     * Converts the magento decimal amount into a int one used by Paycomet
      *
      * @param float  $amount
      * @param string $currencyCode
@@ -1132,7 +1732,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @desc Converts the paycomet int amount into a decimal one used by Paycomet
+     * Converts the paycomet int amount into a decimal one used by Paycomet
      *
      * @param string $amount
      * @param string $currencyCode
@@ -1147,8 +1747,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @desc Gets the amount of currency minor units. This would be used to divide or
-     * multiply with. eg. cents with 2 minor units would mean 10^2 = 100
+     * Gets the amount of currency minor units.
      *
      * @param string $currencyCode
      *
@@ -1175,13 +1774,39 @@ class Data extends AbstractHelper
         return 100;
     }
 
+    /**
+     * Check First Minor Unit
+     *
+     * @param string $currencyCode
+     */
     private function checkForFirstMinorUnit($currencyCode)
     {
-        return in_array($currencyCode, ['BYR', 'BIF', 'CLP', 'DJF', 'GNF', 'ISK', 'KMF','KRW', 'PYG', 'RWF', 'UGX', 'UYI', 'VUV', 'VND', 'XAF', 'XOF', 'XPF', ]);
+        return in_array(
+            $currencyCode,
+            [
+                'BYR',
+                'BIF',
+                'CLP',
+                'DJF',
+                'GNF',
+                'ISK',
+                'KMF',
+                'KRW',
+                'PYG',
+                'RWF',
+                'UGX',
+                'UYI',
+                'VUV',
+                'VND',
+                'XAF',
+                'XOF',
+                'XPF'
+            ]
+        );
     }
 
     /**
-     * @desc Sets additional information fields on the payment class
+     * Sets additional information fields on the payment class
      *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @param array                              $response
@@ -1195,37 +1820,45 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @desc Gives back configuration values
+     * Gives back configuration values
      *
-     * @param $field
-     * @param null $storeId
+     * @param string $field
+     * @param int $storeId
+     * @param string $paymentMethodCode
      *
      * @return mixed
      */
-    public function getConfigData($field, $storeId = null, $paymentMethodCode = \Paycomet\Payment\Model\PaymentMethod::METHOD_CODE)
-    {
+    public function getConfigData(
+        $field,
+        $storeId = null,
+        $paymentMethodCode = \Paycomet\Payment\Model\PaymentMethod::METHOD_CODE
+    ) {
         $this->_paycometLogger->debug($field . "--" . $paymentMethodCode);
         return $this->getConfig($field, $paymentMethodCode, $storeId);
     }
 
     /**
-     * @desc Gives back configuration values as flag
+     * Gives back configuration values as flag
      *
-     * @param $field
-     * @param null $storeId
+     * @param string $field
+     * @param int $storeId
+     * @param string $paymentMethodCode
      *
      * @return mixed
      */
-    public function getConfigDataFlag($field, $storeId = null, $paymentMethodCode = \Paycomet\Payment\Model\PaymentMethod::METHOD_CODE)
-    {
+    public function getConfigDataFlag(
+        $field,
+        $storeId = null,
+        $paymentMethodCode = \Paycomet\Payment\Model\PaymentMethod::METHOD_CODE
+    ) {
         return $this->getConfig($field, $paymentMethodCode, $storeId, true);
     }
 
     /**
-     * @desc Gives back encrypted configuration values
+     * Gives back encrypted configuration values
      *
-     * @param $field
-     * @param null $storeId
+     * @param string $field
+     * @param int $storeId
      *
      * @return mixed
      */
@@ -1235,11 +1868,11 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @desc Retrieve information from payment configuration
+     * Retrieve information from payment configuration
      *
-     * @param $field
-     * @param $paymentMethodCode
-     * @param $storeId
+     * @param string $field
+     * @param string $paymentMethodCode
+     * @param int $storeId
      * @param bool|false $flag
      *
      * @return bool|mixed
@@ -1258,15 +1891,33 @@ class Data extends AbstractHelper
         }
     }
 
-    public function getCustomerId(){
+    /**
+     * Get Customer Id
+     */
+    public function getCustomerId()
+    {
         return $this->_session->getCustomer()->getId();
     }
 
-    public function getCustomerById($id) {
+    /**
+     * Get Customer By Id
+     *
+     * @param int $id
+     */
+    public function getCustomerById($id)
+    {
         return $this->_customerFactory->create()->load($id);
     }
 
-    public function createTransaction($type, $transactionid, $order = null, $paymentData = array())
+    /**
+     * Create Transaction
+     *
+     * @param string $type
+     * @param int $transactionid
+     * @param \Magento\Sales\Mode\Order $order
+     * @param array $paymentData
+     */
+    public function createTransaction($type, $transactionid, $order = null, $paymentData = [])
     {
         try {
             //get payment object from order object
@@ -1279,25 +1930,36 @@ class Data extends AbstractHelper
 
             switch ($type) {
                 case \Magento\Sales\Model\Order\Payment\Transaction::TYPE_CAPTURE:
-                    $message = __('Captured amount of %1',$order->getBaseCurrency()->formatTxt($order->getGrandTotal()));
-                break;
+                    $message = __(
+                        'Captured amount of %1',
+                        $order->getBaseCurrency()->formatTxt($order->getGrandTotal())
+                    );
+                    break;
 
                 case \Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH:
-                    $message = __('Authorize amount of %1',$order->getBaseCurrency()->formatTxt($order->getGrandTotal()));
-                break;
+                    $message = __(
+                        'Authorize amount of %1',
+                        $order->getBaseCurrency()->formatTxt($order->getGrandTotal())
+                    );
+                    break;
             }
 
             $trans = $this->_transactionBuilder;
             $transaction = $trans->setPayment($payment)
                                 ->setOrder($order)
                                 ->setTransactionId($transactionid)
-                                ->setAdditionalInformation([\Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS => (array) $paymentData])
+                                ->setAdditionalInformation(
+                                    [
+                                        \Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS =>
+                                        (array) $paymentData
+                                    ]
+                                )
                                 ->setFailSafe(true)
                                 ->build($type);
 
-
-            if ($type==\Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH)
+            if ($type==\Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH) {
                 $transaction->setIsClosed(false);
+            }
 
             $order->setPayment($payment);
 
@@ -1314,9 +1976,8 @@ class Data extends AbstractHelper
         }
     }
 
-
     /**
-     * @desc Create an invoice
+     * Create an invoice
      *
      * @param \Magento\Sales\Mode\Order $order
      * @param string                    $pasref
@@ -1341,9 +2002,8 @@ class Data extends AbstractHelper
         $this->_addHistoryComment($order, $message);
     }
 
-
     /**
-     * @desc Add a comment to order history
+     * Add a comment to order history
      *
      * @param \Magento\Sales\Mode\Order $order
      * @param string                    $message
@@ -1359,7 +2019,11 @@ class Data extends AbstractHelper
         $history->save();
     }
 
-
+    /**
+     * Get Token Data
+     *
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     */
     public function getTokenData($payment)
     {
         $hash = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_TOKENCARD);
@@ -1370,7 +2034,7 @@ class Data extends AbstractHelper
         }
 
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
+        $resource = $objectManager->get('\Magento\Framework\App\ResourceConnection::class');
         $connection = $resource->getConnection();
 
         $conds[] = $connection->quoteInto("hash" . ' = ?', $hash);
@@ -1386,25 +2050,34 @@ class Data extends AbstractHelper
         $data = $connection->fetchRow($select);
 
         return $data;
-
     }
 
+    /**
+     * Get First Order
+     *
+     * @param \Magento\Sales\Mode\Order $order
+     */
     public function getFirstOrder($order)
     {
 
         $searchCriteria = $this->_searchCriteriaBuilder
         ->addFilter('customer_id', $this->getCustomerId())
-        ->addFilter('status', array('pending','cancel','canceled','refund'), 'nin')
+        ->addFilter('status', ['pending','cancel','canceled','refund'], 'nin')
         ->create();
 
         $orders = $this->_orderRepository->getList($searchCriteria);
 
-        if (sizeof($orders)>0) {
+        if (count($orders)>0) {
             return 0;
         }
         return 1;
     }
 
+    /**
+     * Is First Purchase token
+     *
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     */
     public function isFirstPurchaseToken($payment)
     {
         $data = $this->getTokenData($payment);
@@ -1415,20 +2088,25 @@ class Data extends AbstractHelper
             $searchCriteria = $this->_searchCriteriaBuilder
             ->addFilter('customer_id', $this->getCustomerId())
             ->addFilter('paycomet_token', $paycomet_token)
-            ->addFilter('status', array('pending_payment','pending','cancel','canceled','refund'), 'nin')
+            ->addFilter('status', ['pending_payment','pending','cancel','canceled','refund'], 'nin')
             ->create();
 
             $orders = $this->_orderRepository->getList($searchCriteria);
 
-            if (sizeof($orders)>0) {
+            if (count($orders)>0) {
                 return false;
             }
         }
         return true;
     }
 
-
-    public function CreateTransInvoice($order, $response)
+    /**
+     * Create Transaction Invoice
+     *
+     * @param \Magento\Sales\Mode\Order $order
+     * @param array $response
+     */
+    public function createTransInvoice($order, $response)
     {
         $payment = $order->getPayment();
 
@@ -1450,7 +2128,6 @@ class Data extends AbstractHelper
               ? \Magento\Sales\Model\Order\Payment\Transaction::TYPE_CAPTURE
               : \Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH;
 
-
         //Set information
         //$this->setAdditionalInfo($payment, $response);
 
@@ -1466,8 +2143,9 @@ class Data extends AbstractHelper
         }
 
         // Set PAYCOMET iduser|tokenuser to order
-        $IdUser = 0; $TokenUser = ""; // Inicializamos
-        if (isset($response['IdUser']) && isset($response['TokenUser']) ) {
+        $IdUser = 0;
+        $TokenUser = ""; // Inicializamos
+        if (isset($response['IdUser']) && isset($response['TokenUser'])) {
             $IdUser = $response['IdUser'];
             $TokenUser = $response['TokenUser'];
         } else {
@@ -1495,12 +2173,12 @@ class Data extends AbstractHelper
         }
     }
 
-
     /**
-     * @desc Handles the card storage fields
+     * Handles the card storage fields
      *
-     * @param array  $response
-     * @param string $customerId
+     * @param array $response
+     * @param int $customerId
+     * @param int $storeId
      */
     public function _handleCardStorage($response, $customerId, $storeId = null)
     {
@@ -1508,8 +2186,8 @@ class Data extends AbstractHelper
             $IdUser = $response['IdUser'];
             $TokenUser = $response['TokenUser'];
 
-            $merchant_terminal  = trim($this->getConfigData('merchant_terminal',$storeId));
-            $api_key            = trim($this->getEncryptedConfigData('api_key',$storeId));
+            $merchant_terminal  = trim($this->getConfigData('merchant_terminal', $storeId));
+            $api_key            = trim($this->getEncryptedConfigData('api_key', $storeId));
 
             if ($api_key != "") {
                 $apiRest = new ApiRest($api_key);
@@ -1519,7 +2197,7 @@ class Data extends AbstractHelper
                     $merchant_terminal
                 );
 
-                $resp = array();
+                $resp = [];
                 $resp["DS_MERCHANT_PAN"] = $formResponse->pan;
                 $resp["DS_CARD_BRAND"] = $formResponse->cardBrand;
                 $resp["DS_EXPIRYDATE"] = $formResponse->expiryDate;
@@ -1528,8 +2206,8 @@ class Data extends AbstractHelper
                 $this->logDebug(__("ERROR: PAYCOMET API KEY required"));
             }
             if ('' == $resp['DS_ERROR_ID'] || 0 == $resp['DS_ERROR_ID']) {
-                return $this->addCustomerCard($customerId,$IdUser,$TokenUser,$resp);
-            } else{
+                return $this->addCustomerCard($customerId, $IdUser, $TokenUser, $resp);
+            } else {
                 return false;
             }
 
@@ -1539,17 +2217,19 @@ class Data extends AbstractHelper
         }
     }
 
-
     /**
-     * @desc Manage cards that were edited while the user was on payment
+     * Manage cards that were edited while the user was on payment
      *
-     * @param string $cards
+     * @param int $customerId
+     * @param int $IdUser
+     * @param string $TokenUser
+     * @param array $response
      */
-    private function addCustomerCard($customerId,$IdUser,$TokenUser,$response)
+    private function addCustomerCard($customerId, $IdUser, $TokenUser, $response)
     {
         try {
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); // Instance of object manager
-            $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
+            $resource = $objectManager->get('\Magento\Framework\App\ResourceConnection::class');
             $connection = $resource->getConnection();
 
             $card =  $response["DS_MERCHANT_PAN"];
@@ -1561,374 +2241,736 @@ class Data extends AbstractHelper
 
             $connection->insert(
                 $resource->getTableName('paycomet_token'),
-                ['customer_id' => $customerId, 'hash' => $hash, 'iduser' => $IdUser, 'tokenuser' => $TokenUser, 'cc' => $card , 'brand' => $card_brand, 'expiry' => $expiryDate, 'date' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)]
+                [
+                    'customer_id' => $customerId,
+                    'hash' => $hash,
+                    'iduser' => $IdUser,
+                    'tokenuser' => $TokenUser,
+                    'cc' => $card ,
+                    'brand' => $card_brand,
+                    'expiry' => $expiryDate,
+                    'date' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
+                ]
             );
             return true;
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             return false;
         }
-
     }
 
-
+    /**
+     * Get Error Description
+     *
+     * @param int $code
+     */
     public function getErrorDesc($code)
     {
-        switch ($code){
-            case 0: return __("No error"); break;
-            case 1: return __("Error"); break;
-            case 100: return __("Expired credit card"); break;
-            case 101: return __("Credit card blacklisted"); break;
-            case 102: return __("Operation not allowed for the credit card type"); break;
-            case 103: return __("Please, call the credit card issuer"); break;
-            case 104: return __("Unexpected error"); break;
-            case 105: return __("Insufficient funds"); break;
-            case 106: return __("Credit card not registered or not logged by the issuer"); break;
-            case 107: return __("Data error. Validation Code"); break;
-            case 108: return __("PAN Check Error"); break;
-            case 109: return __("Expiry date error"); break;
-            case 110: return __("Data error"); break;
-            case 111: return __("CVC2 block incorrect"); break;
-            case 112: return __("Please, call the credit card issuer"); break;
-            case 113: return __("Credit card not valid"); break;
-            case 114: return __("The credit card has credit restrictions"); break;
-            case 115: return __("Card issuer could not validate card owner"); break;
-            case 116: return __("Payment not allowed in off-line authorization"); break;
-            case 118: return __("Expired credit card. Please capture card"); break;
-            case 119: return __("Credit card blacklisted. Please capture card"); break;
-            case 120: return __("Credit card lost or stolen. Please capture card"); break;
-            case 121: return __("Error in CVC2. Please capture card"); break;
-            case 122: return __("Error en Pre-Transaction process. Try again later."); break;
-            case 123: return __("Operation denied. Please capture card"); break;
-            case 124: return __("Closing with agreement"); break;
-            case 125: return __("Closing without agreement"); break;
-            case 126: return __("Cannot close right now"); break;
-            case 127: return __("Invalid parameter"); break;
-            case 128: return __("Transactions were not accomplished"); break;
-            case 129: return __("Duplicated internal reference"); break;
-            case 130: return __("Original operation not found. Could not refund"); break;
-            case 131: return __("Expired preauthorization"); break;
-            case 132: return __("Operation not valid with selected currency"); break;
-            case 133: return __("Error in message format"); break;
-            case 134: return __("Message not recognized by the system"); break;
-            case 135: return __("CVC2 block incorrect"); break;
-            case 137: return __("Credit card not valid"); break;
-            case 138: return __("Gateway message error"); break;
-            case 139: return __("Gateway format error"); break;
-            case 140: return __("Credit card does not exist"); break;
-            case 141: return __("Amount zero or not valid"); break;
-            case 142: return __("Operation canceled"); break;
-            case 143: return __("Authentification error"); break;
-            case 144: return __("Denegation by security level"); break;
-            case 145: return __("Error in PUC message. Please contact PAYCOMET"); break;
-            case 146: return __("System error"); break;
-            case 147: return __("Duplicated transaction"); break;
-            case 148: return __("MAC error"); break;
-            case 149: return __("Settlement rejected"); break;
-            case 150: return __("System date/time not synchronized"); break;
-            case 151: return __("Invalid card expiration date"); break;
-            case 152: return __("Could not find any preauthorization with given data"); break;
-            case 153: return __("Cannot find requested data"); break;
-            case 154: return __("Cannot operate with given credit card"); break;
-            case 155: return __("This method requires activation of the VHASH protocol"); break;
-            case 500: return __("Unexpected error"); break;
-            case 501: return __("Unexpected error"); break;
-            case 502: return __("Unexpected error"); break;
-            case 504: return __("Transaction already cancelled"); break;
-            case 505: return __("Transaction originally denied"); break;
-            case 506: return __("Confirmation data not valid"); break;
-            case 507: return __("Unexpected error"); break;
-            case 508: return __("Transaction still in process"); break;
-            case 509: return __("Unexpected error"); break;
-            case 510: return __("Refund is not possible"); break;
-            case 511: return __("Unexpected error"); break;
-            case 512: return __("Card issuer not available right now. Please try again later"); break;
-            case 513: return __("Unexpected error"); break;
-            case 514: return __("Unexpected error"); break;
-            case 515: return __("Unexpected error"); break;
-            case 516: return __("Unexpected error"); break;
-            case 517: return __("Unexpected error"); break;
-            case 518: return __("Unexpected error"); break;
-            case 519: return __("Unexpected error"); break;
-            case 520: return __("Unexpected error"); break;
-            case 521: return __("Unexpected error"); break;
-            case 522: return __("Unexpected error"); break;
-            case 523: return __("Unexpected error"); break;
-            case 524: return __("Unexpected error"); break;
-            case 525: return __("Unexpected error"); break;
-            case 526: return __("Unexpected error"); break;
-            case 527: return __("TransactionType desconocido"); break;
-            case 528: return __("Unexpected error"); break;
-            case 529: return __("Unexpected error"); break;
-            case 530: return __("Unexpected error"); break;
-            case 531: return __("Unexpected error"); break;
-            case 532: return __("Unexpected error"); break;
-            case 533: return __("Unexpected error"); break;
-            case 534: return __("Unexpected error"); break;
-            case 535: return __("Unexpected error"); break;
-            case 536: return __("Unexpected error"); break;
-            case 537: return __("Unexpected error"); break;
-            case 538: return __("Not cancelable operation"); break;
-            case 539: return __("Unexpected error"); break;
-            case 540: return __("Unexpected error"); break;
-            case 541: return __("Unexpected error"); break;
-            case 542: return __("Unexpected error"); break;
-            case 543: return __("Unexpected error"); break;
-            case 544: return __("Unexpected error"); break;
-            case 545: return __("Unexpected error"); break;
-            case 546: return __("Unexpected error"); break;
-            case 547: return __("Unexpected error"); break;
-            case 548: return __("Unexpected error"); break;
-            case 549: return __("Unexpected error"); break;
-            case 550: return __("Unexpected error"); break;
-            case 551: return __("Unexpected error"); break;
-            case 552: return __("Unexpected error"); break;
-            case 553: return __("Unexpected error"); break;
-            case 554: return __("Unexpected error"); break;
-            case 555: return __("Could not find the previous operation"); break;
-            case 556: return __("Data inconsistency in cancellation validation"); break;
-            case 557: return __("Delayed payment code does not exists"); break;
-            case 558: return __("Unexpected error"); break;
-            case 559: return __("Unexpected error"); break;
-            case 560: return __("Unexpected error"); break;
-            case 561: return __("Unexpected error"); break;
-            case 562: return __("Credit card does not allow preauthorizations"); break;
-            case 563: return __("Data inconsistency in confirmation"); break;
-            case 564: return __("Unexpected error"); break;
-            case 565: return __("Unexpected error"); break;
-            case 567: return __("Refund operation not correctly specified"); break;
-            case 568: return __("Online communication incorrect"); break;
-            case 569: return __("Denied operation"); break;
-            case 1000: return __("Account not found. Review your settings"); break;
-            case 1001: return __("User not found. Please contact your administrator"); break;
-            case 1002: return __("External provider signature error. Contact your service provider"); break;
-            case 1003: return __("Signature not valid. Please review your settings"); break;
-            case 1004: return __("Forbidden access"); break;
-            case 1005: return __("Invalid credit card format"); break;
-            case 1006: return __("Data error: Validation code"); break;
-            case 1007: return __("Data error: Expiration date"); break;
-            case 1008: return __("Preauthorization reference not found"); break;
-            case 1009: return __("Preauthorization data could not be found"); break;
-            case 1010: return __("Could not send cancellation. Please try again later"); break;
-            case 1011: return __("Could not connect to host"); break;
-            case 1012: return __("Could not resolve proxy address"); break;
-            case 1013: return __("Could not resolve host"); break;
-            case 1014: return __("Initialization failed"); break;
-            case 1015: return __("Could not find HTTP resource"); break;
-            case 1016: return __("The HTTP options range is not valid"); break;
-            case 1017: return __("The POST is not correctly built"); break;
-            case 1018: return __("The username is not correctly formatted"); break;
-            case 1019: return __("Operation timeout exceeded"); break;
-            case 1020: return __("Insufficient memory"); break;
-            case 1021: return __("Could not connect to SSL host"); break;
-            case 1022: return __("Protocol not supported"); break;
-            case 1023: return __("Given URL is not correctly formatted and cannot be used"); break;
-            case 1024: return __("URL user is not correctly formatted"); break;
-            case 1025: return __("Cannot register available resources to complete current operation"); break;
-            case 1026: return __("Duplicated external reference"); break;
-            case 1027: return __("Total refunds cannot exceed original payment"); break;
-            case 1028: return __("Account not active. Please contact PAYCOMET"); break;
-            case 1029: return __("Account still not certified. Please contact PAYCOMET"); break;
-            case 1030: return __("Product is marked for deletion and cannot be used"); break;
-            case 1031: return __("Insufficient rights"); break;
-            case 1032: return __("Product cannot be used under test environment"); break;
-            case 1033: return __("Product cannot be used under production environment"); break;
-            case 1034: return __("It was not possible to send the refund request"); break;
-            case 1035: return __("Error in field operation origin IP"); break;
-            case 1036: return __("Error in XML format"); break;
-            case 1037: return __("Root element is not correct"); break;
-            case 1038: return __("Field DS_MERCHANT_AMOUNT incorrect"); break;
-            case 1039: return __("Field DS_MERCHANT_ORDER incorrect"); break;
-            case 1040: return __("Field DS_MERCHANT_MERCHANTCODE incorrect"); break;
-            case 1041: return __("Field DS_MERCHANT_CURRENCY incorrect"); break;
-            case 1042: return __("Field DS_MERCHANT_PAN incorrect"); break;
-            case 1043: return __("Field DS_MERCHANT_CVV2 incorrect"); break;
-            case 1044: return __("Field DS_MERCHANT_TRANSACTIONTYPE incorrect"); break;
-            case 1045: return __("Field DS_MERCHANT_TERMINAL incorrect"); break;
-            case 1046: return __("Field DS_MERCHANT_EXPIRYDATE incorrect"); break;
-            case 1047: return __("Field DS_MERCHANT_MERCHANTSIGNATURE incorrect"); break;
-            case 1048: return __("Field DS_ORIGINAL_IP incorrect"); break;
-            case 1049: return __("Client not found"); break;
-            case 1050: return __("Preauthorization amount cannot be greater than previous preauthorization amount"); break;
-            case 1099: return __("Unexpected error"); break;
-            case 1100: return __("Card diary limit exceeds"); break;
-            case 1103: return __("ACCOUNT field error"); break;
-            case 1104: return __("USERCODE field error"); break;
-            case 1105: return __("TERMINAL field error"); break;
-            case 1106: return __("OPERATION field error"); break;
-            case 1107: return __("REFERENCE field error"); break;
-            case 1108: return __("AMOUNT field error"); break;
-            case 1109: return __("CURRENCY field error"); break;
-            case 1110: return __("SIGNATURE field error"); break;
-            case 1120: return __("Operation unavailable"); break;
-            case 1121: return __("Client not found"); break;
-            case 1122: return __("User not found. Contact PAYCOMET"); break;
-            case 1123: return __("Invalid signature. Please check your configuration"); break;
-            case 1124: return __("Operation not available with the specified user"); break;
-            case 1125: return __("Invalid operation in a currency other than Euro"); break;
-            case 1127: return __("Quantity zero or invalid"); break;
-            case 1128: return __("Current currency conversion invalid"); break;
-            case 1129: return __("Invalid amount"); break;
-            case 1130: return __("Product not found"); break;
-            case 1131: return __("Invalid operation with the current currency"); break;
-            case 1132: return __("Invalid operation with a different article of the Euro currency"); break;
-            case 1133: return __("Info button corrupt"); break;
-            case 1134: return __("The subscription may not exceed the expiration date of the card"); break;
-            case 1135: return __("DS_EXECUTE can not be true if DS_SUBSCRIPTION_STARTDATE is different from today."); break;
-            case 1136: return __("PAYCOMET_OPERATIONS_MERCHANTCODE field error"); break;
-            case 1137: return __("PAYCOMET_OPERATIONS_TERMINAL must be Array"); break;
-            case 1138: return __("PAYCOMET_OPERATIONS_OPERATIONS must be Array"); break;
-            case 1139: return __("PAYCOMET_OPERATIONS_SIGNATURE field error"); break;
-            case 1140: return __("Can not find any of the PAYCOMET_OPERATIONS_TERMINAL"); break;
-            case 1141: return __("Error in the date range requested"); break;
-            case 1142: return __("The application can not have a length greater than 2 years"); break;
-            case 1143: return __("The operation state is incorrect"); break;
-            case 1144: return __("Error in the amounts of the search"); break;
-            case 1145: return __("The type of operation requested does not exist"); break;
-            case 1146: return __("Sort Order unrecognized"); break;
-            case 1147: return __("PAYCOMET_OPERATIONS_SORTORDER unrecognized"); break;
-            case 1148: return __("Subscription start date wrong"); break;
-            case 1149: return __("Subscription end date wrong"); break;
-            case 1150: return __("Frequency error in the subscription"); break;
-            case 1151: return __("Invalid usuarioXML"); break;
-            case 1152: return __("Invalid codigoCliente"); break;
-            case 1153: return __("Invalid usuarios parameter"); break;
-            case 1154: return __("Invalid firma parameter"); break;
-            case 1155: return __("Invalid usuarios parameter format"); break;
-            case 1156: return __("Invalid type"); break;
-            case 1157: return __("Invalid name"); break;
-            case 1158: return __("Invalid surname"); break;
-            case 1159: return __("Invalid email"); break;
-            case 1160: return __("Invalid password"); break;
-            case 1161: return __("Invalid language"); break;
-            case 1162: return __("Invalid maxamount"); break;
-            case 1163: return __("Invalid multicurrency"); break;
-            case 1165: return __("Invalid permissions_specs. Format not allowed"); break;
-            case 1166: return __("Invalid permissions_products. Format not allowed"); break;
-            case 1167: return __("Invalid email. Format not allowed"); break;
-            case 1168: return __("Weak or invalid password"); break;
-            case 1169: return __("Invalid value for type parameter"); break;
-            case 1170: return __("Invalid value for language parameter"); break;
-            case 1171: return __("Invalid format for maxamount parameter"); break;
-            case 1172: return __("Invalid multicurrency. Format not allowed"); break;
-            case 1173: return __("Invalid permission_id – permissions_specs. Not allowed"); break;
-            case 1174: return __("Invalid user"); break;
-            case 1175: return __("Invalid credentials"); break;
-            case 1176: return __("Account not found"); break;
-            case 1177: return __("User not found"); break;
-            case 1178: return __("Invalid signature"); break;
-            case 1179: return __("Account without products"); break;
-            case 1180: return __("Invalid product_id - permissions_products. Not allowed"); break;
-            case 1181: return __("Invalid permission_id -permissions_products. Not allowed"); break;
-            case 1185: return __("Minimun limit not allowed"); break;
-            case 1186: return __("Maximun limit not allowed"); break;
-            case 1187: return __("Daily limit not allowed"); break;
-            case 1188: return __("Monthly limit not allowed"); break;
-            case 1189: return __("Max amount (same card / last 24 h.) not allowed"); break;
-            case 1190: return __("Max amount (same card / last 24 h. / same IP address) not allowed"); break;
-            case 1191: return __("Day / IP address limit (all cards) not allowed"); break;
-            case 1192: return __("Country (merchant IP address) not allowed"); break;
-            case 1193: return __("Card type (credit / debit) not allowed"); break;
-            case 1194: return __("Card brand not allowed"); break;
-            case 1195: return __("Card Category not allowed"); break;
-            case 1196: return __("Authorization from different country than card issuer, not allowed"); break;
-            case 1197: return __("Denied. Filter: Card country issuer not allowed"); break;
-            case 1198: return __("Scoring limit exceeded"); break;
-            case 1200: return __("Denied. Filter: same card, different country last 24 h."); break;
-            case 1201: return __("Number of erroneous consecutive attempts with the same card exceeded"); break;
-            case 1202: return __("Number of failed attempts (last 30 minutes) from the same ip address exceeded"); break;
-            case 1203: return __("Wrong or not configured PayPal credentials"); break;
-            case 1204: return __("Wrong token received"); break;
-            case 1205: return __("Can not perform the operation"); break;
-            case 1206: return __("ProviderID not available"); break;
-            case 1207: return __("Operations parameter missing or not in a correct format"); break;
-            case 1208: return __("PaycometMerchant parameter missing"); break;
-            case 1209: return __("MerchatID parameter missing"); break;
-            case 1210: return __("TerminalID parameter missing"); break;
-            case 1211: return __("TpvID parameter missing"); break;
-            case 1212: return __("OperationType parameter missing"); break;
-            case 1213: return __("OperationResult parameter missing"); break;
-            case 1214: return __("OperationAmount parameter missing"); break;
-            case 1215: return __("OperationCurrency parameter missing"); break;
-            case 1216: return __("OperationDatetime parameter missing"); break;
-            case 1217: return __("OriginalAmount parameter missing"); break;
-            case 1218: return __("Pan parameter missing"); break;
-            case 1219: return __("ExpiryDate parameter missing"); break;
-            case 1220: return __("Reference parameter missing"); break;
-            case 1221: return __("Signature parameter missing"); break;
-            case 1222: return __("OriginalIP parameter missing or not in a correct format"); break;
-            case 1223: return __("Authcode / errorCode parameter missing"); break;
-            case 1224: return __("Product of the operation missing"); break;
-            case 1225: return __("The type of operation is not supported"); break;
-            case 1226: return __("The result of the operation is not supported"); break;
-            case 1227: return __("The transaction currency is not supported"); break;
-            case 1228: return __("The date of the transaction is not in a correct format"); break;
-            case 1229: return __("The signature is not correct"); break;
-            case 1230: return __("Can not find the associated account information"); break;
-            case 1231: return __("Can not find the associated product information"); break;
-            case 1232: return __("Can not find the associated user information"); break;
-            case 1233: return __("The product is not set as multicurrency"); break;
-            case 1234: return __("The amount of the transaction is not in a correct format"); break;
-            case 1235: return __("The original amount of the transaction is not in a correct format"); break;
-            case 1236: return __("The card does not have the correct format"); break;
-            case 1237: return __("The expiry date of the card is not in a correct format"); break;
-            case 1238: return __("Can not initialize the service"); break;
-            case 1239: return __("Can not initialize the service"); break;
-            case 1240: return __("Method not implemented"); break;
-            case 1241: return __("Can not initialize the service"); break;
-            case 1242: return __("Service can not be completed"); break;
-            case 1243: return __("OperationCode parameter missing"); break;
-            case 1244: return __("bankName parameter missing"); break;
-            case 1245: return __("csb parameter missing"); break;
-            case 1246: return __("userReference parameter missing"); break;
-            case 1247: return __("Can not find the associated FUC"); break;
-            case 1248: return __("Duplicate xref. Pending operation."); break;
-            case 1249: return __("[DS_]AGENT_FEE parameter missing"); break;
-            case 1250: return __("[DS_]AGENT_FEE parameter is not in a correct format"); break;
-            case 1251: return __("DS_AGENT_FEE parameter is not correct"); break;
-            case 1252: return __("CANCEL_URL parameter missing"); break;
-            case 1253: return __("CANCEL_URL parameter is not in a correct format"); break;
-            case 1254: return __("Commerce with secure cardholder and cardholder without secure purchase key"); break;
-            case 1255: return __("Call terminated by the client"); break;
-            case 1256: return __("Call terminated, incorrect attempts exceeded"); break;
-            case 1257: return __("Call terminated, operation attempts exceeded"); break;
-            case 1258: return __("stationID not available"); break;
-            case 1259: return __("It has not been possible to establish the IVR session"); break;
-            case 1260: return __("merchantCode parameter missing"); break;
-            case 1261: return __("The merchantCode parameter is incorrect"); break;
-            case 1262: return __("terminalIDDebtor parameter missing"); break;
-            case 1263: return __("terminalIDCreditor parameter missing"); break;
-            case 1264: return __("Authorisations for carrying out the operation not available"); break;
-            case 1265: return __("The Iban account (terminalIDDebtor) is invalid"); break;
-            case 1266: return __("The Iban account (terminalIDCreditor) is invalid"); break;
-            case 1267: return __("The BicCode of the Iban account (terminalIDDebtor) is invalid"); break;
-            case 1268: return __("The BicCode of the Iban account (terminalIDCreditor) is invalid"); break;
-            case 1269: return __("operationOrder parameter missing"); break;
-            case 1270: return __("The operationOrder parameter does not have the correct format"); break;
-            case 1271: return __("The operationAmount parameter does not have the correct format"); break;
-            case 1272: return __("The operationDatetime parameter does not have the correct format"); break;
-            case 1273: return __("The operationConcept parameter contains invalid characters or exceeds 140 characters"); break;
-            case 1274: return __("It has not been possible to record the SEPA operation"); break;
-            case 1275: return __("It has not been possible to record the SEPA operation"); break;
-            case 1276: return __("Can not create an operation token"); break;
-            case 1277: return __("Invalid scoring value"); break;
-            case 1278: return __("The language parameter is not in a correct format"); break;
-            case 1279: return __("The cardholder name is not in a correct format"); break;
-            case 1280: return __("The card does not have the correct format"); break;
-            case 1281: return __("The month does not have the correct format"); break;
-            case 1282: return __("The year does not have the correct format"); break;
-            case 1283: return __("The cvc2 does not have the correct format"); break;
-            case 1284: return __("The JETID parameter is not in a correct format"); break;
-            case 1288: return __("The splitId parameter is not valid"); break;
-            case 1289: return __("The splitId parameter is not allowed"); break;
-            case 1290: return __("This terminal don't allow split transfers"); break;
-            case 1291: return __("It has not been possible to record the split transfer operation"); break;
-            case 1292: return __("Original payment's date cannot exceed 90 days"); break;
-            case 1293: return __("Original split tansfer not found"); break;
-            case 1294: return __("Total reversal cannot exceed original split transfer"); break;
-            case 1295: return __("It has not been possible to record the split transfer reversal operation"); break;
-
+        switch ($code) {
+            case 0:
+                return __("No error");
+            case 1:
+                return __("Error");
+            case 100:
+                return __("Expired credit card");
+            case 101:
+                return __("Credit card blacklisted");
+            case 102:
+                return __("Operation not allowed for the credit card type");
+            case 103:
+                return __("Please, call the credit card issuer");
+            case 104:
+                return __("Unexpected error");
+            case 105:
+                return __("Insufficient funds");
+            case 106:
+                return __("Credit card not registered or not logged by the issuer");
+            case 107:
+                return __("Data error. Validation Code");
+            case 108:
+                return __("PAN Check Error");
+            case 109:
+                return __("Expiry date error");
+            case 110:
+                return __("Data error");
+            case 111:
+                return __("CVC2 block incorrect");
+            case 112:
+                return __("Please, call the credit card issuer");
+            case 113:
+                return __("Credit card not valid");
+            case 114:
+                return __("The credit card has credit restrictions");
+            case 115:
+                return __("Card issuer could not validate card owner");
+            case 116:
+                return __("Payment not allowed in off-line authorization");
+            case 118:
+                return __("Expired credit card. Please capture card");
+            case 119:
+                return __("Credit card blacklisted. Please capture card");
+            case 120:
+                return __("Credit card lost or stolen. Please capture card");
+            case 121:
+                return __("Error in CVC2. Please capture card");
+            case 122:
+                return __("Error en Pre-Transaction process. Try again later.");
+            case 123:
+                return __("Operation denied. Please capture card");
+            case 124:
+                return __("Closing with agreement");
+            case 125:
+                return __("Closing without agreement");
+            case 126:
+                return __("Cannot close right now");
+            case 127:
+                return __("Invalid parameter");
+            case 128:
+                return __("Transactions were not accomplished");
+            case 129:
+                return __("Duplicated internal reference");
+            case 130:
+                return __("Original operation not found. Could not refund");
+            case 131:
+                return __("Expired preauthorization");
+            case 132:
+                return __("Operation not valid with selected currency");
+            case 133:
+                return __("Error in message format");
+            case 134:
+                return __("Message not recognized by the system");
+            case 135:
+                return __("CVC2 block incorrect");
+            case 137:
+                return __("Credit card not valid");
+            case 138:
+                return __("Gateway message error");
+            case 139:
+                return __("Gateway format error");
+            case 140:
+                return __("Credit card does not exist");
+            case 141:
+                return __("Amount zero or not valid");
+            case 142:
+                return __("Operation canceled");
+            case 143:
+                return __("Authentification error");
+            case 144:
+                return __("Denegation by security level");
+            case 145:
+                return __("Error in PUC message. Please contact PAYCOMET");
+            case 146:
+                return __("System error");
+            case 147:
+                return __("Duplicated transaction");
+            case 148:
+                return __("MAC error");
+            case 149:
+                return __("Settlement rejected");
+            case 150:
+                return __("System date/time not synchronized");
+            case 151:
+                return __("Invalid card expiration date");
+            case 152:
+                return __("Could not find any preauthorization with given data");
+            case 153:
+                return __("Cannot find requested data");
+            case 154:
+                return __("Cannot operate with given credit card");
+            case 155:
+                return __("This method requires activation of the VHASH protocol");
+            case 500:
+                return __("Unexpected error");
+            case 501:
+                return __("Unexpected error");
+            case 502:
+                return __("Unexpected error");
+            case 504:
+                return __("Transaction already cancelled");
+            case 505:
+                return __("Transaction originally denied");
+            case 506:
+                return __("Confirmation data not valid");
+            case 507:
+                return __("Unexpected error");
+            case 508:
+                return __("Transaction still in process");
+            case 509:
+                return __("Unexpected error");
+            case 510:
+                return __("Refund is not possible");
+            case 511:
+                return __("Unexpected error");
+            case 512:
+                return __("Card issuer not available right now. Please try again later");
+            case 513:
+                return __("Unexpected error");
+            case 514:
+                return __("Unexpected error");
+            case 515:
+                return __("Unexpected error");
+            case 516:
+                return __("Unexpected error");
+            case 517:
+                return __("Unexpected error");
+            case 518:
+                return __("Unexpected error");
+            case 519:
+                return __("Unexpected error");
+            case 520:
+                return __("Unexpected error");
+            case 521:
+                return __("Unexpected error");
+            case 522:
+                return __("Unexpected error");
+            case 523:
+                return __("Unexpected error");
+            case 524:
+                return __("Unexpected error");
+            case 525:
+                return __("Unexpected error");
+            case 526:
+                return __("Unexpected error");
+            case 527:
+                return __("TransactionType desconocido");
+            case 528:
+                return __("Unexpected error");
+            case 529:
+                return __("Unexpected error");
+            case 530:
+                return __("Unexpected error");
+            case 531:
+                return __("Unexpected error");
+            case 532:
+                return __("Unexpected error");
+            case 533:
+                return __("Unexpected error");
+            case 534:
+                return __("Unexpected error");
+            case 535:
+                return __("Unexpected error");
+            case 536:
+                return __("Unexpected error");
+            case 537:
+                return __("Unexpected error");
+            case 538:
+                return __("Not cancelable operation");
+            case 539:
+                return __("Unexpected error");
+            case 540:
+                return __("Unexpected error");
+            case 541:
+                return __("Unexpected error");
+            case 542:
+                return __("Unexpected error");
+            case 543:
+                return __("Unexpected error");
+            case 544:
+                return __("Unexpected error");
+            case 545:
+                return __("Unexpected error");
+            case 546:
+                return __("Unexpected error");
+            case 547:
+                return __("Unexpected error");
+            case 548:
+                return __("Unexpected error");
+            case 549:
+                return __("Unexpected error");
+            case 550:
+                return __("Unexpected error");
+            case 551:
+                return __("Unexpected error");
+            case 552:
+                return __("Unexpected error");
+            case 553:
+                return __("Unexpected error");
+            case 554:
+                return __("Unexpected error");
+            case 555:
+                return __("Could not find the previous operation");
+            case 556:
+                return __("Data inconsistency in cancellation validation");
+            case 557:
+                return __("Delayed payment code does not exists");
+            case 558:
+                return __("Unexpected error");
+            case 559:
+                return __("Unexpected error");
+            case 560:
+                return __("Unexpected error");
+            case 561:
+                return __("Unexpected error");
+            case 562:
+                return __("Credit card does not allow preauthorizations");
+            case 563:
+                return __("Data inconsistency in confirmation");
+            case 564:
+                return __("Unexpected error");
+            case 565:
+                return __("Unexpected error");
+            case 567:
+                return __("Refund operation not correctly specified");
+            case 568:
+                return __("Online communication incorrect");
+            case 569:
+                return __("Denied operation");
+            case 1000:
+                return __("Account not found. Review your settings");
+            case 1001:
+                return __("User not found. Please contact your administrator");
+            case 1002:
+                return __("External provider signature error. Contact your service provider");
+            case 1003:
+                return __("Signature not valid. Please review your settings");
+            case 1004:
+                return __("Forbidden access");
+            case 1005:
+                return __("Invalid credit card format");
+            case 1006:
+                return __("Data error: Validation code");
+            case 1007:
+                return __("Data error: Expiration date");
+            case 1008:
+                return __("Preauthorization reference not found");
+            case 1009:
+                return __("Preauthorization data could not be found");
+            case 1010:
+                return __("Could not send cancellation. Please try again later");
+            case 1011:
+                return __("Could not connect to host");
+            case 1012:
+                return __("Could not resolve proxy address");
+            case 1013:
+                return __("Could not resolve host");
+            case 1014:
+                return __("Initialization failed");
+            case 1015:
+                return __("Could not find HTTP resource");
+            case 1016:
+                return __("The HTTP options range is not valid");
+            case 1017:
+                return __("The POST is not correctly built");
+            case 1018:
+                return __("The username is not correctly formatted");
+            case 1019:
+                return __("Operation timeout exceeded");
+            case 1020:
+                return __("Insufficient memory");
+            case 1021:
+                return __("Could not connect to SSL host");
+            case 1022:
+                return __("Protocol not supported");
+            case 1023:
+                return __("Given URL is not correctly formatted and cannot be used");
+            case 1024:
+                return __("URL user is not correctly formatted");
+            case 1025:
+                return __("Cannot register available resources to complete current operation");
+            case 1026:
+                return __("Duplicated external reference");
+            case 1027:
+                return __("Total refunds cannot exceed original payment");
+            case 1028:
+                return __("Account not active. Please contact PAYCOMET");
+            case 1029:
+                return __("Account still not certified. Please contact PAYCOMET");
+            case 1030:
+                return __("Product is marked for deletion and cannot be used");
+            case 1031:
+                return __("Insufficient rights");
+            case 1032:
+                return __("Product cannot be used under test environment");
+            case 1033:
+                return __("Product cannot be used under production environment");
+            case 1034:
+                return __("It was not possible to send the refund request");
+            case 1035:
+                return __("Error in field operation origin IP");
+            case 1036:
+                return __("Error in XML format");
+            case 1037:
+                return __("Root element is not correct");
+            case 1038:
+                return __("Field DS_MERCHANT_AMOUNT incorrect");
+            case 1039:
+                return __("Field DS_MERCHANT_ORDER incorrect");
+            case 1040:
+                return __("Field DS_MERCHANT_MERCHANTCODE incorrect");
+            case 1041:
+                return __("Field DS_MERCHANT_CURRENCY incorrect");
+            case 1042:
+                return __("Field DS_MERCHANT_PAN incorrect");
+            case 1043:
+                return __("Field DS_MERCHANT_CVV2 incorrect");
+            case 1044:
+                return __("Field DS_MERCHANT_TRANSACTIONTYPE incorrect");
+            case 1045:
+                return __("Field DS_MERCHANT_TERMINAL incorrect");
+            case 1046:
+                return __("Field DS_MERCHANT_EXPIRYDATE incorrect");
+            case 1047:
+                return __("Field DS_MERCHANT_MERCHANTSIGNATURE incorrect");
+            case 1048:
+                return __("Field DS_ORIGINAL_IP incorrect");
+            case 1049:
+                return __("Client not found");
+            case 1050:
+                return __("Preauthorization amount cannot be greater than previous preauthorization amount");
+            case 1099:
+                return __("Unexpected error");
+            case 1100:
+                return __("Card diary limit exceeds");
+            case 1103:
+                return __("ACCOUNT field error");
+            case 1104:
+                return __("USERCODE field error");
+            case 1105:
+                return __("TERMINAL field error");
+            case 1106:
+                return __("OPERATION field error");
+            case 1107:
+                return __("REFERENCE field error");
+            case 1108:
+                return __("AMOUNT field error");
+            case 1109:
+                return __("CURRENCY field error");
+            case 1110:
+                return __("SIGNATURE field error");
+            case 1120:
+                return __("Operation unavailable");
+            case 1121:
+                return __("Client not found");
+            case 1122:
+                return __("User not found. Contact PAYCOMET");
+            case 1123:
+                return __("Invalid signature. Please check your configuration");
+            case 1124:
+                return __("Operation not available with the specified user");
+            case 1125:
+                return __("Invalid operation in a currency other than Euro");
+            case 1127:
+                return __("Quantity zero or invalid");
+            case 1128:
+                return __("Current currency conversion invalid");
+            case 1129:
+                return __("Invalid amount");
+            case 1130:
+                return __("Product not found");
+            case 1131:
+                return __("Invalid operation with the current currency");
+            case 1132:
+                return __("Invalid operation with a different article of the Euro currency");
+            case 1133:
+                return __("Info button corrupt");
+            case 1134:
+                return __("The subscription may not exceed the expiration date of the card");
+            case 1135:
+                return __("DS_EXECUTE can not be true if DS_SUBSCRIPTION_STARTDATE is different from today.");
+            case 1136:
+                return __("PAYCOMET_OPERATIONS_MERCHANTCODE field error");
+            case 1137:
+                return __("PAYCOMET_OPERATIONS_TERMINAL must be Array");
+            case 1138:
+                return __("PAYCOMET_OPERATIONS_OPERATIONS must be Array");
+            case 1139:
+                return __("PAYCOMET_OPERATIONS_SIGNATURE field error");
+            case 1140:
+                return __("Can not find any of the PAYCOMET_OPERATIONS_TERMINAL");
+            case 1141:
+                return __("Error in the date range requested");
+            case 1142:
+                return __("The application can not have a length greater than 2 years");
+            case 1143:
+                return __("The operation state is incorrect");
+            case 1144:
+                return __("Error in the amounts of the search");
+            case 1145:
+                return __("The type of operation requested does not exist");
+            case 1146:
+                return __("Sort Order unrecognized");
+            case 1147:
+                return __("PAYCOMET_OPERATIONS_SORTORDER unrecognized");
+            case 1148:
+                return __("Subscription start date wrong");
+            case 1149:
+                return __("Subscription end date wrong");
+            case 1150:
+                return __("Frequency error in the subscription");
+            case 1151:
+                return __("Invalid usuarioXML");
+            case 1152:
+                return __("Invalid codigoCliente");
+            case 1153:
+                return __("Invalid usuarios parameter");
+            case 1154:
+                return __("Invalid firma parameter");
+            case 1155:
+                return __("Invalid usuarios parameter format");
+            case 1156:
+                return __("Invalid type");
+            case 1157:
+                return __("Invalid name");
+            case 1158:
+                return __("Invalid surname");
+            case 1159:
+                return __("Invalid email");
+            case 1160:
+                return __("Invalid password");
+            case 1161:
+                return __("Invalid language");
+            case 1162:
+                return __("Invalid maxamount");
+            case 1163:
+                return __("Invalid multicurrency");
+            case 1165:
+                return __("Invalid permissions_specs. Format not allowed");
+            case 1166:
+                return __("Invalid permissions_products. Format not allowed");
+            case 1167:
+                return __("Invalid email. Format not allowed");
+            case 1168:
+                return __("Weak or invalid password");
+            case 1169:
+                return __("Invalid value for type parameter");
+            case 1170:
+                return __("Invalid value for language parameter");
+            case 1171:
+                return __("Invalid format for maxamount parameter");
+            case 1172:
+                return __("Invalid multicurrency. Format not allowed");
+            case 1173:
+                return __("Invalid permission_id – permissions_specs. Not allowed");
+            case 1174:
+                return __("Invalid user");
+            case 1175:
+                return __("Invalid credentials");
+            case 1176:
+                return __("Account not found");
+            case 1177:
+                return __("User not found");
+            case 1178:
+                return __("Invalid signature");
+            case 1179:
+                return __("Account without products");
+            case 1180:
+                return __("Invalid product_id - permissions_products. Not allowed");
+            case 1181:
+                return __("Invalid permission_id -permissions_products. Not allowed");
+            case 1185:
+                return __("Minimun limit not allowed");
+            case 1186:
+                return __("Maximun limit not allowed");
+            case 1187:
+                return __("Daily limit not allowed");
+            case 1188:
+                return __("Monthly limit not allowed");
+            case 1189:
+                return __("Max amount (same card / last 24 h.) not allowed");
+            case 1190:
+                return __("Max amount (same card / last 24 h. / same IP address) not allowed");
+            case 1191:
+                return __("Day / IP address limit (all cards) not allowed");
+            case 1192:
+                return __("Country (merchant IP address) not allowed");
+            case 1193:
+                return __("Card type (credit / debit) not allowed");
+            case 1194:
+                return __("Card brand not allowed");
+            case 1195:
+                return __("Card Category not allowed");
+            case 1196:
+                return __("Authorization from different country than card issuer, not allowed");
+            case 1197:
+                return __("Denied. Filter: Card country issuer not allowed");
+            case 1198:
+                return __("Scoring limit exceeded");
+            case 1200:
+                return __("Denied. Filter: same card, different country last 24 h.");
+            case 1201:
+                return __("Number of erroneous consecutive attempts with the same card exceeded");
+            case 1202:
+                return __("Number of failed attempts (last 30 minutes) from the same ip address exceeded");
+            case 1203:
+                return __("Wrong or not configured PayPal credentials");
+            case 1204:
+                return __("Wrong token received");
+            case 1205:
+                return __("Can not perform the operation");
+            case 1206:
+                return __("ProviderID not available");
+            case 1207:
+                return __("Operations parameter missing or not in a correct format");
+            case 1208:
+                return __("PaycometMerchant parameter missing");
+            case 1209:
+                return __("MerchatID parameter missing");
+            case 1210:
+                return __("TerminalID parameter missing");
+            case 1211:
+                return __("TpvID parameter missing");
+            case 1212:
+                return __("OperationType parameter missing");
+            case 1213:
+                return __("OperationResult parameter missing");
+            case 1214:
+                return __("OperationAmount parameter missing");
+            case 1215:
+                return __("OperationCurrency parameter missing");
+            case 1216:
+                return __("OperationDatetime parameter missing");
+            case 1217:
+                return __("OriginalAmount parameter missing");
+            case 1218:
+                return __("Pan parameter missing");
+            case 1219:
+                return __("ExpiryDate parameter missing");
+            case 1220:
+                return __("Reference parameter missing");
+            case 1221:
+                return __("Signature parameter missing");
+            case 1222:
+                return __("OriginalIP parameter missing or not in a correct format");
+            case 1223:
+                return __("Authcode / errorCode parameter missing");
+            case 1224:
+                return __("Product of the operation missing");
+            case 1225:
+                return __("The type of operation is not supported");
+            case 1226:
+                return __("The result of the operation is not supported");
+            case 1227:
+                return __("The transaction currency is not supported");
+            case 1228:
+                return __("The date of the transaction is not in a correct format");
+            case 1229:
+                return __("The signature is not correct");
+            case 1230:
+                return __("Can not find the associated account information");
+            case 1231:
+                return __("Can not find the associated product information");
+            case 1232:
+                return __("Can not find the associated user information");
+            case 1233:
+                return __("The product is not set as multicurrency");
+            case 1234:
+                return __("The amount of the transaction is not in a correct format");
+            case 1235:
+                return __("The original amount of the transaction is not in a correct format");
+            case 1236:
+                return __("The card does not have the correct format");
+            case 1237:
+                return __("The expiry date of the card is not in a correct format");
+            case 1238:
+                return __("Can not initialize the service");
+            case 1239:
+                return __("Can not initialize the service");
+            case 1240:
+                return __("Method not implemented");
+            case 1241:
+                return __("Can not initialize the service");
+            case 1242:
+                return __("Service can not be completed");
+            case 1243:
+                return __("OperationCode parameter missing");
+            case 1244:
+                return __("bankName parameter missing");
+            case 1245:
+                return __("csb parameter missing");
+            case 1246:
+                return __("userReference parameter missing");
+            case 1247:
+                return __("Can not find the associated FUC");
+            case 1248:
+                return __("Duplicate xref. Pending operation.");
+            case 1249:
+                return __("[DS_]AGENT_FEE parameter missing");
+            case 1250:
+                return __("[DS_]AGENT_FEE parameter is not in a correct format");
+            case 1251:
+                return __("DS_AGENT_FEE parameter is not correct");
+            case 1252:
+                return __("CANCEL_URL parameter missing");
+            case 1253:
+                return __("CANCEL_URL parameter is not in a correct format");
+            case 1254:
+                return __("Commerce with secure cardholder and cardholder without secure purchase key");
+            case 1255:
+                return __("Call terminated by the client");
+            case 1256:
+                return __("Call terminated, incorrect attempts exceeded");
+            case 1257:
+                return __("Call terminated, operation attempts exceeded");
+            case 1258:
+                return __("stationID not available");
+            case 1259:
+                return __("It has not been possible to establish the IVR session");
+            case 1260:
+                return __("merchantCode parameter missing");
+            case 1261:
+                return __("The merchantCode parameter is incorrect");
+            case 1262:
+                return __("terminalIDDebtor parameter missing");
+            case 1263:
+                return __("terminalIDCreditor parameter missing");
+            case 1264:
+                return __("Authorisations for carrying out the operation not available");
+            case 1265:
+                return __("The Iban account (terminalIDDebtor) is invalid");
+            case 1266:
+                return __("The Iban account (terminalIDCreditor) is invalid");
+            case 1267:
+                return __("The BicCode of the Iban account (terminalIDDebtor) is invalid");
+            case 1268:
+                return __("The BicCode of the Iban account (terminalIDCreditor) is invalid");
+            case 1269:
+                return __("operationOrder parameter missing");
+            case 1270:
+                return __("The operationOrder parameter does not have the correct format");
+            case 1271:
+                return __("The operationAmount parameter does not have the correct format");
+            case 1272:
+                return __("The operationDatetime parameter does not have the correct format");
+            case 1273:
+                return __("The operationConcept parameter contains invalid characters or exceeds 140 characters");
+            case 1274:
+                return __("It has not been possible to record the SEPA operation");
+            case 1275:
+                return __("It has not been possible to record the SEPA operation");
+            case 1276:
+                return __("Can not create an operation token");
+            case 1277:
+                return __("Invalid scoring value");
+            case 1278:
+                return __("The language parameter is not in a correct format");
+            case 1279:
+                return __("The cardholder name is not in a correct format");
+            case 1280:
+                return __("The card does not have the correct format");
+            case 1281:
+                return __("The month does not have the correct format");
+            case 1282:
+                return __("The year does not have the correct format");
+            case 1283:
+                return __("The cvc2 does not have the correct format");
+            case 1284:
+                return __("The JETID parameter is not in a correct format");
+            case 1288:
+                return __("The splitId parameter is not valid");
+            case 1289:
+                return __("The splitId parameter is not allowed");
+            case 1290:
+                return __("This terminal don't allow split transfers");
+            case 1291:
+                return __("It has not been possible to record the split transfer operation");
+            case 1292:
+                return __("Original payment's date cannot exceed 90 days");
+            case 1293:
+                return __("Original split tansfer not found");
+            case 1294:
+                return __("Total reversal cannot exceed original split transfer");
+            case 1295:
+                return __("It has not been possible to record the split transfer reversal operation");
         }
-
     }
 }

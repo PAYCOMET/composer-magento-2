@@ -53,20 +53,17 @@ class PaycometConfigProvider implements ConfigProviderInterface
      */
     private $methods = [];
 
-     /**
-     * Escaper
-     *
+    /**
      * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
 
-
     /**
      * PaycometConfigProvider constructor.
      *
-     * @param PaymentHelper                   $paymentHelper
+     * @param PaymentHelper                     $paymentHelper
      * @param \Paycomet\Payment\Helper\Data     $helper
-     * @param \Magento\Framework\Escaper    $escaper
+     * @param \Magento\Framework\Escaper        $escaper
      */
     public function __construct(
         PaymentHelper $paymentHelper,
@@ -102,9 +99,14 @@ class PaycometConfigProvider implements ConfigProviderInterface
                         $config['payment'] [$code]['iframeEnabled'] = $this->_helper->getConfigData('iframe_enabled');
                         $config['payment'] [$code]['iframeMode'] = $this->_helper->getConfigData('iframe_mode');
                         $config['payment'] [$code]['iframeHeight'] = $this->_helper->getConfigData('iframe_height');
-                        $config['payment'] [$code]['card_offer_save'] = ($this->_helper->getConfigData('card_offer_save') && $this->_helper->getCustomerId());
+                        $config['payment'] [$code]['card_offer_save'] = (
+                            $this->_helper->getConfigData('card_offer_save') &&
+                            $this->_helper->getCustomerId()
+                        );
                         $config['payment'] [$code]['paycometCards'] = $this->getPaycometToken($code);
-                        $config['payment'] [$code]['form_footer'] = nl2br($this->_escaper->escapeHtml($this->_helper->getConfigData('form_footer')));
+                        $config['payment'] [$code]['form_footer'] = nl2br(
+                            $this->_escaper->escapeHtml($this->_helper->getConfigData('form_footer'))
+                        );
                         $config['payment'] [$code]['integration'] = $this->_helper->getConfigData('integration');
                         $config['payment'] [$code]['jetid'] = $this->_helper->getEncryptedConfigData('jetid');
                         $config['payment'] [$code]['isActive'] = $this->_helper->getConfigData('active', null, $code);
@@ -115,7 +117,6 @@ class PaycometConfigProvider implements ConfigProviderInterface
                         $config['payment'] [$code]['redirectUrl'] = $this->getMethodRedirectUrl($code);
                         $config['payment'] [$code]['isActive'] = $this->_helper->getConfigData('active', null, $code);
                         break;
-
                 }
             }
         }
@@ -134,7 +135,6 @@ class PaycometConfigProvider implements ConfigProviderInterface
     {
         return $this->methods[$code]->getCheckoutRedirectUrl();
     }
-
 
     /**
      * Return redirect URL for method.

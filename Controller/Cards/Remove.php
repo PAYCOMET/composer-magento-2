@@ -53,17 +53,21 @@ class Remove extends \Magento\Framework\App\Action\Action
         $hash = $response["item"];
         $customer_id = $this->_customerSession->getCustomerId();
 
-
-        $this->deletePaycometCard($hash,$customer_id);
+        $this->deletePaycometCard($hash, $customer_id);
 
         $this->_redirect('paycomet_payment/cards/view');
     }
 
-
-    public function deletePaycometCard($hash,$customer_id)
+    /**
+     * Delete Paycomet Card
+     *
+     * @param string $hash
+     * @param int $customer_id
+     */
+    public function deletePaycometCard($hash, $customer_id)
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
+        $resource = $objectManager->get('\Magento\Framework\App\ResourceConnection::class');
         $connection = $resource->getConnection();
 
         $conds[] = $connection->quoteInto("hash" . ' = ?', $hash);

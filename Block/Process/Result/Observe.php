@@ -4,8 +4,11 @@ namespace Paycomet\Payment\Block\Process\Result;
 
 class Observe extends \Magento\Framework\View\Element\Template
 {
-    const OBSERVE_KEY = 'paycomet_payment_observe';
+    public const OBSERVE_KEY = 'paycomet_payment_observe';
 
+    /**
+     * @var $_observe
+     */
     private $_observe;
 
     /**
@@ -17,8 +20,8 @@ class Observe extends \Magento\Framework\View\Element\Template
      * Process constructor.
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param array                                            $data
-     * @param \Magento\Framework\Message\ManagerInterface      $messageManager
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -30,6 +33,8 @@ class Observe extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Prepare Layout
+     *
      * @return $this
      */
     public function _prepareLayout()
@@ -48,6 +53,8 @@ class Observe extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get Observe
+     *
      * @return bool
      */
     public function getObserve()

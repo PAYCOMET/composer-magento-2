@@ -5,10 +5,6 @@ namespace Paycomet\Payment\ViewModel\Apm\Instantcredit;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Class OddSimulatorViewModel
- * @package Paycomet\Payment\ViewModel\Apm\Instantcredit;
-  */
 class OddSimulatorViewModel implements \Magento\Framework\View\Element\Block\ArgumentInterface
 {
     /**
@@ -32,8 +28,8 @@ class OddSimulatorViewModel implements \Magento\Framework\View\Element\Block\Arg
      */
     private $icHelper;
 
-    const SIMULATOR_URL       = "https://instantcredit.net/simulator/ic-simulator.js";
-    const SIMULATOR_URL_TEST  = "https://instantcredit.net/simulator/test/ic-simulator.js";
+    private const SIMULATOR_URL       = "https://instantcredit.net/simulator/ic-simulator.js";
+    private const SIMULATOR_URL_TEST  = "https://instantcredit.net/simulator/test/ic-simulator.js";
 
     /**
      * OddSimulatorViewModel constructor.
@@ -58,6 +54,8 @@ class OddSimulatorViewModel implements \Magento\Framework\View\Element\Block\Arg
     }
 
     /**
+     * Get IcHelper
+     *
      * @return \Paycomet\Payment\Helper\Apm\Instantcredit\IcHelper
      */
     public function getIcHelper()
@@ -67,24 +65,33 @@ class OddSimulatorViewModel implements \Magento\Framework\View\Element\Block\Arg
 
     /**
      * Get if odd simulator can be showed in cart
+     *
      * @return mixed
      */
     public function showInCart()
     {
-        return $this->scopeConfig->getValue('payment/paycomet_instantcredit/show_cart', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue(
+            'payment/paycomet_instantcredit/show_cart',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
      * Get hash to use in odd simulator
+     *
      * @return mixed
      */
     public function getHash()
     {
-        return $this->scopeConfig->getValue('payment/paycomet_instantcredit/hash', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue(
+            'payment/paycomet_instantcredit/hash',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
      * Get grand total from current quote
+     *
      * @return float
      */
     public function getQuoteGrandTotal()
@@ -94,28 +101,27 @@ class OddSimulatorViewModel implements \Magento\Framework\View\Element\Block\Arg
         } catch (NoSuchEntityException | LocalizedException $e) {
             return 0.0;
         }
-
         return $quote->getGrandTotal();
-
     }
 
-
     /**
-     * @param $price
+     * Get Price Formatted
+     *
+     * @param string $price
      * @return mixed|string
      */
     public function getPriceFormatted($price)
     {
-        if ($price == intval($price)) {
+        if ($price == (int)$price) {
             return $price . ',00';
         }
 
         return str_replace('.', ',', (string) $price);
-
     }
 
     /**
      * Get current product
+     *
      * @return mixed
      */
     public function getProduct()
@@ -123,18 +129,21 @@ class OddSimulatorViewModel implements \Magento\Framework\View\Element\Block\Arg
         return $this->registry->registry('current_product');
     }
 
-
     /**
      * Get IC simulator URL
+     *
      * @return return
      */
     public function getSimulatorUrl()
     {
-        if ($this->scopeConfig->getValue('payment/paycomet_instantcredit/simulatorenvironment', \Magento\Store\Model\ScopeInterface::SCOPE_STORE) == 1) {
+        if ($this->scopeConfig->getValue(
+            'payment/paycomet_instantcredit/simulatorenvironment',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) == 1
+        ) {
             return self::SIMULATOR_URL_TEST;
         } else {
             return self::SIMULATOR_URL;
         }
     }
-
 }

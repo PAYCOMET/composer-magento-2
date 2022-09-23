@@ -6,7 +6,6 @@ use Paycomet\Payment\Model\Apm\Instantcredit\PaymentMethod;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
-
 class PaymentMethodAvailable implements ObserverInterface
 {
 
@@ -22,6 +21,8 @@ class PaymentMethodAvailable implements ObserverInterface
 
     /**
      * PaymentMethodAvailable constructor.
+     *
+     * @param \Magento\Checkout\Model\Session $session
      * @param \Paycomet\Payment\Helper\Apm\Instantcredit\IcHelper $icHelper
      */
     public function __construct(
@@ -32,14 +33,15 @@ class PaymentMethodAvailable implements ObserverInterface
         $this->_session = $session;
     }
 
-
     /**
+     * Execute
+     *
      * @param Observer\Magento\Framework\Event\Observer $observer
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
 
-        if($observer->getEvent()->getMethodInstance()->getCode() == PaymentMethod::METHOD_CODE){
+        if ($observer->getEvent()->getMethodInstance()->getCode() == PaymentMethod::METHOD_CODE) {
             $grandTotal = $this->_session->getQuote()->getGrandTotal();
 
             if (!$this->_icHelper->getIsEnabled() || !$this->_icHelper->isBetweenLimits($grandTotal)) {
@@ -47,7 +49,5 @@ class PaymentMethodAvailable implements ObserverInterface
                 $checkResult->setData('is_available', false); // Disable payment method at checkout page
             }
         }
-
     }
-
 }

@@ -28,8 +28,11 @@ class View extends \Magento\Framework\View\Element\Template
     /**
      * View constructor.
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param array                                            $data
+     * @param \Magento\Framework\View\Element\Template\Context  $context
+     * @param \Magento\Framework\Data\Helper\PostHelper         $postDataHelper
+     * @param \Magento\Customer\Model\Session                   $customerSession
+     * @param \Paycomet\Payment\Helper\Data                     $helper
+     * @param array                                             $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -47,6 +50,8 @@ class View extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get Iframe Url
+     *
      * @return string
      */
     public function getIframeUrl()
@@ -58,6 +63,8 @@ class View extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get Integration
+     *
      * @return string
      */
     public function getIntegration()
@@ -66,6 +73,8 @@ class View extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get JetId param
+     *
      * @return string
      */
     public function getJetId()
@@ -73,7 +82,12 @@ class View extends \Magento\Framework\View\Element\Template
         return $this->_helper->getEncryptedConfigData('jetid');
     }
 
-    public function getAddCard($hash)
+    /**
+     * Get add Card
+     *
+     * @return string
+     */
+    public function getAddCard()
     {
         $url = $this->_urlBuilder->getUrl('paycomet_payment/cards/add');
         $params = [];
@@ -81,6 +95,12 @@ class View extends \Magento\Framework\View\Element\Template
         return $this->_postDataHelper->getPostData($url, $params);
     }
 
+    /**
+     * Get update Card
+     *
+     * @param string $hash
+     * @return string
+     */
     public function getUpdateParams($hash)
     {
         $url = $this->_urlBuilder->getUrl('paycomet_payment/cards/update');
@@ -89,6 +109,12 @@ class View extends \Magento\Framework\View\Element\Template
         return $this->_postDataHelper->getPostData($url, $params);
     }
 
+    /**
+     * Get remove Card
+     *
+     * @param string $hash
+     * @return string
+     */
     public function getRemoveParams($hash)
     {
         $url = $this->_urlBuilder->getUrl('paycomet_payment/cards/remove');
@@ -97,10 +123,15 @@ class View extends \Magento\Framework\View\Element\Template
         return $this->_postDataHelper->getPostData($url, $params);
     }
 
+    /**
+     * Get cards
+     *
+     * @return array $data
+     */
     public function getPaycometCards()
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
+        $resource = $objectManager->get('\Magento\Framework\App\ResourceConnection::class');
         $connection = $resource->getConnection();
         $select = $connection->select()
             ->from(
@@ -111,5 +142,4 @@ class View extends \Magento\Framework\View\Element\Template
         $data = $connection->fetchAll($select);
         return $data;
     }
-    
 }

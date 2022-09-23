@@ -24,40 +24,44 @@ class Info extends \Magento\Payment\Block\Info
         $transport = parent::_prepareSpecificInformation($transport);
         $data = [];
         $orderId = $this->getInfo()->getAdditionalInformation('Order');
-        if ($orderId=="")
+        if ($orderId=="") {
             $orderId = $this->getInfo()->getAdditionalInformation('DS_MERCHANT_ORDER');
+        }
 
         $cardType = $this->getInfo()->getAdditionalInformation('CardBrand');
-        if ($cardType=="")
+        if ($cardType=="") {
             $cardType = $this->getInfo()->getAdditionalInformation('DS_MERCHANT_CARDBRAND');
+        }
 
         $cardCountry = $this->getInfo()->getAdditionalInformation('CardCountry');
-        if ($cardCountry=="")
+        if ($cardCountry=="") {
             $cardCountry = $this->getInfo()->getAdditionalInformation('DS_MERCHANT_CARDCOUNTRY');
-
+        }
 
         $bicCode = $this->getInfo()->getAdditionalInformation('BicCode');
         $ErrorID = $this->getInfo()->getAdditionalInformation('ErrorID');
-        if ($ErrorID=="")
+        if ($ErrorID=="") {
             $ErrorID = $this->getInfo()->getAdditionalInformation('DS_ERROR_ID');
-
+        }
 
         $ErrorDescription = $this->getInfo()->getAdditionalInformation('ErrorDescription');
 
         $Currency = $this->getInfo()->getAdditionalInformation('Currency');
-        if ($Currency=="")
+        if ($Currency=="") {
             $Currency = $this->getInfo()->getAdditionalInformation('DS_MERCHANT_CURRENCY');
-
+        }
 
         $cardDigits = $this->getInfo()->getAdditionalInformation('CARDDIGITS');
 
         $result = $this->getInfo()->getAdditionalInformation('Response');
-        if ($result=="")
+        if ($result=="") {
             $result = $this->getInfo()->getAdditionalInformation('DS_RESPONSE');
+        }
 
         $authCode = $this->getInfo()->getAdditionalInformation('AuthCode');
-        if ($authCode=="")
+        if ($authCode=="") {
             $authCode = $this->getInfo()->getAdditionalInformation('DS_MERCHANT_AUTHCODE');
+        }
 
         $Scoring = $this->getInfo()->getAdditionalInformation('Scoring');
         $SecurePayment = $this->getInfo()->getAdditionalInformation('SecurePayment');
@@ -85,24 +89,32 @@ class Info extends \Magento\Payment\Block\Info
             $data[(string) __('Card Number')] = sprintf('xxxx-%s', $cardDigits);
         }
 
-        if ($SecurePayment)
+        if ($SecurePayment) {
             $data[(string) __('3D Secure Status')] = $this->_is3DSecure($SecurePayment);
+        }
 
-        if ($methodData){
+        if ($methodData) {
             $methodData = json_decode($methodData);
-                        
+
             if ($methodData->entityNumber) {
                 $data = $this->checkAndSet($data, $methodData->entityNumber, 'Entity');
             }
             if ($methodData->referenceNumber) {
                 $data = $this->checkAndSet($data, $methodData->referenceNumber, 'Reference');
             }
-            
         }
 
         return $transport->setData(array_merge($data, $transport->getData()));
     }
 
+    /**
+     * Check and Set
+     *
+     * @param string $data
+     * @param string $field
+     * @param string $text
+     * @return array $data
+     */
     private function checkAndSet($data, $field, $text)
     {
         if ($field) {
@@ -112,12 +124,18 @@ class Info extends \Magento\Payment\Block\Info
         return $data;
     }
 
+    /**
+     * Check is3DSecure
+     *
+     * @param boolean $SecurePayment
+     * @return string
+     */
     private function _is3DSecure($SecurePayment)
     {
-        if ($SecurePayment)
+        if ($SecurePayment) {
             return '3D Secure';
-        else
+        } else {
             return 'Not 3D Secure';
-
+        }
     }
 }
