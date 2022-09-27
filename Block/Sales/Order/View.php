@@ -34,7 +34,7 @@ class View extends \Magento\Framework\View\Element\Template
     {
         $orderId = $this->getRequest()->getParam('order_id');
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $order = $objectManager->create('\Magento\Sales\Api\Data\OrderInterface::class')->load($orderId);
+        $order = $objectManager->create(\Magento\Sales\Api\Data\OrderInterface::class)->load($orderId);
 
         $this->_code = $order->getPayment()->getMethodInstance()->getCode();
 

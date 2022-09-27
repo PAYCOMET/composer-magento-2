@@ -12,7 +12,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     /**
      * @var string
      */
-    protected $_infoBlockType = '\Paycomet\Payment\Block\Info\Info::class';
+    protected $_infoBlockType = \Paycomet\Payment\Block\Info\Info::class;
 
     /**
      * @var \Paycomet\Payment\Helper\Data

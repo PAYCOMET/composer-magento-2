@@ -1374,14 +1374,14 @@ class Data extends AbstractHelper
             $from = $from->format('Y-m-d h:m:s');
 
             if ($valid==1) {
-                $orderCollection = $this->_objectManager->get('\Magento\Sales\Model\Order::class')->getCollection()
+                $orderCollection = $this->_objectManager->get(\Magento\Sales\Model\Order::class)->getCollection()
                     ->addFieldToFilter('customer_id', ['eq' => [$id_customer]])
                     ->addFieldToFilter('status', [
                         'nin' => ['pending','cancel','canceled','refund'],
                         'notnull'=>true])
                     ->addAttributeToFilter('created_at', ['gt' => $from]);
             } else {
-                $orderCollection = $this->_objectManager->get('\Magento\Sales\Model\Order:class')->getCollection()
+                $orderCollection = $this->_objectManager->get(\Magento\Sales\Model\Order::class)->getCollection()
                     ->addFieldToFilter('customer_id', ['eq' => [$id_customer]])
                     ->addFieldToFilter('status', [
                         'notnull'=>true])
@@ -1425,9 +1425,9 @@ class Data extends AbstractHelper
     private function firstAddressDelivery($id_customer, $id_address_delivery)
     {
         try {
-            $resource = $this->_objectManager->get('\Magento\Framework\App\ResourceConnection::class');
+            $resource = $this->_objectManager->get(\Magento\Framework\App\ResourceConnection::class);
 
-            $orderCollection = $this->_objectManager->get('\Magento\Sales\Model\Order::clas')->getCollection()
+            $orderCollection = $this->_objectManager->get(\Magento\Sales\Model\Order::class)->getCollection()
             ->addFieldToFilter('customer_id', ['eq' => $id_customer])
             ->getSelect()
             ->joinLeft(
@@ -1473,13 +1473,13 @@ class Data extends AbstractHelper
 
             $amountAux += $shoppingCartData[$key]["unitPrice"] * $shoppingCartData[$key]["quantity"];
 
-            $product = $this->_objectManager->create('\Magento\Catalog\Model\Product::class')->load($item->getProductId());
+            $product = $this->_objectManager->create(\Magento\Catalog\Model\Product::class)->load($item->getProductId());
 
             $cats = $product->getCategoryIds();
 
             $arrCat = [];
             foreach ($cats as $category_id) {
-                $_cat = $this->_objectManager->create('\Magento\Catalog\Model\Category::class')->load($category_id);
+                $_cat = $this->_objectManager->create(\Magento\Catalog\Model\Category::class)->load($category_id);
                 $arrCat[] = $_cat->getName();
             }
 
@@ -2034,7 +2034,7 @@ class Data extends AbstractHelper
         }
 
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $resource = $objectManager->get('\Magento\Framework\App\ResourceConnection::class');
+        $resource = $objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $connection = $resource->getConnection();
 
         $conds[] = $connection->quoteInto("hash" . ' = ?', $hash);
@@ -2229,7 +2229,7 @@ class Data extends AbstractHelper
     {
         try {
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); // Instance of object manager
-            $resource = $objectManager->get('\Magento\Framework\App\ResourceConnection::class');
+            $resource = $objectManager->get(\Magento\Framework\App\ResourceConnection::class);
             $connection = $resource->getConnection();
 
             $card =  $response["DS_MERCHANT_PAN"];

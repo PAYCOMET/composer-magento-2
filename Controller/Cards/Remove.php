@@ -67,7 +67,7 @@ class Remove extends \Magento\Framework\App\Action\Action
     public function deletePaycometCard($hash, $customer_id)
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $resource = $objectManager->get('\Magento\Framework\App\ResourceConnection::class');
+        $resource = $objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $connection = $resource->getConnection();
 
         $conds[] = $connection->quoteInto("hash" . ' = ?', $hash);

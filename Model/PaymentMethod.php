@@ -23,7 +23,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     /**
      * @var string
      */
-    protected $_infoBlockType = '\Paycomet\Payment\Block\Info\Info::class';
+    protected $_infoBlockType = \Paycomet\Payment\Block\Info\Info::class;
 
     /**
      * Payment Method feature.
@@ -737,7 +737,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             return $data;
         }
 
-        $resource = $this->_objectManager->get('\Magento\Framework\App\ResourceConnection::class');
+        $resource = $this->_objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $connection = $resource->getConnection();
 
         $select = $connection->select()

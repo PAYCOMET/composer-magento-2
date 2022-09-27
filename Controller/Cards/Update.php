@@ -67,7 +67,7 @@ class Update extends \Magento\Framework\App\Action\Action
     public function updatePaycometCard($hash, $customer_id, $card_desc)
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $resource = $objectManager->get('\Magento\Framework\App\ResourceConnection::class');
+        $resource = $objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $connection = $resource->getConnection();
 
         $data = [

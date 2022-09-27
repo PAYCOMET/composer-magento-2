@@ -131,7 +131,7 @@ class View extends \Magento\Framework\View\Element\Template
     public function getPaycometCards()
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $resource = $objectManager->get('\Magento\Framework\App\ResourceConnection::class');
+        $resource = $objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $connection = $resource->getConnection();
         $select = $connection->select()
             ->from(
