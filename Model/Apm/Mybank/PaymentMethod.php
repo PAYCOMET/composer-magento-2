@@ -4,21 +4,66 @@ namespace Paycomet\Payment\Model\Apm\Mybank;
 
 class PaymentMethod extends \Paycomet\Payment\Model\Apm\PaymentMethod
 {
-    const METHOD_ID = 15;
-    const METHOD_CODE = 'paycomet_mybank';
+    public const METHOD_ID = 15;
+    public const METHOD_CODE = 'paycomet_mybank';
 
+    /**
+     * @var string
+     */
     protected $_code = self::METHOD_CODE;
 
+    /**
+     * @var boolean
+     */
     protected $_canAuthorize = false;
-    protected $_canCapture = false;
-    protected $_canCapturePartial = false;
-    protected $_canCaptureOnce = false;
-    protected $_canRefund = false;
-    protected $_canRefundInvoicePartial = false;
-    protected $_isGateway = true;
-    protected $_isInitializeNeeded = true;
-    protected $_canUseInternal = false;
-    protected $_canVoid = false;
-    protected $_canReviewPayment = true;
 
+    /**
+     * @var boolean
+     */
+    protected $_canCapture = false;
+
+    /**
+     * @var boolean
+     */
+    protected $_canCapturePartial = false;
+
+    /**
+     * @var boolean
+     */
+    protected $_canCaptureOnce = false;
+
+    /**
+     * @var boolean
+     */
+    protected $_canRefund = false;
+
+    /**
+     * @var boolean
+     */
+    protected $_canRefundInvoicePartial = false;
+
+    /**
+     * @var boolean
+     */
+    protected $_isGateway = true;
+
+    /**
+     * @var boolean
+     */
+    protected $_isInitializeNeeded = true;
+
+    /**
+     * @var boolean
+     */
+    protected $_canUseInternal = false;
+
+    /**
+     * @var boolean
+     */
+    protected $_canVoid = false;
+
+    /**
+     * @var boolean
+     */
+    protected $_canReviewPayment = true;
 }

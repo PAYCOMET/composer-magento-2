@@ -3,14 +3,10 @@
 namespace Paycomet\Payment\Model\Api;
 
 use Paycomet\Payment\Model\Config\Source\PaymentAction;
-
 use Paycomet\Payment\Observer\DataAssignObserver;
 
 class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPaymentManagementInterface
 {
-    const FRAUD_ACTIVE = 'ACTIVE';
-    const FRAUD_HOLD = 'HOLD';
-    const FRAUD_BLOCK = 'BLOCK';
     /**
      * @var \Paycomet\Payment\Helper\Data
      */
@@ -49,13 +45,13 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
     /**
      * PaycometManagement constructor.
      *
-     * @param \Paycomet\Payment\Helper\Data                                 $helper
-     * @param \Magento\Checkout\Model\Session                                 $session
-     * @param \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder
-     * @param \Paycomet\Payment\Logger\Logger                               $logger
-     * @param \Magento\Sales\Model\Order\Email\Sender\OrderSender             $orderSender
-     * @param \Magento\Sales\Model\Order\Status\HistoryFactory                $orderHistoryFactory
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface               $customerRepository
+     * @param \Paycomet\Payment\Helper\Data                                     $helper
+     * @param \Magento\Checkout\Model\Session                                   $session
+     * @param \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface   $transactionBuilder
+     * @param \Paycomet\Payment\Logger\Logger                                   $logger
+     * @param \Magento\Sales\Model\Order\Email\Sender\OrderSender               $orderSender
+     * @param \Magento\Sales\Model\Order\Status\HistoryFactory                  $orderHistoryFactory
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface                 $customerRepository
      */
     public function __construct(
         \Paycomet\Payment\Helper\Data $helper,
@@ -76,7 +72,10 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
     }
 
     /**
-     * {@inheritdoc}
+     * Process Response
+     *
+     * @param \Magento\Sales\Mode\Order $order
+     * @param array $response
      */
     public function processResponse($order, $response)
     {
@@ -93,19 +92,19 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
         }
 
         // Verificamos que no se haya creado ya la misma Transacción.
-        if ( $payment->getLastTransId() == $response["AuthCode"]) {
-            print "PAYCOMET 1";
+        if ($payment->getLastTransId() == $response["AuthCode"]) {
             return false;
         }
 
-        $this->_helper->CreateTransInvoice($order,$response);
+        $this->_helper->createTransInvoice($order, $response);
 
         return true;
     }
 
-
     /**
-     * {@inheritdoc}
+     * Process Response AddUser
+     *
+     * @param array $response
      */
     public function processResponseAddUser($response)
     {
@@ -115,9 +114,9 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
         }
 
         //Store customer card
-        $datosOrder = explode("_",$response["Order"]);
+        $datosOrder = explode("_", $response["Order"]);
         $customerId = $datosOrder[0];
-	    $storeId = $datosOrder[1];
+        $storeId = $datosOrder[1];
 
         if (!empty($customerId)) {
             return $this->_helper->_handleCardStorage($response, $customerId, $storeId);
@@ -127,7 +126,9 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
     }
 
     /**
-     * {@inheritdoc}
+     * Restore Cart
+     *
+     * @param int $cartId
      */
     public function restoreCart($cartId)
     {
@@ -141,9 +142,8 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
         }
     }
 
-
     /**
-     * @desc Validates the response fields
+     * Validates the response fields
      *
      * @param array $response
      *
@@ -162,9 +162,8 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
         return true;
     }
 
-
     /**
-     * @desc Validates the response fields add_user
+     * Validates the response fields add_user
      *
      * @param array $response
      *
@@ -181,5 +180,4 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
 
         return true;
     }
-
 }

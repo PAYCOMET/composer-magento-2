@@ -1,13 +1,12 @@
 <div id="storingStep" class="alert alert-info" style="display: block;">
     <h4 data-bind="i18n: 'NEW CARD'"></h4>
-          
-    <input type="checkbox" id="paycomet_showcarddata" data-bind="checked: displayMessage" />
+
+    <input type="checkbox" id="paycomet_showcarddata" data-bind="checked: displayMessage">
     <label for="paycomet_showcarddata" data-bind="text: $t('Save card for future purchases.')"></label>
     <span for="paycomet_showcarddata" class="paycomet-pci" data-bind="text: $t('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS).')"></span>
-    
 
     <form role="form" id="paycometPaymentForm" method="POST" class="" data-bind="visible: isVisibleJetIframe(), afterRender: jetIframeLoad" action="/paycomet_payment/cards/add" >
-            <br/>
+            <br>
             <div class="paycomet_jet">
                 <ul>
                     <li>

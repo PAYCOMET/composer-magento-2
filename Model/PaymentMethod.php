@@ -10,30 +10,20 @@ use Paycomet\Bankstore\ApiRest;
 use Paycomet\Payment\Observer\DataAssignObserver;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
-
 class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod implements GatewayInterface
 {
-    const METHOD_ID = 1;
-    const METHOD_CODE = 'paycomet_payment';
-
-    protected $_code = self::METHOD_CODE;
-
-    const NOT_AVAILABLE = 'N/A';
-
-    /**
-    /**
-     * @var GUEST_ID , used when order is placed by guests
-     */
-    const GUEST_ID = 'guest';
-    /**
-     * @var CUSTOMER_ID , used when order is placed by customers
-     */
-    const CUSTOMER_ID = 'customer';
+    public const METHOD_ID = 1;
+    public const METHOD_CODE = 'paycomet_payment';
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Paycomet\Payment\Block\Info\Info';
+    protected $_code = self::METHOD_CODE;
+
+    /**
+     * @var string
+     */
+    protected $_infoBlockType = \Paycomet\Payment\Block\Info\Info::class;
 
     /**
      * Payment Method feature.
@@ -137,8 +127,14 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      */
     private $_customerRepository;
 
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     private $_objectManager;
 
+    /**
+     * @var RemoteAddress
+     */
     private $_remoteAddress;
 
     /**
@@ -146,7 +142,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      *
      * @param \Magento\Framework\App\RequestInterface                      $request
      * @param \Magento\Framework\UrlInterface                              $urlBuilder
-     * @param \Paycomet\Payment\Helper\Data                              $helper
+     * @param \Paycomet\Payment\Helper\Data                                $helper
      * @param \Magento\Store\Model\StoreManagerInterface                   $storeManager
      * @param \Magento\Framework\Locale\ResolverInterface                  $resolver
      * @param \Magento\Framework\Model\Context                             $context
@@ -156,14 +152,15 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      * @param \Magento\Payment\Helper\Data                                 $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface           $scopeConfig
      * @param \Magento\Payment\Model\Method\Logger                         $logger
-     * @param \Paycomet\Payment\Logger\Logger                            $paycometLogger
+     * @param \Paycomet\Payment\Logger\Logger                              $paycometLogger
      * @param \Magento\Framework\App\ProductMetadataInterface              $productMetadata
      * @param \Magento\Framework\Module\ResourceInterface                  $resourceInterface
      * @param \Magento\Checkout\Model\Session                              $session
      * @param \Magento\Customer\Api\CustomerRepositoryInterface            $customerRepository
+     * @param \Magento\Framework\ObjectManagerInterface                    $objectmanager,
+     * @param RemoteAddress                                                $remoteAddress
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null           $resourceCollection
-     * @param \Magento\Framework\ObjectManagerInterface                    $objectmanager,
      * @param array                                                        $data
      */
     public function __construct(
@@ -218,9 +215,14 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $this->_remoteAddress = $remoteAddress;
     }
 
-    public function getAcceptedCurrencyCodes() {
-        return array($this->getConfigData('currency'));
+    /**
+     * Get Accepted Currency Codes
+     */
+    public function getAcceptedCurrencyCodes()
+    {
+        return [$this->getConfigData('currency')];
     }
+
     /**
      * Check method for processing with base currency
      *
@@ -246,6 +248,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     }
 
     /**
+     * Initialize
+     *
      * @param string $paymentAction
      * @param object $stateObject
      *
@@ -277,11 +281,11 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $hash = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_TOKENCARD);
         $jetToken = $payment->getAdditionalInformation(DataAssignObserver::PAYCOMET_JETTOKEN);
         // Pago mediante tarjeta tokenizada ----------------------------------------------------------
-        if (isset($hash) && $hash!=""){
+        if (isset($hash) && $hash!="") {
 
             // Verifiy Token Data
             $data = $this->_helper->getTokenData($payment);
-            if (!isset($data["iduser"]) || !isset($data["tokenuser"])){
+            if (!isset($data["iduser"]) || !isset($data["tokenuser"])) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Token Card failed'));
             }
             $idUser = $data["iduser"];
@@ -289,7 +293,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             $tokenCardPayment = true;
 
         // Fin Pago mediante tarjeta tokenizada ------------------------------------------------------
-        } if (isset($jetToken) && $jetToken!=""){
+        } if (isset($jetToken) && $jetToken!="") {
 
             $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));
             $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
@@ -306,7 +310,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                         '',
                         2
                     );
-                    $response = array();
+                    $response = [];
                     $response["DS_RESPONSE"] = ($tokenCard->errorCode > 0)? 0 : 1;
 
                     if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
@@ -335,7 +339,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         // Fin Pago mediante jetIFrame -------------------------------------------------------------------
 
         // If a Payment with Saved Card or JetIframe
-        if ($tokenCardPayment){
+        if ($tokenCardPayment) {
 
             // Si es pago con Token o jetIframe guardamos los datos del token en el pedido
             $order->setPaycometToken($idUser."|".$tokenUser);
@@ -351,12 +355,11 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         return $this;
     }
 
-
     /**
      * Send authorize request to gateway
      *
      * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface $payment
-     * @param  float $amount
+     * @param float $amount
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -373,15 +376,15 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         //CREATE_PREAUTHORIZATION
         $data = $this->_helper->getTokenData($payment);
-        if (!isset($data["iduser"]) || !isset($data["tokenuser"])){
+        if (!isset($data["iduser"]) || !isset($data["tokenuser"])) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Token Card failed'));
         }
         $IdUser = $data["iduser"];
         $TokenUser = $data["tokenuser"];
 
         $storeId = $order->getStoreId();
-        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal',$storeId));
-        $api_key            = trim($this->_helper->getEncryptedConfigData('api_key',$storeId));
+        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal', $storeId));
+        $api_key            = trim($this->_helper->getEncryptedConfigData('api_key', $storeId));
 
         $methodId = 1;
         $secure = 0;
@@ -390,7 +393,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         // Uso de Rest
         if ($api_key != "") {
-            $merchantData = $this->_helper->getMerchantData($order,self::METHOD_ID);
+            $merchantData = $this->_helper->getMerchantData($order, self::METHOD_ID);
             try {
                 $apiRest = new ApiRest($api_key);
                 $createPreauthorizationResponse = $apiRest->createPreautorization(
@@ -415,7 +418,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     $merchantData,
                     $defered
                 );
-                $response = array();
+                $response = [];
                 $response["DS_RESPONSE"] = ($createPreauthorizationResponse->errorCode > 0)? 0 : 1;
                 $response["DS_ERROR_ID"] = $createPreauthorizationResponse->errorCode;
 
@@ -443,7 +446,13 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __(sprintf('Payment failed. Error ( %s ) - %s', $response['DS_ERROR_ID'], $this->_helper->getErrorDesc($response['DS_ERROR_ID'])))
+                __(
+                    sprintf(
+                        'Payment failed. Error ( %s ) - %s',
+                        $response['DS_ERROR_ID'],
+                        $this->_helper->getErrorDesc($response['DS_ERROR_ID'])
+                    )
+                )
             );
         }
 
@@ -456,13 +465,10 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         // Set Operation Type
         $response["TransactionType"] = 3;
 
-        $this->_helper->CreateTransInvoice($order,$response);
+        $this->_helper->createTransInvoice($order, $response);
 
         return $this;
-
     }
-
-
 
     /**
      * Capture.
@@ -487,20 +493,19 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $amount = $this->_helper->amountFromMagento($amount, $currencyCode);
 
         $storeId = $order->getStoreId();
-        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal',$storeId));
-        $api_key            = trim($this->_helper->getEncryptedConfigData('api_key',$storeId));
+        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal', $storeId));
+        $api_key            = trim($this->_helper->getEncryptedConfigData('api_key', $storeId));
 
         $TransactionType = $payment->getAdditionalInformation('TransactionType');
-        switch ($TransactionType){
+        switch ($TransactionType) {
 
             case 3: //PREAUTHORIZATION_CONFIRM
-
                 // Uso de Rest
                 if ($api_key != "") {
                     try {
                         $apiRest = new ApiRest($api_key);
 
-                        $AuthCode = str_replace("-capture","",$payment->getTransactionId());
+                        $AuthCode = str_replace("-capture", "", $payment->getTransactionId());
 
                         $confirmPreautorization = $apiRest->confirmPreautorization(
                             $realOrderId,
@@ -511,7 +516,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                             '0'
                         );
 
-                        $response = array();
+                        $response = [];
                         $response["DS_RESPONSE"] = ($confirmPreautorization->errorCode > 0)? 0 : 1;
                         $response["DS_ERROR_ID"] = $confirmPreautorization->errorCode;
 
@@ -531,8 +536,13 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
                 if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
                     throw new \Magento\Framework\Exception\LocalizedException(
-                         __(sprintf('Payment failed. Error ( %s ) - %s', $response['DS_ERROR_ID'], $this->_helper->getErrorDesc($response['DS_ERROR_ID'])))
-
+                        __(
+                            sprintf(
+                                'Payment failed. Error ( %s ) - %s',
+                                $response['DS_ERROR_ID'],
+                                $this->_helper->getErrorDesc($response['DS_ERROR_ID'])
+                            )
+                        )
                     );
                 }
 
@@ -550,9 +560,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 break;
 
             default: // EXECUTE_PURCHASE
-
                 $data = $this->_helper->getTokenData($payment);
-                if (!isset($data["iduser"]) || !isset($data["tokenuser"])){
+                if (!isset($data["iduser"]) || !isset($data["tokenuser"])) {
                     throw new \Magento\Framework\Exception\LocalizedException(__('Token Card failed'));
                 }
                 $IdUser = $data["iduser"];
@@ -563,10 +572,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 $userInteraction = 1;
                 $notifyDirectPayment = 1;
 
-
                 // Uso de Rest
                 if ($api_key != "") {
-                    $merchantData = $this->_helper->getMerchantData($order,self::METHOD_ID);
+                    $merchantData = $this->_helper->getMerchantData($order, self::METHOD_ID);
                     $apiRest = new ApiRest($api_key);
                     try {
 
@@ -593,7 +601,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                             $notifyDirectPayment
                         );
 
-                        $response = array();
+                        $response = [];
 
                         $response["DS_RESPONSE"] = ($executePurchaseResponse->errorCode > 0)? 0 : 1;
                         $response["DS_ERROR_ID"] = $executePurchaseResponse->errorCode;
@@ -620,7 +628,13 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 if ('' == $response['DS_RESPONSE'] || 0 == $response['DS_RESPONSE']) {
 
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __(sprintf('Payment failed. Error ( %s ) - %s', $response['DS_ERROR_ID'], $this->_helper->getErrorDesc($response['DS_ERROR_ID'])))
+                        __(
+                            sprintf(
+                                'Payment failed. Error ( %s ) - %s',
+                                $response['DS_ERROR_ID'],
+                                $this->_helper->getErrorDesc($response['DS_ERROR_ID'])
+                            )
+                        )
                     );
                 }
 
@@ -629,13 +643,12 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 $response["ErrorDescription"] = (string)$errorDesc;
                 $response["SecurePayment"] = 0;
 
-                $this->_helper->CreateTransInvoice($order,$response);
+                $this->_helper->createTransInvoice($order, $response);
 
                 break;
         }
         return $this;
     }
-
 
     /**
      * Refund specified amount for payment.
@@ -670,9 +683,25 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         return $this;
     }
 
-    public function acceptPayment(\Magento\Payment\Model\InfoInterface $payment){}
+    /**
+     * Accept payment
+     *
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     */
+    public function acceptPayment(\Magento\Payment\Model\InfoInterface $payment)
+    {
+        // Accept Payment
+    }
 
-    public function hold(\Magento\Payment\Model\InfoInterface $payment){}
+    /**
+     * Hold
+     *
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     */
+    public function hold(\Magento\Payment\Model\InfoInterface $payment)
+    {
+        // Hold
+    }
 
     /**
      * Assign data to info model instance.
@@ -697,19 +726,23 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         return $this;
     }
 
+    /**
+     * Get checkout Cards
+     */
     public function getCheckoutCards()
     {
-        $data = array();
+        $data = [];
         // Si no esta logado no cargamos nada
-        if (!$this->_helper->customerIsLogged())
+        if (!$this->_helper->customerIsLogged()) {
             return $data;
+        }
 
-        $resource = $this->_objectManager->get('Magento\Framework\App\ResourceConnection');
+        $resource = $this->_objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $connection = $resource->getConnection();
 
         $select = $connection->select()
             ->from(
-        		['token' => $resource->getTableName('paycomet_token')],
+                ['token' => $resource->getTableName('paycomet_token')],
                 ['hash', 'cc', 'brand' , 'desc']
             )
             ->where('customer_id = ?', $this->_helper->getCustomerId())
@@ -734,7 +767,6 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         );
     }
 
-
     /**
      * Retrieve request object.
      *
@@ -757,10 +789,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $this->_helper->logDebug('Gateway postRequest called');
     }
 
-
-
     /**
-     * @desc Sets all the fields that is posted to Payment
+     * Get Form Paycomet Url
      *
      * @return array
      *
@@ -787,7 +817,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $customerId = $order->getCustomerId();
 
         $shopperLocale = $this->_resolver->getLocale();
-        $language_data = explode("_",$shopperLocale);
+        $language_data = explode("_", $shopperLocale);
         $language = $language_data[0];
 
         /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
@@ -799,7 +829,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         $Secure = 1;
 
-        $OPERATION = ($payment_action==PaymentAction::AUTHORIZE_CAPTURE)?1:3; // EXECUTE_PURCHASE : CREATE_PREAUTORIZATION
+        // 1 ->EXECUTE_PURCHASE : 3->CREATE_PREAUTORIZATION
+        $OPERATION = ($payment_action==PaymentAction::AUTHORIZE_CAPTURE)?1:3;
 
         // DCC OPERATION
         if ($OPERATION == 1 && $dcc) {
@@ -810,11 +841,11 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         $function_txt = "";
 
-        $dataResponse = array();
+        $dataResponse = [];
 
         if ($api_key != "") {
 
-            $merchantData = $this->_helper->getMerchantData($order,self::METHOD_ID);
+            $merchantData = $this->_helper->getMerchantData($order, self::METHOD_ID);
             
             $paymentData = [
                 'terminal' => $merchant_terminal,
@@ -830,8 +861,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             ];
 
             // Payment/Preauthorization with Saved Card or jetIframe add idUser/tokenUser to paymentData
-            if ($order->getPaycometToken() != ""){
-                $paycometToken = explode("|",$order->getPaycometToken());
+            if ($order->getPaycometToken() != "") {
+                $paycometToken = explode("|", $order->getPaycometToken());
 
                 $IdUser = $paycometToken[0];
                 $TokenUser = $paycometToken[1];
@@ -880,5 +911,4 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         return $dataResponse;
     }
-
 }

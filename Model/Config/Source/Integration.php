@@ -13,13 +13,13 @@ use Magento\Payment\Model\Method\AbstractMethod;
 class Integration implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * {@inheritdoc}
+     * To Option array
      */
     public function toOptionArray()
     {
         return [
-        	0 => __('BankStore IFRAME/XML'),
-        	1 => __('BankStore JETIFRAME/XML')
+            0 => __('BankStore IFRAME/XML'),
+            1 => __('BankStore JETIFRAME/XML')
         ];
     }
 }

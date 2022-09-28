@@ -4,7 +4,7 @@
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
-                <item name="paycomet_payment_config_provider" xsi:type="object">Paycomet\Payment\Model\ConfigProvider\PaycometConfigProvider</item>                
+                <item name="paycomet_payment_config_provider" xsi:type="object">Paycomet\Payment\Model\ConfigProvider\PaycometConfigProvider</item>
             </argument>
         </arguments>
     </type>

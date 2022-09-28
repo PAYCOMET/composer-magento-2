@@ -1,29 +1,29 @@
-<?php if ($block->escapeHtml($block->getisPaycomet())) :?>
-    <p><?php echo $block->escapeHtml(__('Your payment was successful.'));?></p>
-    <?php if ($block->getNewPayer()) :?>
-      <p><?php echo $block->escapeHtml(__('Card details successfully and securely stored.'));?></p>
+<?php if ($block->escapeHtml($block->getisPaycomet())):?>
+    <p><?= $block->escapeHtml(__('Your payment was successful.'));?></p>
+    <?php if ($block->getNewPayer()):?>
+      <p><?= $block->escapeHtml(__('Card details successfully and securely stored.'));?></p>
     <?php endif ?>
 <?php endif ?>
 
-
 <?php $params = $block->getParams(); ?>
 <script>
-    <?php if (isset($params['returnUrl'])) :?>
-        window.top.location = "<?php echo $block->escapeXssInUrl($params['returnUrl']); ?>";
+    <?php if (isset($params['returnUrl'])):?>
+        window.top.location = "<?= $block->escapeXssInUrl($params['returnUrl']); ?>";
     <?php endif; ?>
 </script>
 
 
-<?php if ($block->getData('code') == "paycomet_multibanco") :?>
-    <p><?php echo $block->getData('title');?></p>
+<?php if ($block->getData('code') == "paycomet_multibanco"):?>
+    <p><?= /* @noEscape */ $block->getData('title');?></p>
     <p>
         <span class="paycoment-icon-left">
-            <img class="payment-icon" src="<?php echo $block->getData('img_src');?>" title="<?php echo $block->getData('title');?>">
+            <img class="payment-icon" src="<?= /* @noEscape */ $block->getData('img_src');?>"
+            title="<?= /* @noEscape */ $block->getData('title');?>">
         </span>
         <span>
-            <strong><?=__("Entity");?>:</strong>  <?php echo $block->getData('Entity');?>
+            <strong><?= /* @noEscape */ __("Entity");?>:</strong> <?= /* @noEscape */ $block->getData('Entity');?>
             <br/>
-            <strong><?=__("Reference");?>:</strong> <?php echo $block->getData('Reference');?>
+            <strong><?= /* @noEscape */ __("Reference");?>:</strong> <?= /* @noEscape */ $block->getData('Reference');?>
         </span>
     </p>
 <?php endif ?>

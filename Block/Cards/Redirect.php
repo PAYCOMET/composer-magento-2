@@ -12,9 +12,9 @@ class Redirect extends \Magento\Payment\Block\Form
     /**
      * Redirect constructor.
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Paycomet\Payment\Helper\Data                  $helper
-     * @param array                                            $data
+     * @param \Magento\Framework\View\Element\Template\Context  $context
+     * @param \Paycomet\Payment\Helper\Data                     $helper
+     * @param array                                             $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -26,6 +26,8 @@ class Redirect extends \Magento\Payment\Block\Form
     }
 
     /**
+     * Get Form Paycomet Url
+     *
      * @return string
      */
     public function getFormPaycometUrl()

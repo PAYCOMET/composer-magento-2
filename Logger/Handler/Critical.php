@@ -14,7 +14,6 @@ class Critical extends \Magento\Framework\Logger\Handler\Base
     protected $loggerType = Logger::CRITICAL;
 
     /**
-     * File name.
      *
      * @var string
      */

@@ -4,6 +4,8 @@ namespace Paycomet\Payment\Plugin;
 class Csrf
 {
     /**
+     * Around Validate
+     *
      * @param \Magento\Framework\App\Request\CsrfValidator $subject
      * @param \Closure $proceed
      * @param \Magento\Framework\App\RequestInterface $request

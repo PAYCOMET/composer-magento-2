@@ -4,11 +4,9 @@ namespace Paycomet\Payment\Block\Process;
 
 class Result extends \Magento\Framework\View\Element\Template
 {
-    const REGISTRY_KEY = 'paycomet_payment_params';
+    public const REGISTRY_KEY = 'paycomet_payment_params';
 
     /**
-     * Core registry.
-     *
      * @var \Magento\Framework\Registry
      */
     private $coreRegistry;
@@ -17,8 +15,8 @@ class Result extends \Magento\Framework\View\Element\Template
      * Process constructor.
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param array                                            $data
      * @param \Magento\Framework\Registry                      $registry
+     * @param array                                            $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -30,6 +28,8 @@ class Result extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Prepare Layout
+     *
      * @return $this
      */
     public function _prepareLayout()

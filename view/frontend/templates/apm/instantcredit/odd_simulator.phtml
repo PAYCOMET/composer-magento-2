@@ -16,23 +16,25 @@ $icHelper = $viewModel->getIcHelper();
 $price = $viewModel->getPriceFormatted($price);
 
 // If APM InstantCredit not enable, return
-if (!$icHelper->getIsEnabled()) return;
+if (!$icHelper->getIsEnabled()) {
+    return;
+}
 
 if ($hash): ?>
 <div class="ic-container">
-    <div class="ic-configuration" style="display:none"><?= $hash ?></div>
-    <div class="ic-simulator" comma amount="<?= $price ?>"></div>
+    <div class="ic-configuration" style="display:none"><?= /* @noEscape */ $hash ?></div>
+    <div class="ic-simulator" comma amount="<?= /* @noEscape */ $price ?>"></div>
 </div>
 <script>
     require([
         'jquery',
         'domReady',
-        '<?= $viewModel->getSimulatorUrl() ?>'
+        '<?= /* @noEscape */ $viewModel->getSimulatorUrl() ?>'
     ], function($, domr, icsimulator){
         $(function(){
             window.icSimulatorCustom = {
-                upperLimit:  <?= $icHelper->getUpperLimit() ?>,
-                lowerLimit: <?= $icHelper->getLowerLimit() ?>,
+                upperLimit:  <?= /* @noEscape */ $icHelper->getUpperLimit() ?>,
+                lowerLimit: <?= /* @noEscape */ $icHelper->getLowerLimit() ?>,
             };
 
             // Fire event manually (cause in RequireJS is not fired)

@@ -13,13 +13,13 @@ use Magento\Payment\Model\Method\AbstractMethod;
 class ICSimulator implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * {@inheritdoc}
+     * To Option Array
      */
     public function toOptionArray()
     {
         return [
-        	0 => __('Production'),
-        	1 => __('Test')
+            0 => __('Production'),
+            1 => __('Test')
         ];
     }
 }
