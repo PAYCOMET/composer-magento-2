@@ -80,4 +80,28 @@ class Update extends \Magento\Framework\App\Action\Action
 
         $connection->update($resource->getTableName('paycomet_token'), $data, $where);
     }
+
+    /**
+     * Update Paycoment Card Expiry Date
+     *
+     * @param string $hash
+     * @param int $customer_id
+     * @param string $expiry
+     */
+    public function updatePaycometCardExpiryDate($hash, $customer_id, $expiry)
+    {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $resource = $objectManager->get(\Magento\Framework\App\ResourceConnection::class);
+        $connection = $resource->getConnection();
+
+        $data = [
+            "expiry"=>$expiry
+        ];
+        $conds[] = $connection->quoteInto("hash" . ' = ?', $hash);
+        $conds[] = $connection->quoteInto("customer_id" . ' = ?', $customer_id);
+
+        $where = implode(' AND ', $conds);
+
+        $connection->update($resource->getTableName('paycomet_token'), $data, $where);
+    }
 }

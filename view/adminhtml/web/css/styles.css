@@ -1,6 +1,6 @@
 .paycomet-section .heading {background: url("images/paycomet_logo.png") no-repeat 0 10% / 18rem auto; padding-left: 20rem;}
 .paycomet-section .button-container {float: right;}
-.paycomet-section .config-alt {background: url("images/paycomet_allinone.png") no-repeat scroll 0 0 / 100% auto; height: 28px; margin: 0.5rem 0 0; width: 230px;}
+.paycomet-section .config-alt {background: no-repeat scroll 0 0 / 100% auto; height: 28px; margin: 0.5rem 0 0; width: 230px;}
 
 
 .Txerra a {background: url("images/paycomet_logo.png") no-repeat 0 50% / 18rem auto; padding-left: 20rem;}

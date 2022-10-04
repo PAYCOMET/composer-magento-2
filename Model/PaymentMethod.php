@@ -743,12 +743,16 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $select = $connection->select()
             ->from(
                 ['token' => $resource->getTableName('paycomet_token')],
-                ['hash', 'cc', 'brand' , 'desc']
+                ['customer_id', 'iduser', 'tokenuser', 'hash', 'cc', 'brand' , 'expiry' , 'desc']
             )
             ->where('customer_id = ?', $this->_helper->getCustomerId())
             ->order('date DESC');
         $data = $connection->fetchAll($select);
-        return $data;
+
+        $data =  $this->_helper->validateTokenInfo($data);
+
+        // Return only valid cards
+        return $data["valid"];
     }
 
     /**
