@@ -7,6 +7,7 @@ use Paycomet\Payment\Observer\DataAssignObserver;
 use Paycomet\Payment\Model\Config\Source\PaymentAction;
 use Paycomet\Bankstore\ApiRest;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Paycomet\Payment\Controller\Cards\Update;
 
 class Data extends AbstractHelper
 {
@@ -120,6 +121,7 @@ class Data extends AbstractHelper
      * Data constructor.
      *
      * @param \Magento\Framework\App\Helper\Context                             $context
+     * @param \Magento\Framework\App\Action\Context                             $context2
      * @param \Magento\Framework\Encryption\EncryptorInterface                  $encryptor
      * @param \Magento\Directory\Model\Config\Source\Country                    $country
      * @param \Magento\Quote\Api\CartRepositoryInterface                        $quoteRepository
@@ -143,6 +145,7 @@ class Data extends AbstractHelper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Action\Context $context2,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Directory\Model\Config\Source\Country $country,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
@@ -164,6 +167,7 @@ class Data extends AbstractHelper
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Framework\ObjectManagerInterface $objectmanager
     ) {
+        $this->context = $context2;
         parent::__construct($context);
         $this->_encryptor = $encryptor;
         $this->_country = $country;
@@ -2257,6 +2261,66 @@ class Data extends AbstractHelper
             $this->_logger->critical($e);
             return false;
         }
+    }
+
+    /**
+     * Manage cards. Update expiryDate when not defined
+     *
+     * @param array $arrData
+     * @return array $arrDataValidated array of validd and invalid cards
+     */
+    public function validateTokenInfo($arrData)
+    {
+        $storeId = $this->_storeManager->getStore()->getId();
+        $arrDataValidated = [];
+        $arrDataValidated["valid"] = [];
+        $arrDataValidated["invalid"] = [];
+
+        foreach ($arrData as $key => $tokenData) {
+            if (empty($tokenData['expiry'])) {
+
+                $merchant_terminal  = trim($this->getConfigData('merchant_terminal', $storeId));
+                $api_key            = trim($this->getEncryptedConfigData('api_key', $storeId));
+
+                if ($api_key != "") {
+                    $apiRest = new ApiRest($api_key);
+                    $formResponse = $apiRest->infoUser(
+                        $tokenData['iduser'],
+                        $tokenData['tokenuser'],
+                        $merchant_terminal
+                    );
+
+                    if ($formResponse->errorCode==0) {
+                        $tokenData['expiry'] = $formResponse->expiryDate;
+                    } else {
+                        $tokenData['expiry'] = "1900/01";
+                    }
+
+                    $update = new Update($this->context, $this->_session);
+                    $update->updatePaycometCardExpiryDate(
+                        $tokenData['hash'],
+                        $tokenData['customer_id'],
+                        $tokenData['expiry']
+                    );
+                }
+            }
+
+            // Remove sensible data from array
+            unset($tokenData['customer_id']);
+            unset($tokenData['iduser']);
+            unset($tokenData['tokenuser']);
+
+            // If not expired
+            if ((int)date("Ym") < (int)str_replace("/", "", $tokenData['expiry'])) {
+                $arrDataValidated["valid"][] = $tokenData;
+            } else {
+                if ($tokenData['expiry'] == "1900/01") {
+                    $tokenData['expiry'] = "";  
+                }
+                $arrDataValidated["invalid"][] = $tokenData;
+            }
+        }
+        return $arrDataValidated;
     }
 
     /**

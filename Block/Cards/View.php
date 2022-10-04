@@ -136,10 +136,12 @@ class View extends \Magento\Framework\View\Element\Template
         $select = $connection->select()
             ->from(
                 ['token' => $resource->getTableName('paycomet_token')],
-                ['token_id', 'customer_id', 'hash', 'iduser', 'tokenuser', 'cc', 'brand' , 'expiry' , 'desc']
+                ['token_id', 'customer_id', 'iduser', 'tokenuser', 'hash', 'cc', 'brand' , 'expiry' , 'desc']
             )
-            ->where('customer_id = ?', $this->_customerSession->getCustomerId());
+            ->where('customer_id = ?', $this->_customerSession->getCustomerId())
+            ->order('date DESC');
         $data = $connection->fetchAll($select);
-        return $data;
+
+        return $this->_helper->validateTokenInfo($data);
     }
 }

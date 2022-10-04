@@ -47,6 +47,14 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.23: 
+
+- Control tokens inactivos. Los tarjetas caducadas ya no se muestrasn en el checkout.
+
+> 2.4.22: 
+
+- Mejoras de código. Los pedidos de los APMs se crean inicialmente en estado pending_payment a excepción de Multibanco que se crea en pending.
+
 > 2.4.21: 
 
 - Validación Magento 2.4.4 y php 8.1
