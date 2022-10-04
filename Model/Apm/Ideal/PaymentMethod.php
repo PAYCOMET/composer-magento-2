@@ -4,20 +4,66 @@ namespace Paycomet\Payment\Model\Apm\Ideal;
 
 class PaymentMethod extends \Paycomet\Payment\Model\Apm\PaymentMethod
 {
-    const METHOD_ID = 12;
-    const METHOD_CODE = 'paycomet_ideal';
+    public const METHOD_ID = 12;
+    public const METHOD_CODE = 'paycomet_ideal';
 
+    /**
+     * @var string
+     */
     protected $_code = self::METHOD_CODE;
 
+    /**
+     * @var boolean
+     */
     protected $_canAuthorize = false;
+
+    /**
+     * @var boolean
+     */
     protected $_canCapture = false;
+
+    /**
+     * @var boolean
+     */
     protected $_canCapturePartial = false;
+
+    /**
+     * @var boolean
+     */
     protected $_canCaptureOnce = false;
+
+    /**
+     * @var boolean
+     */
     protected $_canRefund = true;
+
+    /**
+     * @var boolean
+     */
     protected $_canRefundInvoicePartial = true;
+
+    /**
+     * @var boolean
+     */
     protected $_isGateway = true;
+
+    /**
+     * @var boolean
+     */
     protected $_isInitializeNeeded = true;
+
+    /**
+     * @var boolean
+     */
     protected $_canUseInternal = false;
+
+    /**
+     * @var boolean
+     */
     protected $_canVoid = false;
+
+    /**
+     * @var boolean
+     */
     protected $_canReviewPayment = true;
 }

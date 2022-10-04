@@ -7,6 +7,8 @@ use Magento\Sales\Model\Order as parentOrder;
 class Order extends parentOrder
 {
     /**
+     * Hold
+     *
      * @return $this
      */
     public function hold()
@@ -19,6 +21,8 @@ class Order extends parentOrder
     }
 
     /**
+     * Unhold
+     *
      * @return $this
      */
     public function unhold()

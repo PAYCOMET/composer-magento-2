@@ -14,7 +14,6 @@ class Debug extends \Magento\Framework\Logger\Handler\Base
     protected $loggerType = Logger::DEBUG;
 
     /**
-     * File name.
      *
      * @var string
      */

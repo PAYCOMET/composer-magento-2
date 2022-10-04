@@ -2,7 +2,6 @@
 
 namespace Paycomet\Payment\Controller\Process;
 
-
 class SessionResult extends \Magento\Framework\App\Action\Action
 {
     /**
@@ -39,9 +38,9 @@ class SessionResult extends \Magento\Framework\App\Action\Action
      * Result constructor.
      *
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Paycomet\Payment\Helper\Data       $helper
+     * @param \Paycomet\Payment\Helper\Data         $helper
      * @param \Magento\Sales\Model\OrderFactory     $orderFactory
-     * @param \Paycomet\Payment\Logger\Logger     $logger
+     * @param \Paycomet\Payment\Logger\Logger       $logger
      * @param \Magento\Checkout\Model\Session       $session
      */
     public function __construct(
@@ -60,19 +59,21 @@ class SessionResult extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Execute
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
-        
+
         $response = $this->getRequest()->getParams();
         if (!$this->_validateResponse($response)) {
             $this->messageManager->addError(
                 __('Your payment was unsuccessful. Please try again or use a different card / payment method.'),
                 'PAYCOMET_messages'
-            );            
+            );
             $this->_redirect('checkout/cart');
-            
+
             return;
         }
 
@@ -89,11 +90,17 @@ class SessionResult extends \Magento\Framework\App\Action\Action
                 __('Your payment was unsuccessful. Please try again or use a different card / payment method.'),
                 'PAYCOMET_messages'
             );
-            $this->_redirect('checkout/cart'); 
+            $this->_redirect('checkout/cart');
         }
     }
 
-    private function _validateResponse($response){
+    /**
+     * Validate Response
+     *
+     * @param array $response
+     */
+    private function _validateResponse($response)
+    {
         if (!isset($response) || !isset($response['timestamp']) || !isset($response['order_id']) ||
             !isset($response['result']) || !isset($response['hash'])) {
             return false;
@@ -129,7 +136,7 @@ class SessionResult extends \Magento\Framework\App\Action\Action
     /**
      * Get order based on increment_id.
      *
-     * @param $incrementId
+     * @param int $incrementId
      *
      * @return \Magento\Sales\Model\Order
      */

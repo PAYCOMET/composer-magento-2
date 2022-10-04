@@ -17,8 +17,6 @@ class Result extends \Magento\Framework\App\Action\Action
     protected $_url;
 
     /**
-     * Core registry.
-     *
      * @var \Magento\Framework\Registry\Registry
      */
     private $coreRegistry;
@@ -31,10 +29,10 @@ class Result extends \Magento\Framework\App\Action\Action
     /**
      * Result constructor.
      *
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Paycomet\Payment\Helper\Data       $helper
-     * @param \Magento\Framework\Registry           $coreRegistry
-     * @param \Paycomet\Payment\Logger\Logger     $logger
+     * @param \Magento\Framework\App\Action\Context     $context
+     * @param \Paycomet\Payment\Helper\Data             $helper
+     * @param \Magento\Framework\Registry               $coreRegistry
+     * @param \Paycomet\Payment\Logger\Logger           $logger
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -51,6 +49,8 @@ class Result extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Execute
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
@@ -75,6 +75,8 @@ class Result extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Handle Response
+     *
      * @param array $response
      *
      * @return bool
@@ -87,6 +89,7 @@ class Result extends \Magento\Framework\App\Action\Action
             return false;
         }
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->_helper->logDebug(__('Gateway response:').print_r($this->_helper->stripTrimFields($response), true));
 
         // validate response

@@ -3,21 +3,22 @@
 $viewModel = $block->getViewModel();
 $icHelper = $viewModel->getIcHelper();
 
-// If APM InstantCredit not enable, return
-if (!$icHelper->getIsEnabled()) return;
+if (!$icHelper->getIsEnabled()) {
+    return;
+}
 
 ?>
 <script>
     require([
         'jquery',
         'domReady',
-        '<?= $viewModel->getSimulatorUrl() ?>'
+        '<?= /* @noEscape */ $viewModel->getSimulatorUrl() ?>'
     ], function($){
         $(function(){
-            window.hashIcSimulator = "<?= $viewModel->getHash() ?>";
+            window.hashIcSimulator = "<?= /* @noEscape */ $viewModel->getHash() ?>";
             window.icSimulatorCustom = {
-                upperLimit:  <?= $icHelper->getUpperLimit() ?>,
-                lowerLimit: <?= $icHelper->getLowerLimit() ?>,
+                upperLimit:  <?= /* @noEscape */ $icHelper->getUpperLimit() ?>,
+                lowerLimit: <?= /* @noEscape */ $icHelper->getLowerLimit() ?>,
             };
 
             // Fire event manually (cause in RequireJS is not fired)

@@ -5,6 +5,8 @@ namespace Paycomet\Payment\Block\Process\Result;
 class Messages extends \Magento\Framework\View\Element\Messages
 {
     /**
+     * Prepare Layout
+     *
      * @return $this
      */
     protected function _prepareLayout()

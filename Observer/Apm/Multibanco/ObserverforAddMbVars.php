@@ -6,15 +6,18 @@ use Paycomet\Payment\Model\Apm\Multibanco\PaymentMethod;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
-
 class ObserverforAddMbVars implements ObserverInterface
 {
-
     /**
      * @var \Magento\Checkout\Model\Session
      */
     private $_session;
 
+    /**
+     * Construct
+     *
+     * @param \Magento\Checkout\Model\Session $session
+     */
     public function __construct(
         \Magento\Checkout\Model\Session $session
     ) {
@@ -22,14 +25,15 @@ class ObserverforAddMbVars implements ObserverInterface
     }
 
     /**
+     * Execute
+     *
      * @param Observer\Magento\Framework\Event\Observer $observer
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $transport = $observer->getTransport();
         $order = $transport->getOrder();
-
-        if($order->getPayment()->getMethodInstance()->getCode() == PaymentMethod::METHOD_CODE){
+        if ($order->getPayment()->getMethodInstance()->getCode() == PaymentMethod::METHOD_CODE) {
             $methodData = $order->getPayment()->getAdditionalInformation('METHOD_DATA');
             if ($methodData) {
                 $methodData = json_decode($methodData);
@@ -42,5 +46,4 @@ class ObserverforAddMbVars implements ObserverInterface
             }
         }
     }
-
 }

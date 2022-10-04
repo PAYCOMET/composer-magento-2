@@ -3,58 +3,122 @@ $_cards = $block->getPaycometCards();
 
 ?>
 
-<p><?php echo $block->escapeHtml(
+<p><?= $block->escapeHtml(
     __('In this section you can Edit or Delete your stored cards or Add a new one to your account')
 ); ?></p>
-<form class="form-paycometcards-items" id="paycometcards-view-form" action="<?php /* @escapeNotVerified */ echo $block->getUrl('paycomet_payment/cards/remove') ?>" method="post">
+<form class="form-paycometcards-items" id="paycometcards-view-form"
+ action="<?= /* @noEscape */ $block->getUrl('paycomet_payment/cards/remove') ?>" method="post">
 
-<div id="cards" class="table-wrapper">
+
+<?php if (count($_cards["valid"])>0): ?>
     <table class="data table table-order-items paycomet-cards" id="paycomet-cards-table">
-        <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('PAYCOMET Cards') ?></caption>
+        <caption class="table-caption"><?= /* @noEscape */ __('PAYCOMET Cards') ?></caption>
         <thead>
             <tr>
-                <th scope="col" class="col number"><?php /* @escapeNotVerified */ echo __('Number') ?></th>
-                <th scope="col" class="col brand"><?php /* @escapeNotVerified */ echo __('Brand') ?></th>
-                <th scope="col" class="col expirty"><?php /* @escapeNotVerified */ echo __('Expiry Date') ?></th>
-                <th scope="col" class="col description"><?php /* @escapeNotVerified */ echo __('Description') ?></th>
+                <th scope="col" class="col number"><?= /* @noEscape */ __('Number') ?></th>
+                <th scope="col" class="col brand"><?= /* @noEscape */ __('Brand') ?></th>
+                <th scope="col" class="col expirty"><?= /* @noEscape */ __('Expiry Date') ?></th>
+                <th scope="col" class="col description"><?= /* @noEscape */ __('Description') ?></th>
                 <th scope="col" class="col actions">&nbsp;</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($_cards as $_card): ?>
-                <tr>
-                    <td data-th="<?php echo $block->escapeHtml(__('Number')) ?>" class="col number"><?php /* @escapeNotVerified */  echo $_card["cc"];?></td>
-                    <td data-th="<?php echo $block->escapeHtml(__('Brand')) ?>" class="col number"><?php /* @escapeNotVerified */  echo $_card["brand"];?></td>
-                    <td data-th="<?php echo $block->escapeHtml(__('Expiry Date')) ?>" class="col number"><?php /* @escapeNotVerified */  echo $_card["expiry"];?></td>
-                    <td data-th="<?php echo $block->escapeHtml(__('Description')) ?>" class="col description"><input type="text" maxlength="64" id="card_desc_<?php echo $_card["hash"];?>" name="card_desc_[<?php echo $_card["hash"];?>]" value="<?php /* @escapeNotVerified */ print $_card["desc"];?>" placeholder="añada una descripción"></td>
-                    <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
-                        
-                        <a href="#" data-role="update" data-post='<?php /* @escapeNotVerified */ echo $block->getUpdateParams($_card["hash"]) ?>' title="<?php /* @escapeNotVerified */ echo __('Update Description') ?>" class="btn-remove action delete">
-						    <span><?php /* @escapeNotVerified */ echo __('Update Description');?></span>
-						</a>
-						<a href="#" data-role="remove" data-post='<?php /* @escapeNotVerified */ echo $block->getRemoveParams($_card["hash"]) ?>' title="<?php /* @escapeNotVerified */ echo __('Remove Card') ?>" class="btn-remove action delete">
-						    <span><?php /* @escapeNotVerified */ echo __('Remove Card');?></span>
-						</a>
-                        
-                     </td>
-                </tr>
+            <?php foreach ($_cards["valid"] as $_card): ?>
+            <tr>
+                <td data-th="<?= $block->escapeHtml(__('Number')) ?>" 
+                    class="col number"><?= /* @noEscape */ $_card["cc"];?>
+                </td>
+                <td data-th="<?= $block->escapeHtml(__('Brand')) ?>" class="col number">
+                    <?= /* @noEscape */ $_card["brand"];?>
+                </td>
+                <td data-th="<?= $block->escapeHtml(__('Expiry Date')) ?>" class="col number">
+                    <?= /* @noEscape */ $_card["expiry"];?>
+                </td>
+                <td data-th="<?= $block->escapeHtml(__('Description')) ?>" class="col description">
+                    <input type="text" maxlength="64" id="card_desc_<?= /* @noEscape */ $_card["hash"];?>" 
+                    name="card_desc_[<?= /* @noEscape */ $_card["hash"];?>]" 
+                    value="<?= /* @noEscape */ $_card["desc"];?>" placeholder="añada una descripción">
+                </td>
+                <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">
+                    <a href="#" data-role="update" 
+                    data-post='<?= /* @noEscape */ $block->getUpdateParams($_card["hash"]) ?>' 
+                    title="<?= /* @noEscape */ __('Update Description') ?>" class="btn-remove action delete">
+                        <span><?= /* @noEscape */ __('Update Description');?></span>
+                    </a>
+                    <a href="#" data-role="remove" 
+                    data-post='<?= /* @noEscape */ $block->getRemoveParams($_card["hash"]) ?>' 
+                    title="<?= /* @noEscape */ __('Remove Card') ?>" class="btn-remove action delete">
+                        <span><?= /* @noEscape */ __('Remove Card');?></span>
+                    </a>
+                </td>
+            </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
-</div>
-</form>
+<?php endif; ?>
 
 
 <div id="paycomet-cards" data-bind="scope:'paycomet-cards'" >
-    <!-- ko template: getTemplate() --><!-- /ko -->
+<!-- ko template: getTemplate() --><!-- /ko -->
 <script type="text/x-magento-init">
-       {
-           "#paycomet-cards": {
-               "Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout();?>
-           }
-       }
+    {
+        "#paycomet-cards": {
+            "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout();?>
+        }
+    }
 </script>
-<input type="hidden" id="paycomet-iframe" value="<?php echo $block->escapeHtml($block->getIframeUrl());?>" />
-<input type="hidden" id="paycomet-integration" value="<?php echo $block->escapeHtml($block->getIntegration());?>" />
-<input type="hidden" id="paycomet-jetid" value="<?php echo $block->escapeHtml($block->getJetId());?>" />
+<input type="hidden" id="paycomet-iframe" value="<?= $block->escapeHtml($block->getIframeUrl());?>" />
+<input type="hidden" id="paycomet-integration" value="<?= $block->escapeHtml($block->getIntegration());?>" />
+<input type="hidden" id="paycomet-jetid" value="<?= $block->escapeHtml($block->getJetId());?>" />
 </div>
+
+<?php if (count($_cards["invalid"])>0): ?>
+    <p><br><br><hr><strong><?= $block->escapeHtml(__('Invalid Cards')) ?></strong></p>
+    <table class="data table table-order-items paycomet-cards" id="paycomet-cards-table">
+        <caption class="table-caption"><?= /* @noEscape */ __('PAYCOMET Cards') ?></caption>
+        <thead>
+            <tr>
+                <th scope="col" class="col number"><?= /* @noEscape */ __('Number') ?></th>
+                <th scope="col" class="col brand"><?= /* @noEscape */ __('Brand') ?></th>
+                <th scope="col" class="col expirty"><?= /* @noEscape */ __('Expiry Date') ?></th>
+                <th scope="col" class="col description"><?= /* @noEscape */ __('Description') ?></th>
+                <th scope="col" class="col actions">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($_cards["invalid"] as $_card): ?>
+            <tr>
+                <td data-th="<?= $block->escapeHtml(__('Number')) ?>" 
+                    class="col number"><?= /* @noEscape */ $_card["cc"];?>
+                </td>
+                <td data-th="<?= $block->escapeHtml(__('Brand')) ?>" class="col number">
+                    <?= /* @noEscape */ $_card["brand"];?>
+                </td>
+                <td data-th="<?= $block->escapeHtml(__('Expiry Date')) ?>" class="col number">
+                    <?= /* @noEscape */ $_card["expiry"];?>
+                </td>
+                <td data-th="<?= $block->escapeHtml(__('Description')) ?>" class="col description">
+                    <input type="text" maxlength="64" id="card_desc_<?= /* @noEscape */ $_card["hash"];?>" 
+                    name="card_desc_[<?= /* @noEscape */ $_card["hash"];?>]" 
+                    value="<?= /* @noEscape */ $_card["desc"];?>" placeholder="añada una descripción">
+                </td>
+                <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">
+                    <a href="#" data-role="update" 
+                    data-post='<?= /* @noEscape */ $block->getUpdateParams($_card["hash"]) ?>' 
+                    title="<?= /* @noEscape */ __('Update Description') ?>" class="btn-remove action delete">
+                        <span><?= /* @noEscape */ __('Update Description');?></span>
+                    </a>
+                    <a href="#" data-role="remove" 
+                    data-post='<?= /* @noEscape */ $block->getRemoveParams($_card["hash"]) ?>' 
+                    title="<?= /* @noEscape */ __('Remove Card') ?>" class="btn-remove action delete">
+                        <span><?= /* @noEscape */ __('Remove Card');?></span>
+                    </a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
+</form>
+
+

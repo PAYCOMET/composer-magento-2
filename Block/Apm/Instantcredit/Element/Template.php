@@ -3,7 +3,6 @@ namespace Paycomet\Payment\Block\Apm\Instantcredit\Element;
 
 /**
  * Class Template
- * @package Paycomet\Payment\Block\Apm\Instantcredit\Element
  *
  * Class to check if module is active before render it
  */
@@ -14,9 +13,7 @@ class Template extends \Magento\Framework\View\Element\Template
      */
     public function _toHtml()
     {
-        if (
-            !$this->_scopeConfig->isSetFlag('payment/paycomet_instantcredit/active')
-        ) {
+        if (!$this->_scopeConfig->isSetFlag('payment/paycomet_instantcredit/active')) {
             return '';
         }
         return parent::_toHtml();

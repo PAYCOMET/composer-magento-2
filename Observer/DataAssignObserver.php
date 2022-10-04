@@ -5,19 +5,15 @@
  */
 namespace Paycomet\Payment\Observer;
 
-
 use Magento\Framework\Event\Observer;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
 
-/**
- * Class DataAssignObserver
- */
 class DataAssignObserver extends AbstractDataAssignObserver
 {
-    const PAYCOMET_SAVECARD     = 'saveCard';
-    const PAYCOMET_TOKENCARD    = 'paycometCard';
-    const PAYCOMET_JETTOKEN     = 'paycometJetToken';
+    public const PAYCOMET_SAVECARD     = 'saveCard';
+    public const PAYCOMET_TOKENCARD    = 'paycometCard';
+    public const PAYCOMET_JETTOKEN     = 'paycometJetToken';
 
     /**
      * @var array
@@ -29,6 +25,8 @@ class DataAssignObserver extends AbstractDataAssignObserver
     ];
 
     /**
+     * Execute
+     *
      * @param Observer $observer
      * @return void
      */

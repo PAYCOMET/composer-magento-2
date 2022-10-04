@@ -8,23 +8,20 @@ namespace Paycomet\Payment\Model\Config\Source;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Framework\Option\ArrayInterface;
 
-/**
- * Class PaymentAction
- */
 class PaymentAction implements ArrayInterface
 {
     /**
      * Possible actions on order place
-     * 
+     *
      * @return array
      */
 
+    public const AUTHORIZE = AbstractMethod::ACTION_AUTHORIZE;
+    public const AUTHORIZE_CAPTURE = AbstractMethod::ACTION_AUTHORIZE_CAPTURE;
 
-    const AUTHORIZE = AbstractMethod::ACTION_AUTHORIZE;
-    const AUTHORIZE_CAPTURE = AbstractMethod::ACTION_AUTHORIZE_CAPTURE;
-    
-
-
+    /**
+     * To Option array
+     */
     public function toOptionArray()
     {
         return [

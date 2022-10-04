@@ -33,7 +33,6 @@ class InstallData implements InstallDataInterface
         $this->quoteSetupFactory = $quoteSetupFactory;
     }
 
-
     /**
      * Installs DB schema for a module.
      *
@@ -50,11 +49,17 @@ class InstallData implements InstallDataInterface
 
         $setup->startSetup();
 
-        $salesInstaller->addAttribute('order', 'paycomet_token', ['type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT, 'length'=> 100, 'visible' => false,'nullable' => true,]);
-
+        $salesInstaller->addAttribute(
+            'order',
+            'paycomet_token',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length'=> 100,
+                'visible' => false,
+                'nullable' => true
+            ]
+        );
 
         $setup->endSetup();
-
-
     }
 }

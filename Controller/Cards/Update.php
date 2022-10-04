@@ -52,19 +52,51 @@ class Update extends \Magento\Framework\App\Action\Action
         $customer_id = $this->_customerSession->getCustomerId();
         $card_desc = $response["card_desc"];
 
-        $this->updatePaycometCard($hash,$customer_id,$card_desc);
+        $this->updatePaycometCard($hash, $customer_id, $card_desc);
 
         $this->_redirect('paycomet_payment/cards/view');
     }
 
-
-    public function updatePaycometCard($hash,$customer_id,$card_desc)
+    /**
+     * Update Paycoment Card
+     *
+     * @param string $hash
+     * @param int $customer_id
+     * @param string $card_desc
+     */
+    public function updatePaycometCard($hash, $customer_id, $card_desc)
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
+        $resource = $objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $connection = $resource->getConnection();
 
-        $data = array("desc"=>$card_desc);
+        $data = [
+            "desc"=>$card_desc
+        ];
+        $conds[] = $connection->quoteInto("hash" . ' = ?', $hash);
+        $conds[] = $connection->quoteInto("customer_id" . ' = ?', $customer_id);
+
+        $where = implode(' AND ', $conds);
+
+        $connection->update($resource->getTableName('paycomet_token'), $data, $where);
+    }
+
+    /**
+     * Update Paycoment Card Expiry Date
+     *
+     * @param string $hash
+     * @param int $customer_id
+     * @param string $expiry
+     */
+    public function updatePaycometCardExpiryDate($hash, $customer_id, $expiry)
+    {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $resource = $objectManager->get(\Magento\Framework\App\ResourceConnection::class);
+        $connection = $resource->getConnection();
+
+        $data = [
+            "expiry"=>$expiry
+        ];
         $conds[] = $connection->quoteInto("hash" . ' = ?', $hash);
         $conds[] = $connection->quoteInto("customer_id" . ' = ?', $customer_id);
 

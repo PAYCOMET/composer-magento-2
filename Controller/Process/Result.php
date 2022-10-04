@@ -25,8 +25,6 @@ class Result extends \Magento\Framework\App\Action\Action
     protected $_url;
 
     /**
-     * Core registry.
-     *
      * @var \Magento\Framework\Registry\Registry
      */
     private $coreRegistry;
@@ -44,12 +42,12 @@ class Result extends \Magento\Framework\App\Action\Action
     /**
      * Result constructor.
      *
-     * @param \Magento\Framework\App\Action\Context                $context
-     * @param \Paycomet\Payment\Helper\Data                          $helper
-     * @param \Magento\Sales\Model\OrderFactory                    $orderFactory
-     * @param \Magento\Framework\Registry                          $coreRegistry
-     * @param \Paycomet\Payment\Logger\Logger                        $logger
-     * @param \Paycomet\Payment\Api\PaycometPaymentManagementInterface $paymentManagement
+     * @param \Magento\Framework\App\Action\Context                         $context
+     * @param \Paycomet\Payment\Helper\Data                                 $helper
+     * @param \Magento\Sales\Model\OrderFactory                             $orderFactory
+     * @param \Magento\Framework\Registry                                   $coreRegistry
+     * @param \Paycomet\Payment\Logger\Logger                               $logger
+     * @param \Paycomet\Payment\Api\PaycometPaymentManagementInterface      $paymentManagement
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -69,21 +67,19 @@ class Result extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Execute
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
-	    try {
+        try {
             $response = $this->getRequest()->getParams();
             unset($response["TransactionName"]);
 
             if ($response) {
-                //the default
-                //$params['returnUrl'] = $this->_url->getUrl('checkout/cart');
-
                 // Notification
-                if (isset($response["TransactionType"])){
-
+                if (isset($response["TransactionType"])) {
                     // Process Notification
                     $result = $this->_handleResponse($response);
 
@@ -91,7 +87,10 @@ class Result extends \Magento\Framework\App\Action\Action
                 } else {
                     $sessionParams = $response;
                     // Process URL OK/KO
-                    $params['returnUrl'] = $this->_url->getUrl('paycomet_payment/process/sessionresult', $sessionParams);
+                    $params['returnUrl'] = $this->_url->getUrl(
+                        'paycomet_payment/process/sessionresult',
+                        $sessionParams
+                    );
                     $this->coreRegistry->register(\Paycomet\Payment\Block\Process\Result::REGISTRY_KEY, $params);
 
                     $this->_view->loadLayout();
@@ -103,10 +102,11 @@ class Result extends \Magento\Framework\App\Action\Action
         } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
-
     }
 
     /**
+     * Handle Response
+     *
      * @param array $response
      *
      * @return bool
@@ -119,6 +119,7 @@ class Result extends \Magento\Framework\App\Action\Action
             return false;
         }
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->_helper->logDebug(__('Gateway response:').print_r($this->_helper->stripTrimFields($response), true));
 
         // validate response
@@ -130,15 +131,12 @@ class Result extends \Magento\Framework\App\Action\Action
             return false;
         }
 
-
         $transaction_type = $response['TransactionType'];
-        switch ($transaction_type){
+        switch ($transaction_type) {
             // add_user
             case 107:
                 // process the response
                 return $this->_paymentManagement->processResponseAddUser($response);
-
-                break;
 
             // refund -> not processed in notification
             case 2:
@@ -166,7 +164,6 @@ class Result extends \Magento\Framework\App\Action\Action
 
                 break;
         }
-
     }
 
     /**
@@ -184,20 +181,28 @@ class Result extends \Magento\Framework\App\Action\Action
         $ref = $response['Order'];
         $resp = $response['Response'];
 
-
-        switch ($transaction_type){
+        switch ($transaction_type) {
             case 107: // add_user
-
-                $arrDatos = explode("_",$ref);
+                $arrDatos = explode("_", $ref);
                 $storeId = $arrDatos[1];
 
-                $merchant_code = $this->_helper->getConfigData('merchant_code',$storeId);
-                $merchant_terminal = $this->_helper->getConfigData('merchant_terminal',$storeId);
-                $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass',$storeId);
+                $merchant_code = $this->_helper->getConfigData('merchant_code', $storeId);
+                $merchant_terminal = $this->_helper->getConfigData('merchant_terminal', $storeId);
+                $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass', $storeId);
                 $sign = $response['NotificationHash'];
                 $datetime = $response['DateTime'];
 
-                $local_sign = hash('sha512',$merchant_code.$merchant_terminal.$transaction_type.$ref.$datetime.md5($merchant_pass));
+                // phpcs:ignore Magento2.Security.InsecureFunction
+                $local_sign = hash(
+                    'sha512',
+                    $merchant_code.
+                    $merchant_terminal.
+                    $transaction_type.
+                    $ref.
+                    $datetime.
+                    // phpcs:ignore Magento2.Security.InsecureFunction
+                    md5($merchant_pass)
+                );
 
                 break;
 
@@ -205,21 +210,31 @@ class Result extends \Magento\Framework\App\Action\Action
                 $order = $this->_getOrder($response['Order']);
                 $storeId = $order->getStoreId();
 
-                $merchant_code = $this->_helper->getConfigData('merchant_code',$storeId);
-                $merchant_terminal = $this->_helper->getConfigData('merchant_terminal',$storeId);
-                $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass',$storeId);
+                $merchant_code = $this->_helper->getConfigData('merchant_code', $storeId);
+                $merchant_terminal = $this->_helper->getConfigData('merchant_terminal', $storeId);
+                $merchant_pass = $this->_helper->getEncryptedConfigData('merchant_pass', $storeId);
 
                 $sign = $response['NotificationHash'];
                 $amount = $response['Amount'];
                 $currency = $response['Currency'];
                 $bankdatetime = $response['BankDateTime'];
 
-                $local_sign = hash('sha512',$merchant_code.$merchant_terminal.$transaction_type.$ref.$amount.$currency.md5($merchant_pass).$bankdatetime.$resp);
+                $local_sign = hash(
+                    'sha512',
+                    $merchant_code.
+                    $merchant_terminal.
+                    $transaction_type.
+                    $ref.
+                    $amount.
+                    $currency.
+                    // phpcs:ignore Magento2.Security.InsecureFunction
+                    md5($merchant_pass).
+                    $bankdatetime.
+                    $resp
+                );
 
                 break;
-
         }
-
 
         //Check to see if hashes match or not
         if (strcmp($sign, $local_sign) != 0) {
@@ -229,11 +244,10 @@ class Result extends \Magento\Framework\App\Action\Action
         return true;
     }
 
-
     /**
      * Get order based on increment id.
      *
-     * @param $incrementId
+     * @param int $incrementId
      *
      * @return \Magento\Sales\Model\Order
      */
