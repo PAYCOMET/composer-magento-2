@@ -2267,7 +2267,7 @@ class Data extends AbstractHelper
      * Manage cards. Update expiryDate when not defined
      *
      * @param array $arrData
-     * @return array $arrDataValidated array of validd and invalid cards
+     * @return array $arrDataValidated array of valid and invalid cards
      */
     public function validateTokenInfo($arrData)
     {
@@ -2315,7 +2315,7 @@ class Data extends AbstractHelper
                 $arrDataValidated["valid"][] = $tokenData;
             } else {
                 if ($tokenData['expiry'] == "1900/01") {
-                    $tokenData['expiry'] = "";  
+                    $tokenData['expiry'] = "";
                 }
                 $arrDataValidated["invalid"][] = $tokenData;
             }

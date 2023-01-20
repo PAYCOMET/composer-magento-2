@@ -34,19 +34,20 @@ define(
             'przelewy24',
             'bancontact',
             'eps',
-            'tele2',
+            //'tele2',
             'paysera',
             'postfinance',
             'qiwi',
-            'yandex',
-            'mts',
-            'beeline',
+            //'yandex',
+            //'mts',
+            //'beeline',
             'paysafecard',
             'skrill',
-            'webmoney',
+            //'webmoney',
             'instantcredit',
             'klarnapayments',
-            'paypal'
+            'paypal',
+            'mbway'
         ];
 
         for (var i = 0; i < arrAPM.length; i+=1) {

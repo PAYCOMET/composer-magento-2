@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.24: 
+
+- Se añade APM MB Way
+
 > 2.4.23: 
 
 - Control tokens inactivos. Los tarjetas caducadas ya no se muestrasn en el checkout.
