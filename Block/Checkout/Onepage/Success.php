@@ -58,21 +58,24 @@ class Success extends \Magento\Framework\View\Element\Template
                 );
                 return parent::_toHtml();
             }
+
+            // APMs Info
+            $code = $order->getPayment()->getMethodInstance()->getCode();
+            $title = $order->getPayment()->getMethodInstance()->getTitle();
+            $this->addData(
+                [
+                'code' => $code,
+                'title' => $title,
+                'img_src' => $this->getViewFileUrl('Paycomet_Payment::img/apms/'.$code . '.svg')
+                ]
+            );
+
+            // APM Extra
             if ($order->getPayment()->getMethodInstance()->getCode() == 'paycomet_multibanco') {
                 $methodData = $order->getPayment()->getAdditionalInformation('METHOD_DATA');
 
                 if ($methodData) {
                     $methodData = json_decode($methodData);
-
-                    $code = $order->getPayment()->getMethodInstance()->getCode();
-                    $title = $order->getPayment()->getMethodInstance()->getTitle();
-                    $this->addData(
-                        [
-                        'code' => $code,
-                        'title' => $title,
-                        'img_src' => $this->getViewFileUrl('Paycomet_Payment::img/apms/'.$code . '.svg')
-                        ]
-                    );
 
                     if ($methodData->entityNumber && $methodData->referenceNumber) {
                         $this->addData(
@@ -82,9 +85,13 @@ class Success extends \Magento\Framework\View\Element\Template
                             ]
                         );
                     }
-
                 }
 
+                return parent::_toHtml();
+            }
+
+            // APM Extra
+            if ($order->getPayment()->getMethodInstance()->getCode() == 'paycomet_mbway') {
                 return parent::_toHtml();
             }
         }
