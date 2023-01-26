@@ -33,19 +33,20 @@ class PaycometConfigProvider implements ConfigProviderInterface
         'paycomet_przelewy24',
         'paycomet_bancontact',
         'paycomet_eps',
-        'paycomet_tele2',
+        //'paycomet_tele2',
         'paycomet_paysera',
         'paycomet_postfinance',
         'paycomet_qiwi',
-        'paycomet_yandex',
-        'paycomet_mts',
-        'paycomet_beeline',
+        //'paycomet_yandex',
+        //'paycomet_mts',
+        //'paycomet_beeline',
         'paycomet_paysafecard',
         'paycomet_skrill',
-        'paycomet_webmoney',
+        //'paycomet_webmoney',
         'paycomet_instantcredit',
         'paycomet_klarnapayments',
-        'paycomet_paypal'
+        'paycomet_paypal',
+        'paycomet_mbway'
     ];
 
     /**

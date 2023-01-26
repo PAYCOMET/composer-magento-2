@@ -38,9 +38,11 @@
         <method name="paycomet_eps">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <!--
         <method name="paycomet_tele2">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        -->
         <method name="paycomet_paysera">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
@@ -50,6 +52,7 @@
         <method name="paycomet_qiwi">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <!--
         <method name="paycomet_yandex">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
@@ -59,19 +62,25 @@
         <method name="paycomet_beeline">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        -->
         <method name="paycomet_paysafecard">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
          <method name="paycomet_skrill">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <!--
          <method name="paycomet_webmoney">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        -->
          <method name="paycomet_instantcredit">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="paycomet_klarnapayments">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="paycomet_mbway">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
 

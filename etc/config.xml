@@ -129,6 +129,7 @@
                 <currency>EUR</currency>
                 <sort_order>1</sort_order>
             </paycomet_eps>
+            <!--
             <paycomet_tele2>
                 <active>0</active>
                 <title>PAYCOMET - Tele2</title>
@@ -139,6 +140,7 @@
                 <currency>EUR</currency>
                 <sort_order>1</sort_order>
             </paycomet_tele2>
+            -->
             <paycomet_paysera>
                 <active>0</active>
                 <title>PAYCOMET - Paysera</title>
@@ -169,6 +171,7 @@
                 <currency>EUR</currency>
                 <sort_order>1</sort_order>
             </paycomet_qiwi>
+            <!--
             <paycomet_yandex>
                 <active>0</active>
                 <title>PAYCOMET - Yandex</title>
@@ -199,6 +202,7 @@
                 <currency>EUR</currency>
                 <sort_order>1</sort_order>
             </paycomet_beeline>
+            -->
             <paycomet_paysafecard>
                 <active>0</active>
                 <title>PAYCOMET - Paysafecard</title>
@@ -219,6 +223,7 @@
                 <currency>EUR</currency>
                 <sort_order>1</sort_order>
             </paycomet_skrill>
+            <!--
             <paycomet_webmoney>
                 <active>0</active>
                 <title>PAYCOMET - Webmoney</title>
@@ -229,6 +234,7 @@
                 <currency>EUR</currency>
                 <sort_order>1</sort_order>
             </paycomet_webmoney>
+            -->
             <paycomet_instantcredit>
                 <active>0</active>
                 <title>Pago a plazos instantáneo</title>
@@ -264,6 +270,16 @@
                 <currency>EUR</currency>
                 <sort_order>1</sort_order>
             </paycomet_paypal>
+            <paycomet_mbway>
+                <active>0</active>
+                <title>PAYCOMET - MB Way</title>
+                <model>Paycomet\Payment\Model\Apm\Mbway\PaymentMethod</model>
+                <payment_action>authorize</payment_action>
+                <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <order_status>pending</order_status>
+                <currency>EUR</currency>
+                <sort_order>1</sort_order>
+            </paycomet_mbway>
         </payment>
         <system>
             <media_storage_configuration>
