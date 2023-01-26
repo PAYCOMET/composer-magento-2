@@ -205,11 +205,10 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
             if ($executePurchaseResponse->errorCode==0 && $executePurchaseResponse->challengeUrl) {
                 $challengeUrl = $executePurchaseResponse->challengeUrl;
             } else {
-                $serializeData = \Magento\Framework\Serialize\SerializerInterface::serialize($executePurchaseResponse);
-                $this->_helper->logDebug('Error executePurchaseResponse' . $serializeData);
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Error: ' . $executePurchaseResponse->errorCode)
-                );
+                $errorCode = $executePurchaseResponse->errorCode ?? 500;
+
+                $this->_helper->logDebug('Order: ' . $order->getRealOrderId() . ': Error apmExecutePurchase ' . json_encode($executePurchaseResponse));
+                throw new \Magento\Framework\Exception\LocalizedException(__("Error " . $errorCode), null, $errorCode);
             }
 
             // Se la asignamos para redirigir al final
@@ -219,7 +218,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 $payment->setAdditionalInformation("METHOD_DATA", json_encode($executePurchaseResponse->methodData));
             }
         } catch (\Exception $e) {
-            $this->_helper->logDebug('Error apmExecutePurchase' . $e->getMessage());
+            $this->_helper->logDebug('Error apmExecutePurchase ' . $e->getMessage());
             throw new \Magento\Framework\Exception\LocalizedException(__('Error: ' . $e->getCode()));
         }
 

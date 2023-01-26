@@ -1143,6 +1143,35 @@ class Data extends AbstractHelper
     }
 
     /**
+     * IsoCode Phone Prefix
+     *
+     * @param string $phone
+     */
+    public function getPhonePrefix($phone)
+    {
+        $prefix_array = [
+            '34', '44', '213', '376', '244', '1264', '1268', '54', '374', '297', '61', '43', '994', '1242', '973', '880',
+            '1246', '375', '32', '501', '229', '1441', '975', '591', '387', '267', '55', '673', '359', '226', '257',
+            '855', '237', '238', '1345', '236', '56', '86', '57', '269', '242', '682', '506', '385', '53', '90392',
+            '357', '42', '45', '253', '1809', '1809', '593', '20', '503', '240', '291', '372', '251', '500', '298',
+            '679', '358', '33', '594', '689', '241', '220', '7880', '49', '233', '350', '30', '299', '1473', '590',
+            '671', '502', '224', '245', '592', '509', '504', '852', '36', '354', '91', '62', '98', '964', '353', '972',
+            '39', '1876', '81', '962', '254', '686', '850', '82', '965', '996', '856', '371', '961', '266', '231',
+            '218', '417', '370', '352', '853', '389', '261', '265', '60', '960', '223', '356', '692', '596', '222',
+            '52', '691', '373', '377', '976', '1664', '212', '258', '95', '264', '674', '977', '31', '687', '64', '505',
+             '227', '234', '683', '672', '670', '47', '968', '680', '507', '675', '595', '51', '63', '48', '351',
+             '1787', '974', '262', '40', '250', '378', '239', '966', '221', '381', '248', '232', '65', '421', '386',
+            '677', '252', '27', '94', '290', '1869', '1758', '249', '597', '268', '46', '41', '963', '886', '66',
+            '228', '676', '1868', '216', '90', '993', '1649', '688', '256', '380', '971', '598', '678', '379', '58',
+            '84', '681', '969', '967', '260', '263', '1', '7'
+        ];
+        foreach ($prefix_array as $key => $prefix) {
+            if (substr($phone, 0, strlen($prefix)+1) == '+' . $prefix)
+                return $prefix;
+        }
+    }
+
+    /**
      * Get Emv3DS
      *
      * @param \Magento\Sales\Mode\Order $order
@@ -1179,10 +1208,10 @@ class Data extends AbstractHelper
         }
 
         if ($phone!="") {
-            $phone_prefix = $this->isoCodePhonePrefix($billingAddressData->getCountryId());
+            $phone_prefix = (substr(trim($phone), 0, 1) == '+') ? $this->getPhonePrefix(trim($phone)) : $this->isoCodePhonePrefix($billingAddressData->getCountryId());
             if ($phone_prefix!="") {
-                $arrDatosWorkPhone["cc"] = substr(preg_replace("/[^0-9]/", '', $phone_prefix), 0, 3);
-                $arrDatosWorkPhone["subscriber"] = substr(preg_replace("/[^0-9]/", '', $phone), 0, 15);
+                $arrDatosWorkPhone["cc"] = substr(preg_replace("/[^0-9]/", '', $phone_prefix), 0, 5);
+                $arrDatosWorkPhone["subscriber"] = substr(preg_replace("/[^0-9]/", '', str_replace('+' . $phone_prefix, '', $phone)), 0, 15);
                 $Merchant_EMV3DS["customer"]["workPhone"] = $arrDatosWorkPhone;
                 $Merchant_EMV3DS["customer"]["mobilePhone"] = $arrDatosWorkPhone;
             }
@@ -2267,7 +2296,7 @@ class Data extends AbstractHelper
      * Manage cards. Update expiryDate when not defined
      *
      * @param array $arrData
-     * @return array $arrDataValidated array of validd and invalid cards
+     * @return array $arrDataValidated array of valid and invalid cards
      */
     public function validateTokenInfo($arrData)
     {
@@ -2315,7 +2344,7 @@ class Data extends AbstractHelper
                 $arrDataValidated["valid"][] = $tokenData;
             } else {
                 if ($tokenData['expiry'] == "1900/01") {
-                    $tokenData['expiry'] = "";  
+                    $tokenData['expiry'] = "";
                 }
                 $arrDataValidated["invalid"][] = $tokenData;
             }

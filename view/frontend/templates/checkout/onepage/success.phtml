@@ -6,16 +6,16 @@
 <?php endif ?>
 
 <?php $params = $block->getParams(); ?>
-<script>
-    <?php if (isset($params['returnUrl'])):?>
-        window.top.location = "<?= $block->escapeXssInUrl($params['returnUrl']); ?>";
-    <?php endif; ?>
-</script>
+<?php if (isset($params['returnUrl'])):?>
+    <script>
+    window.top.location = "<?= $block->escapeXssInUrl($params['returnUrl']); ?>";
+    </script>
+<?php endif; ?>
 
 
 <?php if ($block->getData('code') == "paycomet_multibanco"):?>
     <p><?= /* @noEscape */ $block->getData('title');?></p>
-    <p>
+    <p style="min-height:50px;">
         <span class="paycoment-icon-left">
             <img class="payment-icon" src="<?= /* @noEscape */ $block->getData('img_src');?>"
             title="<?= /* @noEscape */ $block->getData('title');?>">
@@ -24,6 +24,20 @@
             <strong><?= /* @noEscape */ __("Entity");?>:</strong> <?= /* @noEscape */ $block->getData('Entity');?>
             <br/>
             <strong><?= /* @noEscape */ __("Reference");?>:</strong> <?= /* @noEscape */ $block->getData('Reference');?>
+        </span>
+    </p>
+<?php endif ?>
+
+<?php if ($block->getData('code') == "paycomet_mbway"):?>
+    <p><?= /* @noEscape */ $block->getData('title');?></p>
+    <p style="min-height:50px;">
+        <span class="paycoment-icon-left">
+            <img class="payment-icon" src="<?= /* @noEscape */ $block->getData('img_src');?>"
+            title="<?= /* @noEscape */ $block->getData('title');?>">
+        </span>
+        <span>
+            <?= /* @noEscape */ __("You must confirm the purchase on MB WAY, through the notice or in the activity area");?>.
+            <br/>
         </span>
     </p>
 <?php endif ?>
