@@ -280,6 +280,16 @@
                 <currency>EUR</currency>
                 <sort_order>1</sort_order>
             </paycomet_mbway>
+            <paycomet_waylet>
+                <active>0</active>
+                <title>PAYCOMET - Waylet</title>
+                <model>Paycomet\Payment\Model\Apm\Waylet\PaymentMethod</model>
+                <payment_action>authorize</payment_action>
+                <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
+                <order_status>pending_payment</order_status>
+                <currency>EUR</currency>
+                <sort_order>1</sort_order>
+            </paycomet_waylet>
         </payment>
         <system>
             <media_storage_configuration>

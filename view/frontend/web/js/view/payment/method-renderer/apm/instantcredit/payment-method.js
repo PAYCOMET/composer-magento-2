@@ -10,14 +10,35 @@ define(
         'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/model/error-processor',
-        'Magento_Customer/js/model/customer',
-        'mage/translate',
-        'mage/url'
+        'Paycomet_Payment/js/view/payment/apm/instantcredit/helper'
     ],
     function(ko, $, Component, setPaymentMethodAction, quote,
-        additionalValidators, fullScreenLoader, errorProcessor, customer, $t,url) {
+        additionalValidators, fullScreenLoader, errorProcessor, paycomet_instantcredit) {
         'use strict';
         var paymentMethod = ko.observable(null);
+
+        // if totals update refresh simulator
+        quote.totals.subscribe(function() {
+            let classSimulator = '.ic-simulator';
+            $(classSimulator).closest('.cart-ic-container').css('display','none');
+            if (typeof icSimulator !== 'undefined' && $(classSimulator).length > 0) {
+                // Remove odd simulator
+                $(classSimulator).empty();
+                let amountV = quote.totals().base_grand_total;
+                let amountValue = parseFloat(amountV).toFixed(2);
+                if (paycomet_instantcredit.isBetweenLimits(parseFloat(amountValue))) {
+                    let valSimulator = amountValue.toString().replace('.', ',');
+                    if (parseFloat(amountValue) === parseInt(amountValue)) {
+                        valSimulator = parseFloat(amountValue) + ',00';
+                    }
+                    $(classSimulator).attr('amount', valSimulator);
+                    // Refresh simulator
+                    icSimulator.initialize();
+                    // We have simulator always because price can change in cart (cause shipping modify price)
+                    $(classSimulator).closest('.cart-ic-container').css('display','block');
+                }
+            }
+        });
 
         return Component.extend({
             self: this,
