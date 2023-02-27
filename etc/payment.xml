@@ -83,6 +83,9 @@
         <method name="paycomet_mbway">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="paycomet_waylet">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
 
     </methods>
 </payment>
