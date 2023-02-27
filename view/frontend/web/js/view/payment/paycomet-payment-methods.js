@@ -47,7 +47,8 @@ define(
             'instantcredit',
             'klarnapayments',
             'paypal',
-            'mbway'
+            'mbway',
+            'waylet'
         ];
 
         for (var i = 0; i < arrAPM.length; i+=1) {

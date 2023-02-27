@@ -1620,6 +1620,64 @@
                         </depends>
                     </field>
                 </group>
+                <group id="paycomet_payment_waylet" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="527">
+                    <label>PAYCOMET - Waylet</label>
+                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                    <field id="activewaylet" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable PAYCOMET - Waylet</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/paycomet_waylet/active</config_path>
+                    </field>
+                    <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Title</label>
+                        <config_path>payment/paycomet_waylet/title</config_path>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="activewaylet">1</field>
+                        </depends>
+                    </field>
+                    <field id="order_status" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>New order status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
+                        <config_path>payment/paycomet_waylet/order_status</config_path>
+                        <depends>
+                            <field id="activewaylet">1</field>
+                        </depends>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Applicable Countries</label>
+                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                        <config_path>payment/paycomet_waylet/allowspecific</config_path>
+                        <depends>
+                            <field id="activewaylet">1</field>
+                        </depends>
+                    </field>
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Specific Countries</label>
+                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                        <can_be_empty>1</can_be_empty>
+                        <config_path>payment/paycomet_waylet/specificcountry</config_path>
+                        <depends>
+                            <field id="activewaylet">1</field>
+                            <field id="allowspecific">1</field>
+                        </depends>
+                    </field>
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Accepted Currency</label>
+                        <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                        <config_path>payment/paycomet_waylet/currency</config_path>
+                        <depends>
+                            <field id="activewaylet">1</field>
+                        </depends>
+                    </field>
+                    <field id="sort_order" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Sort Order</label>
+                        <config_path>payment/paycomet_waylet/sort_order</config_path>
+                        <depends>
+                            <field id="activewaylet">1</field>
+                        </depends>
+                    </field>
+                </group>
             </group>
         </section>
     </system>

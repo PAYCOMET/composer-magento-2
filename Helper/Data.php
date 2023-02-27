@@ -412,7 +412,7 @@ class Data extends AbstractHelper
             $response["DS_ERROR_ID"] = $executeRefundReponse->errorCode;
 
             if ($response["DS_RESPONSE"]==1) {
-                $response["DS_MERCHANT_AUTHCODE"] = $executeRefundReponse->authCode;
+                $response["DS_MERCHANT_AUTHCODE"] = $executeRefundReponse->authCode ?? $payment->getParentTransactionId();
             }
         } else {
             $this->logDebug(__("ERROR: PAYCOMET API KEY required"));
