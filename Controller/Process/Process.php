@@ -40,6 +40,15 @@ class Process extends \Magento\Framework\App\Action\Action
 
             // Verify is Challenge -> DS_CHALLENGE_URL
             if (isset($payment) && $payment->getAdditionalInformation('DS_CHALLENGE_URL')) {
+
+                // Mantenemos el carrito
+                /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
+                $quoteRepository = $this->_objectManager->create(\Magento\Quote\Api\CartRepositoryInterface::class);
+                /** @var \Magento\Quote\Model\Quote $quote */
+                $quote = $quoteRepository->get($order->getQuoteId());
+                $quote->setIsActive(1)->setReservedOrderId(null);
+                $quoteRepository->save($quote);
+
                 return $this->_redirect($payment->getAdditionalInformation('DS_CHALLENGE_URL'));
             }
 
