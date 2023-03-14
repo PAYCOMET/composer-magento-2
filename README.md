@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.26: 
+
+- Se mantiene el carrito al redirigir al APM
+
 > 2.4.25: 
 
 - Se añade APM Waylet
