@@ -21,6 +21,8 @@
             <values>
                 <value id="paycomet" type="host">www.paycomet.com</value>
                 <value id="paycomet_api" type="host">api.paycomet.com</value>
+                <value id="paycomet_ic" type="host">instantcredit.net</value>
+                <value id="paycomet_ic_t" type="host">test.instantcredit.net</value>
             </values>
         </policy>
         <policy id="form-action">
