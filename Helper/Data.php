@@ -1422,7 +1422,7 @@ class Data extends AbstractHelper
 
             }
             return $orderCollection->getSize();
-        } catch (exception $e) {
+        } catch (\Exception $e) {
             return 0;
         }
     }
@@ -1458,30 +1458,31 @@ class Data extends AbstractHelper
     private function firstAddressDelivery($id_customer, $id_address_delivery)
     {
         try {
-            $resource = $this->_objectManager->get(\Magento\Framework\App\ResourceConnection::class);
+            if ($id_customer && $id_address_delivery) {
+                $resource = $this->_objectManager->get(\Magento\Framework\App\ResourceConnection::class);
 
-            $orderCollection = $this->_objectManager->get(\Magento\Sales\Model\Order::class)->getCollection()
-            ->addFieldToFilter('customer_id', ['eq' => $id_customer])
-            ->getSelect()
-            ->joinLeft(
-                $resource->getTableName('sales_order_address'),
-                "main_table.entity_id = " . $resource->getTableName('sales_order_address'). ".parent_id",
-                ['customer_address_id']
-            )
-            ->where($resource->getTableName('sales_order_address'). ".customer_address_id = $id_address_delivery ")
-            ->limit('1')
-            ->order('created_at ASC');
+                $orderCollection = $this->_objectManager->get(\Magento\Sales\Model\Order::class)->getCollection()
+                ->addFieldToFilter('customer_id', ['eq' => $id_customer])
+                ->getSelect()
+                ->joinLeft(
+                    $resource->getTableName('sales_order_address'),
+                    "main_table.entity_id = " . $resource->getTableName('sales_order_address'). ".parent_id",
+                    ['customer_address_id']
+                )
+                ->where($resource->getTableName('sales_order_address'). ".customer_address_id = $id_address_delivery ")
+                ->limit('1')
+                ->order('created_at ASC');
 
-            $connection = $resource->getConnection();
-            $results = $connection->fetchAll($orderCollection);
+                $connection = $resource->getConnection();
+                $results = $connection->fetchAll($orderCollection);
 
-            if (count($results)>0) {
-                $firstOrder = current($results);
-                return $firstOrder["created_at"];
-            } else {
-                return "";
+                if (count($results)>0) {
+                    $firstOrder = current($results);
+                    return $firstOrder["created_at"];
+                }
             }
-        } catch (exception $e) {
+            return "";
+        } catch (\Exception $e) {
             return "";
         }
     }
