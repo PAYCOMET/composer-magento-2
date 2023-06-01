@@ -88,10 +88,11 @@
 .paycomet_jet .vertical li {
     float: left;
     width: 140px;
+    margin-bottom: 1rem!important;
 }
 
 .paycomet_jet .vertical input {
-    width: 79px;
+    width: 80px!important;
 }
 
 .paycomet_jet label {
@@ -132,7 +133,7 @@
 
 /* .paycomet_jet input{border:1px solid #e5e5e5;color:#333;font-size:18px;height:34px;padding:0 5px;width:100%;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:border-box;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px} */
 
-.paycomet_jet input{height:32px; vertical-align: middle; display: inline-block;border:1px solid #e5e5e5;color:#333;font-size:18px;padding:0 5px;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:border-box;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}
+.paycomet_jet input{height:32px!important; vertical-align: middle; display: inline-block;border:1px solid #e5e5e5;color:#333;font-size:18px;padding:0 5px;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:border-box;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}
 
 #paymentErrorMsg {
     font-size: 1.2rem;

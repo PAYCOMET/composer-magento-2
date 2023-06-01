@@ -237,7 +237,7 @@
             -->
             <paycomet_instantcredit>
                 <active>0</active>
-                <title>Pago a plazos instantáneo</title>
+                <title>Compra ahora y paga después</title>
                 <model>Paycomet\Payment\Model\Apm\Instantcredit\PaymentMethod</model>
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
