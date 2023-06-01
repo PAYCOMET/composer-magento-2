@@ -5,54 +5,53 @@
  * See COPYING.txt for license details.
  */
 -->
-<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
     <policies>
         <policy id="script-src">
             <values>
-                <value id="paycomet" type="host">www.paycomet.com</value>
-                <value id="paycomet_api" type="host">api.paycomet.com</value>
-                <value id="paycomet_ic" type="host">instantcredit.net</value>
-                <value id="paycomet_ic_t" type="host">test.instantcredit.net</value>
-                <value id="paycomet_ic_g" type="host">code.jquery.com</value>
+                <value id="paycomet_script" type="host">www.paycomet.com</value>
+                <value id="paycomet_script1" type="host">api.paycomet.com</value>
+                <value id="paycomet_ic_script" type="host">instantcredit.net</value>
+                <value id="paycomet_ic_t_script" type="host">test.instantcredit.net</value>
+                <value id="paycomet_ic_g_script" type="host">code.jquery.com</value>
             </values>
         </policy>
         <policy id="frame-src">
             <values>
-                <value id="paycomet" type="host">www.paycomet.com</value>
-                <value id="paycomet_api" type="host">api.paycomet.com</value>
-                <value id="paycomet_ic" type="host">instantcredit.net</value>
-                <value id="paycomet_ic_t" type="host">test.instantcredit.net</value>
+                <value id="paycomet_frame" type="host">www.paycomet.com</value>
+                <value id="paycomet_frame2" type="host">api.paycomet.com</value>
+                <value id="paycomet_ic_frame" type="host">instantcredit.net</value>
+                <value id="paycomet_ic_t_frame" type="host">test.instantcredit.net</value>
             </values>
         </policy>
         <policy id="form-action">
             <values>
-                <value id="paycomet" type="host">www.paycomet.com</value>
-                <value id="paycomet_api" type="host">api.paycomet.com</value>
+                <value id="paycomet-form" type="host">www.paycomet.com</value>
+                <value id="paycomet-form1" type="host">api.paycomet.com</value>
             </values>
         </policy>
         <policy id="style-src">
             <values>
-                <value id="paycomet_ic" type="host">instantcredit.net</value>
-                <value id="paycomet_ic_t" type="host">test.instantcredit.net</value>
+                <value id="paycomet_ic_style" type="host">instantcredit.net</value>
+                <value id="paycomet_ic_t_style" type="host">test.instantcredit.net</value>
             </values>
         </policy>
         <policy id="font-src">
             <values>
-                <value id="paycomet_ic" type="host">instantcredit.net</value>
-                <value id="paycomet_ic_t" type="host">test.instantcredit.net</value>
+                <value id="paycomet_ic_font" type="host">instantcredit.net</value>
+                <value id="paycomet_ic_t_font" type="host">test.instantcredit.net</value>
             </values>
         </policy>
         <policy id="img-src">
             <values>
-                <value id="paycomet_ic" type="host">instantcredit.net</value>
-                <value id="paycomet_ic_t" type="host">test.instantcredit.net</value>
+                <value id="paycomet_ic_img" type="host">instantcredit.net</value>
+                <value id="paycomet_ic_t_img" type="host">test.instantcredit.net</value>
             </values>
         </policy>
         <policy id="connect-src">
             <values>
-                <value id="paycomet_ic" type="host">instantcredit.net</value>
-                <value id="paycomet_ic_api" type="host">*.instantcredit.net</value>
+                <value id="paycomet_ic_connect" type="host">instantcredit.net</value>
+                <value id="paycomet_ic_api_connect" type="host">*.instantcredit.net</value>
             </values>
         </policy>
     </policies>

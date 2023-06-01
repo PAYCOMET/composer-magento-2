@@ -59,7 +59,7 @@
             </div>
         </div>
 
-        <form role="form" id="paycometPaymentForm" method="POST" class="" data-bind="afterRender: jetIframeLoad, visible: isVisibleJetIframe()" action="javascript:jetAction();" >
+        <form role="form" id="paycometPaymentForm" method="POST" class="" data-bind="afterRender: jetIframeLoad, visible: isVisibleJetIframe()">
             <div class="paycomet_jet">
                 <ul>
                     <li>
@@ -71,8 +71,8 @@
                     <li class="vertical">
                         <ul>
                             <li>
-                                <label><span class="hidden-xs" data-bind="text: $t('Expiration')"></span> </label>
-                                <input maxlength="5" placeholder="mm/yy" id="expiry_date" pattern="[0-9]{2}/+[0-9]{2}" type="text" data-bind="event:{change: buildED, input: expiryDate }">
+                                <label data-toggle="tooltip" title="" data-bind="text: $t('Expiration')"></label>
+                                <input maxlength="5" placeholder="mm/aa" id="expiry_date" pattern="[0-9]{2}/+[0-9]{2}" type="text" data-bind="event:{change: buildED, input: expiryDate }">
                                 <input type="hidden" data-paycomet="dateMonth" maxlength="2"  value="">
                                 <input type="hidden" data-paycomet="dateYear" maxlength="2" value="">
                             </li>

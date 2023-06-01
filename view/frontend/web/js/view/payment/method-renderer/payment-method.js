@@ -239,6 +239,7 @@ define(
 );
 
 
-function jetAction() {
+
+function continueJetIframe() {
     jQuery("#submit_jet").click();
 }
