@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.29: 
+
+- Mejoras de código jetIframe
+
 > 2.4.28: 
 
 - Mejoras de código
