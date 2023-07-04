@@ -18,6 +18,11 @@ class Data extends AbstractHelper
     protected $_urlBuilder;
 
     /**
+     * @var\Magento\Framework\App\Action\Context
+     */
+    private $_context2;
+
+    /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     private $_encryptor;
@@ -167,7 +172,7 @@ class Data extends AbstractHelper
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Framework\ObjectManagerInterface $objectmanager
     ) {
-        $this->context = $context2;
+        $this->_context2 = $context2;
         parent::__construct($context);
         $this->_encryptor = $encryptor;
         $this->_country = $country;
@@ -2326,7 +2331,7 @@ class Data extends AbstractHelper
                         $tokenData['expiry'] = "1900/01";
                     }
 
-                    $update = new Update($this->context, $this->_session);
+                    $update = new Update($this->_context2, $this->_session);
                     $update->updatePaycometCardExpiryDate(
                         $tokenData['hash'],
                         $tokenData['customer_id'],
