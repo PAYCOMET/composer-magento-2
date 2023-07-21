@@ -434,7 +434,7 @@ class Data extends AbstractHelper
                 )
             );
         } else {
-            $payment->setTransactionId($response['DS_MERCHANT_AUTHCODE'])
+            $payment->setTransactionId($response['DS_MERCHANT_AUTHCODE'] . '-refund' . date("YmdHis"))
                     ->setParentTransactionId($AuthCode)
                     ->setTransactionAdditionalInfo(
                         \Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS,

@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.31: 
+
+- Registro de transacción única por cada devolución.
+
 > 2.4.30: 
 
 - Compatibilidad php 8.2
