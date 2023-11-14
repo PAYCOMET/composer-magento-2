@@ -112,6 +112,7 @@ class PaycometConfigProvider implements ConfigProviderInterface
                         $config['payment'] [$code]['integration'] = $this->_helper->getConfigData('integration');
                         $config['payment'] [$code]['jetid'] = $this->_helper->getEncryptedConfigData('jetid');
                         $config['payment'] [$code]['isActive'] = $this->_helper->getConfigData('active', null, $code);
+                        $config['payment'] [$code]['show_amex_img'] = $this->_helper->getConfigData('show_amex_img');
                         break;
 
                     // 'Apms'
