@@ -23,6 +23,7 @@ define(
         var isOfferSave = ko.observable(false);
         var isVisibleCards = ko.observable(customer.isLoggedIn());
         var isVisibleJetIframe = ko.observable(false);
+        var isVisibleAmexImg = ko.observable(false);
         var isVisibleButton = ko.observable(false);
         var expiry = ko.observable("");
         var place = false;
@@ -41,6 +42,7 @@ define(
             isOfferSave: isOfferSave,
             isVisibleCards: isVisibleCards,
             isVisibleJetIframe: isVisibleJetIframe,
+            isVisibleAmexImg: isVisibleAmexImg,
             isVisibleButton: isVisibleButton,
             expiry: expiry,
 
@@ -208,10 +210,12 @@ define(
                 if ($("#paycomet_card").val()!="") {
                     isOfferSave(false);
                     isVisibleJetIframe(false);
+                    isVisibleAmexImg(false);
                     isVisibleButton(true)
                 } else {
                     isOfferSave(window.checkoutConfig.payment["paycomet_payment"].card_offer_save==1);
                     isVisibleJetIframe(window.checkoutConfig.payment["paycomet_payment"].integration==1);
+                    isVisibleAmexImg(window.checkoutConfig.payment["paycomet_payment"].show_amex_img==1);
                     // Se oculta el boton principal cuando no hay tarjeta seleccionada y es jetIframe
                     isVisibleButton(window.checkoutConfig.payment["paycomet_payment"].integration!=1);
                 }

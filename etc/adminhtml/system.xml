@@ -105,7 +105,16 @@
                             <field id="iframe_enabled">1</field>
                         </depends>
                     </field>
-                    <field id="form_footer" type="textarea" translate="label" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="show_amex_img" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Show AMEX image</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/paycomet_payment/show_amex_img</config_path>
+                        <depends>
+                            <field id="integration">0</field>
+                            <field id="iframe_enabled">1</field>
+                        </depends>
+                    </field>
+                    <field id="form_footer" type="textarea" translate="label" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Ecommerce Info</label>
                         <tooltip>Data to show below the payment form</tooltip>
                         <config_path>payment/paycomet_payment/form_footer</config_path>
@@ -114,7 +123,7 @@
                             <field id="iframe_enabled">1</field>
                         </depends>
                     </field>
-                    <field id="currency" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <field id="currency" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Accepted Currency</label>
                         <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                         <config_path>payment/paycomet_payment/currency</config_path>

@@ -14,6 +14,7 @@
                 <iframe_enabled>1</iframe_enabled>
                 <iframe_mode>lightbox</iframe_mode>
                 <iframe_height>340</iframe_height>
+                <show_amex_img>0</show_amex_img>
                 <dcc>0</dcc>
                 <lang></lang>
                 <payment_desc></payment_desc>
