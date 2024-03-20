@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.33: 
+
+- Mejora de código. Calculo información pedido con cupones.
+
 > 2.4.32: 
 
 - Mejora de código
