@@ -537,8 +537,8 @@ class Data extends AbstractHelper
             return [];
         }
 
-        $merchant_terminal  = trim($this->getConfigData('merchant_terminal'));
-        $api_key            = trim($this->getEncryptedConfigData('api_key'));
+        $merchant_terminal  = trim((string) $this->getConfigData('merchant_terminal'));
+        $api_key            = trim((string) $this->getEncryptedConfigData('api_key'));
 
         $fieldOrderId = $this->_session->getCustomer()->getId() . "_" .
             $this->_storeManager->getStore()->getId(); //UserId | StoreId
@@ -1538,11 +1538,24 @@ class Data extends AbstractHelper
             $amountAux += $shoppingCartData[$key]["unitPrice"] * $shoppingCartData[$key]["quantity"];
         }
 
-        // Impuestos. Si la suma de amountAux < Total, el resto de impuestos
-        $amountTotal = $this->amountFromMagento($order->getBaseGrandTotal(), "EUR");
+        // Descuentos
+        $discount = $this->amountFromMagento($order->getBaseDiscountAmount(), $orderCurrencyCode);
 
-        // Se calculan los impuestos
+        if (isset($discount) && abs($discount)>0) {
+            $key++;
+            $shoppingCartData[$key]["sku"] = "1";
+            $shoppingCartData[$key]["articleType"] = "4";
+            $shoppingCartData[$key]["quantity"] = 1;
+            $shoppingCartData[$key]["unitPrice"] = abs($discount);
+            $shoppingCartData[$key]["name"] = "Discount";
+
+            $amountAux -= abs($discount);
+        }
+
+        // Tax
+        $amountTotal = $this->amountFromMagento($order->getBaseGrandTotal(), "EUR");
         $tax = $amountTotal - $amountAux;
+
         if ($tax > 0) {
             $key++;
             $shoppingCartData[$key]["sku"] = "1";
