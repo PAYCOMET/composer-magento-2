@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.34: 
+
+- Graphql. Obtencion de tokens
+
 > 2.4.33: 
 
 - Mejora de código. Calculo información pedido con cupones.
