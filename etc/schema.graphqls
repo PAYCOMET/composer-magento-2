@@ -1,0 +1,12 @@
+type Query {
+    paycomet_token: [paycomet_token] @resolver(class: "Paycomet\\Payment\\Model\\Resolver\\Tokens") @doc(description: "Paycomet card tokens of a customer")
+}
+
+type paycomet_token {
+    iduser: Int
+    tokenuser: String
+    cc: String
+    brand: String
+    expiry: String
+    desc: String
+}
