@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.35: 
+
+- MB Way. Devoluciones
+
 > 2.4.34: 
 
 - Graphql. Obtencion de tokens

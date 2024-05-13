@@ -35,12 +35,12 @@ class PaymentMethod extends \Paycomet\Payment\Model\Apm\PaymentMethod
     /**
      * @var boolean
      */
-    protected $_canRefund = false;
+    protected $_canRefund = true;
 
     /**
      * @var boolean
      */
-    protected $_canRefundInvoicePartial = false;
+    protected $_canRefundInvoicePartial = true;
 
     /**
      * @var boolean
@@ -65,5 +65,5 @@ class PaymentMethod extends \Paycomet\Payment\Model\Apm\PaymentMethod
     /**
      * @var boolean
      */
-    protected $_canReviewPayment = false;
+    protected $_canReviewPayment = true;
 }
