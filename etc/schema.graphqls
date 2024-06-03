@@ -1,5 +1,6 @@
 type Query {
     paycomet_token: [paycomet_token] @resolver(class: "Paycomet\\Payment\\Model\\Resolver\\Tokens") @doc(description: "Paycomet card tokens of a customer")
+    paycomet_cardOfferSave: Int @resolver(class: "Paycomet\\Payment\\Model\\Resolver\\OfferSave") @doc(description: "Paycomet card offer save")
 }
 
 type paycomet_token {
@@ -9,4 +10,24 @@ type paycomet_token {
     brand: String
     expiry: String
     desc: String
+}
+
+
+type Mutation {
+    paycomet_removeUserToken(iduser: ID! @doc(description: "The iduser to remove from customer.")): paycomet_removeUserTokenOutput @resolver(class: "Paycomet\\Payment\\Model\\Resolver\\RemoveUserToken") @doc(description:"Delete the user token.")
+    paycomet_paymentSaveCard(input: paycomet_paymentSaveCardInput @doc(description: "An input object that defines order to apply save sacard.")): paycomet_paymentSaveCardOutput @resolver(class: "Paycomet\\Payment\\Model\\Resolver\\PaymentSaveCard") @doc(description:"Apply save card to order payment.")
+
+}
+
+type paycomet_removeUserTokenOutput @doc(description: "Contains details of remove token result.") {
+    result: Int! @doc(description: "0: no deleted, 1: deleted")
+}
+
+input paycomet_paymentSaveCardInput @doc(description: "Specifies which order to save card payment.") {
+    order_id: String! @doc(description: "The unique ID for an `Order` object.")
+    save_card: Int! @doc(description: "0: no save, 1: save")
+}
+
+type paycomet_paymentSaveCardOutput @doc(description: "Contains details about the save card to payment.") {
+    result: Int! @doc(description: "0: no save, 1: save")
 }
