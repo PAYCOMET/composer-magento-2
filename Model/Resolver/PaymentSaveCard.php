@@ -1,8 +1,6 @@
 <?php
 namespace Paycomet\Payment\Model\Resolver;
 
-
-use Magento\Framework\App\ResourceConnection;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -25,19 +23,12 @@ class PaymentSaveCard implements ResolverInterface
      */
     private $_orderFactory;
 
-    /**
-    * @var ValueFactory
-    */
-    private $valueFactory;
 
     /**
      * @var \Paycomet\Payment\Logger\Logger
     */
     private $_logger;
-    /**
-     *
-     * @param ValueFactory $valueFactory
-     */
+
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Paycomet\Payment\Logger\Logger $logger
@@ -72,7 +63,7 @@ class PaymentSaveCard implements ResolverInterface
                 $result['result'] = 0;
                 $order = $this->_orderFactory->create()->loadByIncrementId($order_id);
 
-                if ($order->getPayment() && $order->getCustomerId() == $context->getUserId() ) {
+                if ($order->getStatus() == \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT && $order->getPayment() && $order->getCustomerId() == $context->getUserId() ) {
 
                     $payment = $order->getPayment();
                     $result = $payment->setAdditionalInformation(DataAssignObserver::PAYCOMET_SAVECARD, $save_card);

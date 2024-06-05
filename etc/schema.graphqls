@@ -14,20 +14,19 @@ type paycomet_token {
 
 
 type Mutation {
-    paycomet_removeUserToken(iduser: ID! @doc(description: "The iduser to remove from customer.")): paycomet_removeUserTokenOutput @resolver(class: "Paycomet\\Payment\\Model\\Resolver\\RemoveUserToken") @doc(description:"Delete the user token.")
-    paycomet_paymentSaveCard(input: paycomet_paymentSaveCardInput @doc(description: "An input object that defines order to apply save sacard.")): paycomet_paymentSaveCardOutput @resolver(class: "Paycomet\\Payment\\Model\\Resolver\\PaymentSaveCard") @doc(description:"Apply save card to order payment.")
-
+    paycomet_removeUserToken(iduser: ID! @doc(description: "The iduser of a token to remove from customer.")): paycomet_removeUserTokenOutput @resolver(class: "Paycomet\\Payment\\Model\\Resolver\\RemoveUserToken") @doc(description:"Delete the user token.")
+    paycomet_paymentSaveCard(input: paycomet_paymentSaveCardInput @doc(description: "An input object that defines order_id and save_card value")): paycomet_paymentSaveCardOutput @resolver(class: "Paycomet\\Payment\\Model\\Resolver\\PaymentSaveCard") @doc(description:"Save as additional information save_card in the order payment.")
 }
 
-type paycomet_removeUserTokenOutput @doc(description: "Contains details of remove token result.") {
-    result: Int! @doc(description: "0: no deleted, 1: deleted")
+type paycomet_removeUserTokenOutput @doc(description: "Contains details of the remove user token result.") {
+    result: Int! @doc(description: "0: not removed, 1: removed")
 }
 
-input paycomet_paymentSaveCardInput @doc(description: "Specifies which order to save card payment.") {
+input paycomet_paymentSaveCardInput @doc(description: "order_id and save_card to store as additional info in order payment") {
     order_id: String! @doc(description: "The unique ID for an `Order` object.")
-    save_card: Int! @doc(description: "0: no save, 1: save")
+    save_card: Int! @doc(description: "0: not save, 1: save")
 }
 
-type paycomet_paymentSaveCardOutput @doc(description: "Contains details about the save card to payment.") {
-    result: Int! @doc(description: "0: no save, 1: save")
+type paycomet_paymentSaveCardOutput @doc(description: "Contains details about the save_card result.") {
+    result: Int! @doc(description: "0: not saved, 1: saved")
 }
