@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.37: 
+
+- Compatibilidad php 8.3
+
 > 2.4.36: 
 
 - Nuevas funciones Graphql
