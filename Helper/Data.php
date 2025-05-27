@@ -1717,9 +1717,21 @@ class Data extends AbstractHelper
      */
     public function cancelOrder($order)
     {
-        $orderStatus = $this->getConfigData('payment_cancelled');
-        $order->setActionFlag($orderStatus, true);
-        $order->cancel()->save();
+        // Si ya esta cancelada no continuamos
+        if ($order->getState() == \Magento\Sales\Model\Order::STATE_CANCELED) {
+            $this->_paycometLogger->debug("cancelOrder " . $order->getRealOrderId() . " - " . $order->getState() . " - Already Canceled");
+            return;
+        }
+
+        if ($order->canCancel()) {
+            $this->_paycometLogger->debug("cancelOrder " . $order->getRealOrderId() . " - " . $order->getState() . " - Canceling Order");
+
+            $orderStatus = $this->getConfigData('payment_cancelled');
+            $order->setActionFlag($orderStatus, true);
+            $order->cancel()->save();
+        } else {
+            $this->_paycometLogger->debug("cancelOrder " . $order->getRealOrderId() . " - " . $order->getState() . " - Cannot Cancel Order");
+        }
     }
 
     /**
