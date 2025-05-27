@@ -84,7 +84,7 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
             try {
                 $this->_helper->setAdditionalInfo($payment, $response);
                 // Si no es válida la respuesta Cancelamos el pedido y se haya aprobado previamente
-                if (!($payment->getLastTransId() == $response["AuthCode"])) {
+                if (!($payment->getLastTransId() == $response["AuthCode"]) && $order->canCancel()) {
                     $this->_helper->cancelOrder($order);
                 }
                 $order->save();
