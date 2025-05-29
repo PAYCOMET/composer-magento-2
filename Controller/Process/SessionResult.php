@@ -129,8 +129,6 @@ class SessionResult extends \Magento\Framework\App\Action\Action
     {
         // restore the quote
         $this->_session->restoreQuote();
-
-        $this->_helper->cancelOrder($this->_order);
     }
 
     /**
