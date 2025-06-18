@@ -1503,66 +1503,73 @@ class Data extends AbstractHelper
         $shoppingCartData = [];
         $amountAux = 0;
 
-        foreach ($order->getAllItems() as $key => $item) {
-            $shoppingCartData[$key]["sku"] = $item->getProductId();
-            $shoppingCartData[$key]["articleType"] = 5;
-            $shoppingCartData[$key]["quantity"] = (int) $item->getQtyOrdered();
-            $shoppingCartData[$key]["unitPrice"] = $this->amountFromMagento($item->getPrice(), $orderCurrencyCode);
-            $shoppingCartData[$key]["name"] = $item->getName();
+        try {
+            foreach ($order->getAllItems() as $key => $item) {
+                $shoppingCartData[$key]["sku"] = $item->getProductId();
+                $shoppingCartData[$key]["articleType"] = 5;
+                $shoppingCartData[$key]["quantity"] = (int) $item->getQtyOrdered();
+                $shoppingCartData[$key]["unitPrice"] = $this->amountFromMagento($item->getPrice(), $orderCurrencyCode);
+                $shoppingCartData[$key]["name"] = $item->getName();
 
-            $amountAux += $shoppingCartData[$key]["unitPrice"] * $shoppingCartData[$key]["quantity"];
+                $amountAux += $shoppingCartData[$key]["unitPrice"] * $shoppingCartData[$key]["quantity"];
 
-            $product = $this->_objectManager->create(\Magento\Catalog\Model\Product::class)->load($item->getProductId());
+                $product = $this->_objectManager->create(\Magento\Catalog\Model\Product::class)->load($item->getProductId());                
+                if ($product) {
+                    $cats = $product->getCategoryIds();
 
-            $cats = $product->getCategoryIds();
+                    $arrCat = [];
+                    foreach ($cats as $category_id) {
+                        $_cat = $this->_objectManager->create(\Magento\Catalog\Model\Category::class)->load($category_id);
+                        if ($_cat) {
+                            $arrCat[] = $_cat->getName();
+                        }
+                    }
 
-            $arrCat = [];
-            foreach ($cats as $category_id) {
-                $_cat = $this->_objectManager->create(\Magento\Catalog\Model\Category::class)->load($category_id);
-                $arrCat[] = $_cat->getName();
+                    $shoppingCartData[$key]["category"] = strip_tags(implode("|", $arrCat));
+                }
             }
 
-            $shoppingCartData[$key]["category"] = strip_tags(implode("|", $arrCat));
-        }
+            // Shipping Cost
+            $shippingAmount = $order->getShippingAmount();
+            if ((int)$shippingAmount > 0) {
+                $key++;
+                $shoppingCartData[$key]["sku"] = "1";
+                $shoppingCartData[$key]["articleType"] = "6";
+                $shoppingCartData[$key]["quantity"] = 1;
+                $shoppingCartData[$key]["unitPrice"] = $this->amountFromMagento($shippingAmount, $orderCurrencyCode);
+                $shoppingCartData[$key]["name"] = "Package Shipping Cost";
 
-        // Shipping Cost
-        $shippingAmount = $order->getShippingAmount();
-        if ((int)$shippingAmount > 0) {
-            $key++;
-            $shoppingCartData[$key]["sku"] = "1";
-            $shoppingCartData[$key]["articleType"] = "6";
-            $shoppingCartData[$key]["quantity"] = 1;
-            $shoppingCartData[$key]["unitPrice"] = $this->amountFromMagento($shippingAmount, $orderCurrencyCode);
-            $shoppingCartData[$key]["name"] = "Package Shipping Cost";
+                $amountAux += $shoppingCartData[$key]["unitPrice"] * $shoppingCartData[$key]["quantity"];
+            }
 
-            $amountAux += $shoppingCartData[$key]["unitPrice"] * $shoppingCartData[$key]["quantity"];
-        }
+            // Descuentos
+            $discount = $this->amountFromMagento($order->getBaseDiscountAmount(), $orderCurrencyCode);
 
-        // Descuentos
-        $discount = $this->amountFromMagento($order->getBaseDiscountAmount(), $orderCurrencyCode);
+            if (isset($discount) && abs($discount)>0) {
+                $key++;
+                $shoppingCartData[$key]["sku"] = "1";
+                $shoppingCartData[$key]["articleType"] = "4";
+                $shoppingCartData[$key]["quantity"] = 1;
+                $shoppingCartData[$key]["unitPrice"] = abs($discount);
+                $shoppingCartData[$key]["name"] = "Discount";
 
-        if (isset($discount) && abs($discount)>0) {
-            $key++;
-            $shoppingCartData[$key]["sku"] = "1";
-            $shoppingCartData[$key]["articleType"] = "4";
-            $shoppingCartData[$key]["quantity"] = 1;
-            $shoppingCartData[$key]["unitPrice"] = abs($discount);
-            $shoppingCartData[$key]["name"] = "Discount";
+                $amountAux -= abs($discount);
+            }
 
-            $amountAux -= abs($discount);
-        }
+            // Tax
+            $amountTotal = $this->amountFromMagento($order->getBaseGrandTotal(), "EUR");
+            $tax = $amountTotal - $amountAux;
 
-        // Tax
-        $amountTotal = $this->amountFromMagento($order->getBaseGrandTotal(), "EUR");
-        $tax = $amountTotal - $amountAux;
-
-        if ($tax > 0) {
-            $key++;
-            $shoppingCartData[$key]["sku"] = "1";
-            $shoppingCartData[$key]["articleType"] = "11";
-            $shoppingCartData[$key]["quantity"] = 1;
-            $shoppingCartData[$key]["unitPrice"] = $tax;
-            $shoppingCartData[$key]["name"] = "Tax";
+            if ($tax > 0) {
+                $key++;
+                $shoppingCartData[$key]["sku"] = "1";
+                $shoppingCartData[$key]["articleType"] = "11";
+                $shoppingCartData[$key]["quantity"] = 1;
+                $shoppingCartData[$key]["unitPrice"] = $tax;
+                $shoppingCartData[$key]["name"] = "Tax";
+            }
+        } catch (\Exception $e) {
+            // continue
         }
 
         return ["shoppingCart"=>$shoppingCartData];
