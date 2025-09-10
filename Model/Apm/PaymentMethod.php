@@ -115,8 +115,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Framework\ObjectManagerInterface $objectmanager,
         RemoteAddress $remoteAddress,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
 

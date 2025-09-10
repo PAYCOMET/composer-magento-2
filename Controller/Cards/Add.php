@@ -57,8 +57,16 @@ class Add extends \Magento\Framework\App\Action\Action
     {
         $response = $this->getRequest()->getParams();
 
+
         if ($response["paytpvToken"]) {
-            $this->_helper->addUserToken($response["paytpvToken"]);
+            try {
+                $this->_helper->addUserToken($response["paytpvToken"]);
+            } catch (\Exception $e) {
+                $this->messageManager->addError(
+                    __('jetToken card failed'),
+                    'PAYCOMET_messages'
+                );
+            }
         }
 
         $this->_redirect('paycomet_payment/cards/view');

@@ -1513,7 +1513,7 @@ class Data extends AbstractHelper
 
                 $amountAux += $shoppingCartData[$key]["unitPrice"] * $shoppingCartData[$key]["quantity"];
 
-                $product = $this->_objectManager->create(\Magento\Catalog\Model\Product::class)->load($item->getProductId());                
+                $product = $this->_objectManager->create(\Magento\Catalog\Model\Product::class)->load($item->getProductId());
                 if ($product) {
                     $cats = $product->getCategoryIds();
 
@@ -1901,7 +1901,7 @@ class Data extends AbstractHelper
      */
     public function getConfigData(
         $field,
-        $storeId = null,
+        ?int $storeId = null,
         $paymentMethodCode = \Paycomet\Payment\Model\PaymentMethod::METHOD_CODE
     ) {
         $this->_paycometLogger->debug($field . "--" . $paymentMethodCode);
@@ -1919,7 +1919,7 @@ class Data extends AbstractHelper
      */
     public function getConfigDataFlag(
         $field,
-        $storeId = null,
+        ?int $storeId = null,
         $paymentMethodCode = \Paycomet\Payment\Model\PaymentMethod::METHOD_CODE
     ) {
         return $this->getConfig($field, $paymentMethodCode, $storeId, true);
@@ -2378,7 +2378,7 @@ class Data extends AbstractHelper
             unset($tokenData['tokenuser']);
 
             // If not expired
-            if ((int)date("Ym") < (int)str_replace("/", "", $tokenData['expiry'])) {
+            if ((int)date("Ym") <= (int)str_replace("/", "", $tokenData['expiry'])) {
                 $arrDataValidated["valid"][] = $tokenData;
             } else {
                 if ($tokenData['expiry'] == "1900/01") {
