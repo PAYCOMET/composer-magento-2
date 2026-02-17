@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.42: 
+
+- Mejoras de código.
+
 > 2.4.41: 
 
 - Compatiblidad Magento 2.4.8 y php 8.4.
