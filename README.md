@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.43:
+
+- Cambio logo Waylet.
+
 > 2.4.42: 
 
 - Mejoras de código.
