@@ -63,7 +63,7 @@
                     </field>
                     <field id="jetid" translate="label" type="obscure" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>JET ID</label>
-                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>                        
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <config_path>payment/paycomet_payment/jetid</config_path>
                         <depends>
                             <field id="integration">1</field>
@@ -247,10 +247,10 @@
                     </field>
                 </group>
                 <group id="paycomet_payment_ideal" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="504">
-                    <label>PAYCOMET - Ideal</label>
+                    <label>PAYCOMET - Ideal | Wero</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <field id="activeideal" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enable PAYCOMET - Ideal</label>
+                        <label>Enable PAYCOMET - Ideal | Wero</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/paycomet_ideal/active</config_path>
                     </field>
