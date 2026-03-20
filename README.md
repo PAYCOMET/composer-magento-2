@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.44:
+
+- Cambio logo Ideal | Wero.
+
 > 2.4.43:
 
 - Cambio logo Waylet.
