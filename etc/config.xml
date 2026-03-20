@@ -42,7 +42,7 @@
             </paycomet_bizum>
             <paycomet_ideal>
                 <active>0</active>
-                <title>PAYCOMET - Ideal</title>
+                <title>PAYCOMET - Ideal | Wero</title>
                 <model>Paycomet\Payment\Model\Apm\Ideal\PaymentMethod</model>
                 <payment_action>authorize_capture</payment_action>
                 <order_place_redirect_url>paycomet_payment/process/process</order_place_redirect_url>
