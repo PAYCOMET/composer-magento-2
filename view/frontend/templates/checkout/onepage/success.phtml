@@ -13,7 +13,7 @@
 <?php endif; ?>
 
 
-<?php if ($block->getData('code') == "paycomet_multibanco"):?>
+<?php if ($block->getData('code') == "paycomet_multibanco" && $block->getData('entity') != ""): ?>
     <p><?= /* @noEscape */ $block->getData('title');?></p>
     <p style="min-height:50px;">
         <span class="paycoment-icon-left">
