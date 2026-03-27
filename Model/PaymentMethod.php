@@ -348,7 +348,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         // New Card or Token Card with 3D SecurePayment
         // Initialize order to PENDING_PAYMENT
-        $stateObject->setState(Order::STATE_PENDING_PAYMENT);
+        $stateObject->setState(Order::STATE_NEW);
         $stateObject->setStatus(Order::STATE_PENDING_PAYMENT);
         $stateObject->setIsNotified(false);
 
