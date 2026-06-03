@@ -257,7 +257,7 @@ class Data extends AbstractHelper
     public function _buildAddUserSessionParams($result, $orderid)
     {
         $result = ($result) ? '1' : '0';
-        $timestamp = date('YmdHMS');
+        $timestamp = date('YmdHis');
         $merchant_code = $this->getConfigData('merchant_code');
         $sha1hash = $this->signFields("$timestamp.$merchant_code.$orderid.$result");
 
@@ -1689,7 +1689,7 @@ class Data extends AbstractHelper
     private function _buildSessionParams($result, $order)
     {
         $result = ($result) ? '1' : '0';
-        $timestamp = date('YmdHMS');
+        $timestamp = date('YmdHis');
         $merchant_code = $this->getConfigData('merchant_code');
         $orderid = $order->getRealOrderId();
         $sha1hash = $this->signFields("$timestamp.$merchant_code.$orderid.$result");
