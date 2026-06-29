@@ -56,7 +56,9 @@ define(
             },
 
             jetIframeLoad: function() {
-                jQuery.getScript("https://api.paycomet.com/gateway/paycomet.jetiframe.js");
+                if (window.checkoutConfig.payment["paycomet_payment"].integration==1)
+                    jQuery.getScript("https://api.paycomet.com/gateway/paycomet.jetiframe.js");
+
             },
 
             resetIframe: function() {
@@ -116,9 +118,9 @@ define(
 
             /**
              * continueProcess
-             * 
+             *
              */
-            continueProcess: function () {                
+            continueProcess: function () {
                 // Si hay una tarjeta seleccionada o estamos en integracion Bankstore Iframe/XML continuamos
                 if ($("#paycomet_card").val()!="" || window.checkoutConfig.payment["paycomet_payment"].integration==0) {
                     this.continueToPayment();

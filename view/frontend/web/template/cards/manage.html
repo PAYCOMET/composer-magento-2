@@ -10,9 +10,9 @@
             <div class="paycomet_jet">
                 <ul>
                     <li>
-                        <label for="cardNumber" data-bind="text: $t('Credit card number')"></label>
+                        <label for="pc_pan" data-bind="text: $t('Credit card number')"></label>
                         <div id="paycomet-pan">
-                            <input required="required" paycomet-style="width: 78%; width: 78%; border: 1px solid #e5e5e5; height: 32px; display: inline-block; color: #333;font-size: 18px; padding: 0 5px;" paycomet-name="pan">
+                            <input id="pc_pan" required="required" paycomet-style="width: 78%; width: 78%; border: 1px solid #e5e5e5; height: 32px; display: inline-block; color: #333;font-size: 18px; padding: 0 5px;" paycomet-name="pan">
                         </div>
                     </li>
                     <li class="vertical">
@@ -29,7 +29,7 @@
                                     <input paycomet-name="cvc2" paycomet-style="border: 1px solid #e5e5e5; height: 32px; display: inline-block; color: #333;font-size: 18px; padding: 0 5px;" class="form-control" required="required" type="text">
                                 </div>
                             </li>
-                            <small class="help" data-bind="text: $t('The CVV is a numerical code, usually 3 digits behind the card')"></small>                            
+                            <small class="help" data-bind="text: $t('The CVV is a numerical code, usually 3 digits behind the card')"></small>
                         </ul>
                     </li>
                     <input type="hidden" class="paytpv_cardholdername" data-paycomet="cardHolderName" width="360" maxlength="50" value="NONAME" onclick="this.value='';">
@@ -38,7 +38,7 @@
                 <div class="mage-error" id="paymentErrorMsg" generated="true"></div>
 
                 <input type="hidden" data-paycomet="jetID" data-bind="value: jetId()"></input>
-                <input type="hidden" data-paycomet="cardHolderName" value="Noname">                
+                <input type="hidden" data-paycomet="cardHolderName" value="Noname">
             </div>
 
             <!-- Boton jetIframe -->
