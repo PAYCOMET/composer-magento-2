@@ -864,6 +864,11 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 'urlKo' => $this->_helper->getURLKO($order)
             ];
 
+            // Si esta habiltiado el iframe no mostramos xpayx. Cada uno tendrá su opción de pago cuando estén disponibles.
+            if ($this->_helper->getConfigData('iframe_enabled') ) {
+                $paymentData['excludedXpays'] = ["all"];
+            }
+
             // Payment/Preauthorization with Saved Card or jetIframe add idUser/tokenUser to paymentData
             if ($order->getPaycometToken() != "") {
                 $paycometToken = explode("|", $order->getPaycometToken());

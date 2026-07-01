@@ -1963,6 +1963,16 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Retrieve storeName
+     *
+     * @return string
+     */
+    public function getStoreName()
+    {
+        return $this->scopeConfig->getValue('general/store_information/name', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
      * Get Customer Id
      */
     public function getCustomerId()
@@ -2329,6 +2339,7 @@ class Data extends AbstractHelper
             return false;
         }
     }
+
 
     /**
      * Manage cards. Update expiryDate when not defined

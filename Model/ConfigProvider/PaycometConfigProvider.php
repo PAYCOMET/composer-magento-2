@@ -47,7 +47,9 @@ class PaycometConfigProvider implements ConfigProviderInterface
         'paycomet_klarnapayments',
         'paycomet_paypal',
         'paycomet_mbway',
-        'paycomet_waylet'
+        'paycomet_waylet',
+        'paycomet_applepay'
+
     ];
 
     /**
@@ -97,7 +99,6 @@ class PaycometConfigProvider implements ConfigProviderInterface
             if ($this->methods[$code]->isAvailable()) {
                 switch ($code) {
                     case 'paycomet_payment':
-                        $config['payment'] [$code]['redirectUrl'] = $this->getMethodRedirectUrl($code);
                         $config['payment'] [$code]['iframeEnabled'] = $this->_helper->getConfigData('iframe_enabled');
                         $config['payment'] [$code]['iframeMode'] = $this->_helper->getConfigData('iframe_mode');
                         $config['payment'] [$code]['iframeHeight'] = $this->_helper->getConfigData('iframe_height');
@@ -111,17 +112,21 @@ class PaycometConfigProvider implements ConfigProviderInterface
                         );
                         $config['payment'] [$code]['integration'] = $this->_helper->getConfigData('integration');
                         $config['payment'] [$code]['jetid'] = $this->_helper->getEncryptedConfigData('jetid');
-                        $config['payment'] [$code]['isActive'] = $this->_helper->getConfigData('active', null, $code);
                         $config['payment'] [$code]['show_amex_img'] = $this->_helper->getConfigData('show_amex_img');
                         break;
-
+                    case 'paycomet_applepay':
+                        $config['payment'] [$code]['width'] = $this->_helper->getConfig('width', $code, null);
+                        $config['payment'] [$code]['height'] = $this->_helper->getConfig('height', $code, null);
+                        $config['payment'] [$code]['color'] = $this->_helper->getConfig('color', $code, null);
+                        $config['payment'] [$code]['storeName'] = $this->_helper->getStoreName();
+                        break;
                     // 'Apms'
                     default:
-                        $config['payment'] [$code]['redirectUrl'] = $this->getMethodRedirectUrl($code);
-                        $config['payment'] [$code]['isActive'] = $this->_helper->getConfigData('active', null, $code);
                         break;
                 }
             }
+            $config['payment'] [$code]['redirectUrl'] = $this->getMethodRedirectUrl($code);
+            $config['payment'] [$code]['isActive'] = $this->_helper->getConfigData('active', null, $code);
         }
 
         return $config;
@@ -150,4 +155,5 @@ class PaycometConfigProvider implements ConfigProviderInterface
     {
         return $this->methods[$code]->getCheckoutCards();
     }
+
 }

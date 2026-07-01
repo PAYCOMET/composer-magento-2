@@ -17,27 +17,27 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     /**
      * @var \Paycomet\Payment\Helper\Data
      */
-    private $_helper;
+    protected $_helper;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    private $_storeManager;
+    protected $_storeManager;
 
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    private $_urlBuilder;
+    protected $_urlBuilder;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
      */
-    private $_resolver;
+    protected $_resolver;
 
     /**
      * @var \Paycomet\Payment\Logger\Logger
      */
-    private $_paycometLogger;
+    protected $_paycometLogger;
 
     /**
      * @var \Magento\Framework\App\ProductMetadataInterface
@@ -52,22 +52,22 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     /**
      * @var \Magento\Checkout\Model\Session
      */
-    private $_session;
+    protected $_session;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    private $_customerRepository;
+    protected $_customerRepository;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $_objectManager;
+    protected $_objectManager;
 
     /**
      * @var RemoteAddress
      */
-    private $_remoteAddress;
+    protected $_remoteAddress;
 
     /**
      * PaymentMethod constructor.

@@ -14,6 +14,7 @@
                 <value id="paycomet_ic_script" type="host">instantcredit.net</value>
                 <value id="paycomet_ic_t_script" type="host">test.instantcredit.net</value>
                 <value id="paycomet_ic_g_script" type="host">code.jquery.com</value>
+                <value id="paycomet_applepay_script" type="host">applepay.cdn-apple.com</value>
             </values>
         </policy>
         <policy id="frame-src">
@@ -22,36 +23,43 @@
                 <value id="paycomet_frame2" type="host">api.paycomet.com</value>
                 <value id="paycomet_ic_frame" type="host">instantcredit.net</value>
                 <value id="paycomet_ic_t_frame" type="host">test.instantcredit.net</value>
+                <value id="paycomet_applepay_frame" type="host">applepay.cdn-apple.com</value>
             </values>
         </policy>
         <policy id="form-action">
             <values>
                 <value id="paycomet-form" type="host">www.paycomet.com</value>
                 <value id="paycomet-form1" type="host">api.paycomet.com</value>
+                <value id="paycomet_applepay_form" type="host">applepay.cdn-apple.com</value>
             </values>
         </policy>
         <policy id="style-src">
             <values>
                 <value id="paycomet_ic_style" type="host">instantcredit.net</value>
                 <value id="paycomet_ic_t_style" type="host">test.instantcredit.net</value>
+                <value id="paycomet_applepay_style" type="host">applepay.cdn-apple.com</value>
             </values>
         </policy>
         <policy id="font-src">
             <values>
                 <value id="paycomet_ic_font" type="host">instantcredit.net</value>
                 <value id="paycomet_ic_t_font" type="host">test.instantcredit.net</value>
+                <value id="paycomet_applepay_font" type="host">applepay.cdn-apple.com</value>
             </values>
         </policy>
         <policy id="img-src">
             <values>
                 <value id="paycomet_ic_img" type="host">instantcredit.net</value>
                 <value id="paycomet_ic_t_img" type="host">test.instantcredit.net</value>
+                <value id="paycomet_applepay_img" type="host">applepay.cdn-apple.com</value>
             </values>
         </policy>
         <policy id="connect-src">
             <values>
                 <value id="paycomet_ic_connect" type="host">instantcredit.net</value>
                 <value id="paycomet_ic_api_connect" type="host">*.instantcredit.net</value>
+                <value id="paycomet_applepay_connect" type="host">applepay.cdn-apple.com</value>
+                <value id="paycomet_api_connect" type="host">api.paycomet.com</value>
             </values>
         </policy>
     </policies>
