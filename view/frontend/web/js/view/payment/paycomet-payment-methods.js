@@ -9,7 +9,7 @@ define(
     function (Component,ko,rendererList,_,$t) {
         'use strict';
 
-        var config = window.checkoutConfig.payment;        
+        var config = window.checkoutConfig.payment;
 
         var paycomet_payment    = 'paycomet_payment';
         if (config[paycomet_payment].isActive) {
@@ -48,7 +48,8 @@ define(
             'klarnapayments',
             'paypal',
             'mbway',
-            'waylet'
+            'waylet',
+            'applepay'
         ];
 
         for (var i = 0; i < arrAPM.length; i+=1) {
@@ -58,6 +59,9 @@ define(
             switch (arrAPM[i]) {
                 case 'instantcredit':
                     var apm_component = 'Paycomet_Payment/js/view/payment/method-renderer/apm/instantcredit/payment-method';
+                    break;
+                case 'applepay':
+                    var apm_component = 'Paycomet_Payment/js/view/payment/method-renderer/apm/applepay/payment-method';
                     break;
                 default:
                     var apm_component = 'Paycomet_Payment/js/view/payment/method-renderer/apm/payment-method';

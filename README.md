@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.47:
+
+- Integración Apple Pay
+
 > 2.4.46:
 
 - Mejoras de código.

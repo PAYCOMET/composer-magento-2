@@ -4,7 +4,7 @@
                name="payment[method]"
                class="radio"
                data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()">
-        <label data-bind="attr: {'for': getCode()}" class="label">            
+        <label data-bind="attr: {'for': getCode()}" class="label">
             <img class="payment-icon" data-bind="attr: { src: require.toUrl('')+'Paycomet_Payment/img/'+getCode()+'.png', alt: getTitle()}">
             <span data-bind="text: getTitle()"></span>
         </label>
@@ -41,10 +41,10 @@
             </select>
         </div>
 
-        <div id="paycomet_savecards" data-bind="visible: isOfferSave()">            
+        <div id="paycomet_savecards" data-bind="visible: isOfferSave()">
             <input type="checkbox" name="payment[' + getCode() + '][paycomet_card]" id="paycomet_savecard">
             <label for="paycomet_savecard" data-bind="text: $t('Save card for future purchases.')"></label>
-            <span class="paycomet-pci" data-bind="text: $t('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS).')"></span>            
+            <span class="paycomet-pci" data-bind="text: $t('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS).')"></span>
         </div>
 
         <!-- Boton Principal -->
@@ -63,9 +63,9 @@
             <div class="paycomet_jet">
                 <ul>
                     <li>
-                        <label for="cardNumber" data-bind="text: $t('Credit card number')"></label>
+                        <label for="pc_pan" data-bind="text: $t('Credit card number')"></label>
                         <div id="paycomet-pan">
-                            <input required="required" paycomet-style="width: 78%; width: 78%; border: 1px solid #e5e5e5; height: 32px; display: inline-block; color: #333;font-size: 18px; padding: 0 5px;" paycomet-name="pan">
+                            <input id="pc_pan" required="required" paycomet-style="width: 78%; width: 78%; border: 1px solid #e5e5e5; height: 32px; display: inline-block; color: #333;font-size: 18px; padding: 0 5px;" paycomet-name="pan">
                         </div>
                     </li>
                     <li class="vertical">
@@ -82,7 +82,7 @@
                                     <input paycomet-name="cvc2" paycomet-style="border: 1px solid #e5e5e5; height: 32px; display: inline-block; color: #333;font-size: 18px; padding: 0 5px;" class="form-control" required="required" type="text">
                                 </div>
                             </li>
-                            <small class="help" data-bind="text: $t('The CVV is a numerical code, usually 3 digits behind the card')"></small>                            
+                            <small class="help" data-bind="text: $t('The CVV is a numerical code, usually 3 digits behind the card')"></small>
                         </ul>
                     </li>
                     <input type="hidden" class="paytpv_cardholdername" data-paycomet="cardHolderName" width="360" maxlength="50" value="NONAME" onclick="this.value='';">
