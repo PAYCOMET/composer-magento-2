@@ -1726,18 +1726,18 @@ class Data extends AbstractHelper
     {
         // Si ya esta cancelada no continuamos
         if ($order->getState() == \Magento\Sales\Model\Order::STATE_CANCELED) {
-            $this->_paycometLogger->debug("cancelOrder " . $order->getRealOrderId() . " - " . $order->getState() . " - Already Canceled");
+            $this->logDebug("cancelOrder " . $order->getRealOrderId() . " - " . $order->getState() . " - Already Canceled");
             return;
         }
 
         if ($order->canCancel()) {
-            $this->_paycometLogger->debug("cancelOrder " . $order->getRealOrderId() . " - " . $order->getState() . " - Canceling Order");
+            $this->logDebug("cancelOrder " . $order->getRealOrderId() . " - " . $order->getState() . " - Canceling Order");
 
             $orderStatus = $this->getConfigData('payment_cancelled');
             $order->setActionFlag($orderStatus, true);
             $order->cancel()->save();
         } else {
-            $this->_paycometLogger->debug("cancelOrder " . $order->getRealOrderId() . " - " . $order->getState() . " - Cannot Cancel Order");
+            $this->logDebug("cancelOrder " . $order->getRealOrderId() . " - " . $order->getState() . " - Cannot Cancel Order");
         }
     }
 
@@ -1904,7 +1904,9 @@ class Data extends AbstractHelper
         ?int $storeId = null,
         $paymentMethodCode = \Paycomet\Payment\Model\PaymentMethod::METHOD_CODE
     ) {
-        $this->_paycometLogger->debug($field . "--" . $paymentMethodCode);
+        if ($this->getConfig('debug_log', $paymentMethodCode, $storeId) == '1') {
+            $this->_paycometLogger->debug($field . "--" . $paymentMethodCode);
+        }
         return $this->getConfig($field, $paymentMethodCode, $storeId);
     }
 

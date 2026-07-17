@@ -83,7 +83,7 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
         if (!$this->_validateResponseFields($response)) {
             try {
                 $this->_helper->setAdditionalInfo($payment, $response);
-                $this->_logger->debug("processResponse call cancelOrder " . $order->getRealOrderId());
+                $this->_helper->logDebug("processResponse call cancelOrder " . $order->getRealOrderId());
                 $this->_helper->cancelOrder($order);
                 $order->save();
             } catch (\Exception $e) {
