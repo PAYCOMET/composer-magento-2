@@ -173,7 +173,8 @@ class PaymentMethod extends \Paycomet\Payment\Model\Apm\PaymentMethod
                 'urlOk' => $this->_helper->getURLOK($order),
                 'urlKo' => $this->_helper->getURLKO($order),
                 'secure' => $Secure,
-                'notifyDirectPayment'   => 1
+                'notifyDirectPayment'   => 1,
+                'domain' => parse_url($this->_storeManager->getStore()->getBaseUrl(), PHP_URL_HOST)
             ];
 
             try {
