@@ -2,9 +2,14 @@
 
 namespace Paycomet\Payment\Controller\Cards;
 
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResourceConnection;
+use Paycomet\Payment\Helper\Data;
 
-class Add extends \Magento\Framework\App\Action\Action
+class Add extends Action
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -12,23 +17,31 @@ class Add extends \Magento\Framework\App\Action\Action
     private $_customerSession;
 
     /**
+     * @var ResourceConnection
+     */
+    private $_resourceConnection;
+
+    /**
      * @var \Paycomet\Payment\Helper\Data
      */
     private $_helper;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session       $customerSession
-     * @param \Paycomet\Payment\Helper\Data         $helper
+     * @param Context $context
+     * @param CustomerSession $customerSession
+     * @param Data $helper
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Paycomet\Payment\Helper\Data $helper
+        Context $context,
+        CustomerSession $customerSession,
+        Data $helper,
+        ResourceConnection $resourceConnection
     ) {
         parent::__construct($context);
         $this->_customerSession = $customerSession;
         $this->_helper = $helper;
+        $this->_resourceConnection = $resourceConnection;
     }
 
     /**
@@ -55,12 +68,16 @@ class Add extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $response = $this->getRequest()->getParams();
 
+        if (!$this->getRequest()->isPost()) {
+            return $this->_redirect('paycomet_payment/cards/view');
+        }
 
-        if ($response["paytpvToken"]) {
+        $params = $this->getRequest()->getParams();
+        $paytpvToken = $params['paytpvToken'] ?? null;
+        if ($paytpvToken) {
             try {
-                $this->_helper->addUserToken($response["paytpvToken"]);
+                $this->_helper->addUserToken($paytpvToken);
             } catch (\Exception $e) {
                 $this->messageManager->addError(
                     __('jetToken card failed'),
@@ -69,7 +86,7 @@ class Add extends \Magento\Framework\App\Action\Action
             }
         }
 
-        $this->_redirect('paycomet_payment/cards/view');
+        return $this->_redirect('paycomet_payment/cards/view');
     }
 
     /**
@@ -78,17 +95,17 @@ class Add extends \Magento\Framework\App\Action\Action
      * @param string $hash
      * @param int $customer_id
      */
-    public function deletePaycometCard($hash, $customer_id)
+    public function deletePaycometCard(string $hash, int $customerId)
     {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $resource = $objectManager->get(\Magento\Framework\App\ResourceConnection::class);
-        $connection = $resource->getConnection();
+        $connection = $this->_resourceConnection->getConnection();
+        $tableName = $this->_resourceConnection->getTableName('paycomet_token');
 
-        $conds[] = $connection->quoteInto("hash" . ' = ?', $hash);
-        $conds[] = $connection->quoteInto("customer_id" . ' = ?', $customer_id);
+        $where = [
+            'hash = ?' => $hash,
+            'customer_id = ?' => (int)$customerId,
+        ];
 
-        $where = implode(' AND ', $conds);
+        return $connection->delete($tableName, $where);
 
-        return $connection->delete($resource->getTableName('paycomet_token'), $where);
     }
 }

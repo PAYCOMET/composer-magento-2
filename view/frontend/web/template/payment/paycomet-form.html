@@ -60,6 +60,8 @@
         </div>
 
         <form role="form" id="paycometPaymentForm" method="POST" class="" data-bind="afterRender: jetIframeLoad, visible: isVisibleJetIframe()">
+            <input type="hidden" name="form_key" data-bind="value: getFormKey()" />
+
             <div class="paycomet_jet">
                 <ul>
                     <li>

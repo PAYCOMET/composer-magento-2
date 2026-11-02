@@ -4,7 +4,7 @@ define(
         'Magento_Ui/js/form/form',
         'ko',
         'Paycomet_Payment/js/model/manage-cards-service',
-        'Magento_Ui/js/modal/modal',      
+        'Magento_Ui/js/modal/modal',
         'mage/translate'
     ],
     function($, Component, ko, manageCards, modal, $t) {
@@ -12,27 +12,23 @@ define(
 
         var isVisibleIframe = ko.observable(false);
         var isVisibleJetIframe = ko.observable(false);
-        
 
         $( "#paycometcards-view-form a").click(function() {
-            
+
             var data = $.parseJSON($(this).attr("data-post"));
 
             var role = $(this).attr("data-role");
             if (role=="remove")
                 if (!confirm($t('Are you sure?')))
                     return false;
-           
+
             $("#paycometcards-view-form").action = data['action'];
 
             data['data']['card_desc'] = $("#card_desc_"+data['data']['item']).val();
 
             $("#paycometcards-view-form a").attr("data-post",JSON.stringify(data));
             $("#paycometcards-view-form").action = data['action'];
-
-
         });
-        
 
         // Show loading
         $("body").on('click','#paycomet_showcarddata',function() {
@@ -41,15 +37,14 @@ define(
                     isVisibleIframe(true);
                     jQuery('body').trigger('processStart');
                 } else {
-                    isVisibleJetIframe(true);                    
-                }                                
+                    isVisibleJetIframe(true);
+                }
             } else {
                 isVisibleIframe(false);
-                isVisibleJetIframe(false);                
+                isVisibleJetIframe(false);
             }
             //
         });
-        
 
         return Component.extend({
             iframeHeight: manageCards.iframeHeight,
@@ -61,10 +56,15 @@ define(
 
             isVisibleIframe: isVisibleIframe,
             isVisibleJetIframe: isVisibleJetIframe,
-            
+
             defaults: {
                 template: 'Paycomet_Payment/cards/manage'
             },
+            
+            getFormKey: function () {
+                return window.checkoutConfig ? window.checkoutConfig.formKey : $.mage.cookies.get('form_key');
+            },
+
             initObservable: function() {
                 return this;
             },
