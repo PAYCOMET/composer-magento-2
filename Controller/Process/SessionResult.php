@@ -2,7 +2,12 @@
 
 namespace Paycomet\Payment\Controller\Process;
 
-class SessionResult extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
+
+class SessionResult extends Action implements CsrfAwareActionInterface
 {
     /**
      * @var \Paycomet\Payment\Helper\Data
@@ -33,6 +38,18 @@ class SessionResult extends \Magento\Framework\App\Action\Action
      * @var \Magento\Checkout\Model\Session
      */
     private $_session;
+
+
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
+
 
     /**
      * Result constructor.
@@ -65,7 +82,6 @@ class SessionResult extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-
         $response = $this->getRequest()->getParams();
         if (!$this->_validateResponse($response)) {
             $this->messageManager->addError(

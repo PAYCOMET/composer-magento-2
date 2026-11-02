@@ -10,14 +10,14 @@
     <type name="Paycomet\Payment\Logger\Logger">
         <arguments>
             <argument name="name" xsi:type="string">paycometLogger</argument>
-            <argument name="handlers"  xsi:type="array">
+            <argument name="handlers" xsi:type="array">
                 <item name="exception" xsi:type="object">Paycomet\Payment\Logger\Handler\Critical</item>
                 <item name="debug" xsi:type="object">Paycomet\Payment\Logger\Handler\Debug</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Request\CsrfValidator">
-        <plugin name="csrf_validator_skip" type="Paycomet\Payment\Plugin\Csrf" />
+       
+    <type name="Magento\Sales\Model\Order">
+        <plugin name="paycomet_payment_order_plugin" type="Paycomet\Payment\Plugin\OrderPlugin" sortOrder="10" />
     </type>
-    <preference for="Magento\Sales\Model\Order" type="Paycomet\Payment\Model\Order" />
 </config>

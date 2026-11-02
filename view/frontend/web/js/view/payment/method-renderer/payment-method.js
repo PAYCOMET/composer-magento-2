@@ -28,7 +28,6 @@ define(
         var expiry = ko.observable("");
         var place = false;
 
-
         return Component.extend({
             self: this,
             defaults: {
@@ -53,6 +52,10 @@ define(
                         paycometPaymentService.iframeResize(event.originalEvent.data);
                     });
                 }
+            },
+
+            getFormKey: function () {
+                return window.checkoutConfig ? window.checkoutConfig.formKey : $.mage.cookies.get('form_key');
             },
 
             jetIframeLoad: function() {
