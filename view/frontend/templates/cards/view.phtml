@@ -8,7 +8,7 @@ $_cards = $block->getPaycometCards();
 ); ?></p>
 <form class="form-paycometcards-items" id="paycometcards-view-form"
  action="<?= /* @noEscape */ $block->getUrl('paycomet_payment/cards/remove') ?>" method="post">
-
+<?= $block->getBlockHtml('formkey') ?>
 
 <?php if (count($_cards["valid"])>0): ?>
     <table class="data table table-order-items paycomet-cards" id="paycomet-cards-table">
@@ -25,7 +25,7 @@ $_cards = $block->getPaycometCards();
         <tbody>
             <?php foreach ($_cards["valid"] as $_card): ?>
             <tr>
-                <td data-th="<?= $block->escapeHtml(__('Number')) ?>" 
+                <td data-th="<?= $block->escapeHtml(__('Number')) ?>"
                     class="col number"><?= /* @noEscape */ $_card["cc"];?>
                 </td>
                 <td data-th="<?= $block->escapeHtml(__('Brand')) ?>" class="col number">
@@ -35,18 +35,18 @@ $_cards = $block->getPaycometCards();
                     <?= /* @noEscape */ $_card["expiry"];?>
                 </td>
                 <td data-th="<?= $block->escapeHtml(__('Description')) ?>" class="col description">
-                    <input type="text" maxlength="64" id="card_desc_<?= /* @noEscape */ $_card["hash"];?>" 
-                    name="card_desc_[<?= /* @noEscape */ $_card["hash"];?>]" 
-                    value="<?= /* @noEscape */ $_card["desc"];?>" placeholder="añada una descripción">
+                    <input type="text" maxlength="64" id="card_desc_<?= /* @noEscape */ $block->escapeHtmlAttr($_card["hash"]);?>"
+                    name="card_desc_[<?= /* @noEscape */ $block->escapeHtmlAttr($_card["hash"]);?>]"
+                    value="<?= /* @noEscape */ $block->escapeHtmlAttr($_card["desc"]);?>" placeholder="añada una descripción">
                 </td>
                 <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">
-                    <a href="#" data-role="update" 
-                    data-post='<?= /* @noEscape */ $block->getUpdateParams($_card["hash"]) ?>' 
+                    <a href="#" data-role="update"
+                    data-post='<?= /* @noEscape */ $block->getUpdateParams($_card["hash"]) ?>'
                     title="<?= /* @noEscape */ __('Update Description') ?>" class="btn-remove action delete">
                         <span><?= /* @noEscape */ __('Update Description');?></span>
                     </a>
-                    <a href="#" data-role="remove" 
-                    data-post='<?= /* @noEscape */ $block->getRemoveParams($_card["hash"]) ?>' 
+                    <a href="#" data-role="remove"
+                    data-post='<?= /* @noEscape */ $block->getRemoveParams($_card["hash"]) ?>'
                     title="<?= /* @noEscape */ __('Remove Card') ?>" class="btn-remove action delete">
                         <span><?= /* @noEscape */ __('Remove Card');?></span>
                     </a>
@@ -88,7 +88,7 @@ $_cards = $block->getPaycometCards();
         <tbody>
             <?php foreach ($_cards["invalid"] as $_card): ?>
             <tr>
-                <td data-th="<?= $block->escapeHtml(__('Number')) ?>" 
+                <td data-th="<?= $block->escapeHtml(__('Number')) ?>"
                     class="col number"><?= /* @noEscape */ $_card["cc"];?>
                 </td>
                 <td data-th="<?= $block->escapeHtml(__('Brand')) ?>" class="col number">
@@ -98,18 +98,18 @@ $_cards = $block->getPaycometCards();
                     <?= /* @noEscape */ $_card["expiry"];?>
                 </td>
                 <td data-th="<?= $block->escapeHtml(__('Description')) ?>" class="col description">
-                    <input type="text" maxlength="64" id="card_desc_<?= /* @noEscape */ $_card["hash"];?>" 
-                    name="card_desc_[<?= /* @noEscape */ $_card["hash"];?>]" 
-                    value="<?= /* @noEscape */ $_card["desc"];?>" placeholder="añada una descripción">
+                    <input type="text" maxlength="64" id="card_desc_<?= /* @noEscape */ $block->escapeHtmlAttr($_card["hash"]);?>"
+                    name="card_desc_[<?= /* @noEscape */ $block->escapeHtmlAttr($_card["hash"]);?>]"
+                    value="<?= /* @noEscape */ $block->escapeHtmlAttr($_card["desc"]);?>" placeholder="añada una descripción">
                 </td>
                 <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">
-                    <a href="#" data-role="update" 
-                    data-post='<?= /* @noEscape */ $block->getUpdateParams($_card["hash"]) ?>' 
+                    <a href="#" data-role="update"
+                    data-post='<?= /* @noEscape */ $block->getUpdateParams($_card["hash"]) ?>'
                     title="<?= /* @noEscape */ __('Update Description') ?>" class="btn-remove action delete">
                         <span><?= /* @noEscape */ __('Update Description');?></span>
                     </a>
-                    <a href="#" data-role="remove" 
-                    data-post='<?= /* @noEscape */ $block->getRemoveParams($_card["hash"]) ?>' 
+                    <a href="#" data-role="remove"
+                    data-post='<?= /* @noEscape */ $block->getRemoveParams($_card["hash"]) ?>'
                     title="<?= /* @noEscape */ __('Remove Card') ?>" class="btn-remove action delete">
                         <span><?= /* @noEscape */ __('Remove Card');?></span>
                     </a>

@@ -2,7 +2,11 @@
 
 namespace Paycomet\Payment\Controller\Process;
 
-class Result extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
+class Result extends Action implements CsrfAwareActionInterface
 {
     /**
      * @var \Paycomet\Payment\Helper\Data
@@ -38,6 +42,16 @@ class Result extends \Magento\Framework\App\Action\Action
      * @var \Paycomet\Payment\Api\PaycometPaymentManagementInterface
      */
     private $_paymentManagement;
+
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
 
     /**
      * Result constructor.
@@ -82,7 +96,6 @@ class Result extends \Magento\Framework\App\Action\Action
                 if (isset($response["TransactionType"])) {
                     // Process Notification
                     $result = $this->_handleResponse($response);
-
                 // URL OK,KO
                 } else {
                     $sessionParams = $response;

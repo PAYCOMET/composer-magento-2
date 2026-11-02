@@ -6,6 +6,7 @@
     <span for="paycomet_showcarddata" class="paycomet-pci" data-bind="text: $t('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS).')"></span>
 
     <form role="form" id="paycometPaymentForm" method="POST" class="" data-bind="visible: isVisibleJetIframe(), afterRender: jetIframeLoad" action="/paycomet_payment/cards/add" >
+            <input type="hidden" name="form_key" data-bind="value: getFormKey()" />
             <br>
             <div class="paycomet_jet">
                 <ul>

@@ -2,9 +2,14 @@
 
 namespace Paycomet\Payment\Controller\Cards;
 
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResourceConnection;
+use Paycomet\Payment\Helper\Data;
 
-class Remove extends \Magento\Framework\App\Action\Action
+class Remove extends Action
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -12,16 +17,24 @@ class Remove extends \Magento\Framework\App\Action\Action
     private $_customerSession;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session       $customerSession
+     * @var ResourceConnection
+     */
+    private $_resourceConnection;
+
+    /**
+     * @param Context $context
+     * @param CustomerSession $customerSession
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession
+        Context $context,
+        CustomerSession $customerSession,
+        ResourceConnection $resourceConnection
     ) {
         parent::__construct($context);
         $this->_customerSession = $customerSession;
-    }
+        $this->_resourceConnection = $resourceConnection;
+    }  
 
     /**
      * Check customer authentication.
@@ -48,14 +61,18 @@ class Remove extends \Magento\Framework\App\Action\Action
     public function execute()
     {
 
-        $response = $this->getRequest()->getParams();
+        if (!$this->getRequest()->isPost()) {
+            return $this->_redirect('paycomet_payment/cards/view');
+        }
 
-        $hash = $response["item"];
-        $customer_id = $this->_customerSession->getCustomerId();
+        $params = $this->getRequest()->getParams();
 
-        $this->deletePaycometCard($hash, $customer_id);
+        $hash = $params["item"];
+        $customerId = $this->_customerSession->getCustomerId();
 
-        $this->_redirect('paycomet_payment/cards/view');
+        $this->deletePaycometCard($hash, $customerId);
+
+        return $this->_redirect('paycomet_payment/cards/view');
     }
 
     /**
@@ -64,17 +81,17 @@ class Remove extends \Magento\Framework\App\Action\Action
      * @param string $hash
      * @param int $customer_id
      */
-    public function deletePaycometCard($hash, $customer_id)
+    public function deletePaycometCard(string $hash, int $customerId)
     {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $resource = $objectManager->get(\Magento\Framework\App\ResourceConnection::class);
-        $connection = $resource->getConnection();
+        $connection = $this->_resourceConnection->getConnection();
+        $tableName = $this->_resourceConnection->getTableName('paycomet_token');
+        
+        $where = [
+            'hash = ?' => $hash,
+            'customer_id = ?' => (int)$customerId,
+        ];
 
-        $conds[] = $connection->quoteInto("hash" . ' = ?', $hash);
-        $conds[] = $connection->quoteInto("customer_id" . ' = ?', $customer_id);
-
-        $where = implode(' AND ', $conds);
-
-        return $connection->delete($resource->getTableName('paycomet_token'), $where);
+        return $connection->delete($tableName, $where);
+       
     }
 }

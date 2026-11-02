@@ -47,6 +47,10 @@ https://docs.paycomet.com/es/modulos-de-pago/magento2
 
 ## Release Notes
 
+> 2.4.50:
+
+- Mejoras de código
+
 > 2.4.49:
 
 - Actualizacion libreria

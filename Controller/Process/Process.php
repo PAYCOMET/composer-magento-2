@@ -2,7 +2,9 @@
 
 namespace Paycomet\Payment\Controller\Process;
 
-class Process extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\Action\Action;
+
+class Process extends Action
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -33,10 +35,12 @@ class Process extends \Magento\Framework\App\Action\Action
             $order = $this->_checkoutSession->getLastRealOrder();
             $payment = $order->getPayment();
 
+
             // Verify is processed -> Exist AuthCode
             if (isset($payment) && $payment->getAdditionalInformation('DS_MERCHANT_AUTHCODE')) {
                 return $this->_redirect('checkout/onepage/success');
             }
+
 
             // Verify is Challenge -> DS_CHALLENGE_URL
             if (isset($payment) && $payment->getAdditionalInformation('DS_CHALLENGE_URL')) {
