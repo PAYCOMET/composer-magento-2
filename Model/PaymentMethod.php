@@ -2,6 +2,7 @@
 
 namespace Paycomet\Payment\Model;
 
+use Magento\Sales\Model\Order;
 use Paycomet\Payment\Model\Config\Source\PaymentAction;
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\Method\ConfigInterface;
