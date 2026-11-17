@@ -9,7 +9,7 @@ Integrates the PAYCOMET platform in Magento2
 ## Requirements
 
 * Magento 2.*
-* PHP >= 5.6.0
+* PHP 7.4 or 8.1 to 8.5
 * Magento version as specified in composer.json of this project
 * PAYCOMET account ([Account registration](https://www.paycomet.com/crear-una-cuenta))
 

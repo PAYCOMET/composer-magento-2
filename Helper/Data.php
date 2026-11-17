@@ -212,7 +212,7 @@ class Data extends AbstractHelper
             $account = 'merchant_pass';
         }
         $secret = $this->getEncryptedConfigData($account);
-        $sha1hash = sha1($fields);
+        $sha1hash = sha1($fields ?? '');
         $tmp = "$sha1hash.$secret";
 
         return sha1($tmp);
@@ -275,8 +275,8 @@ class Data extends AbstractHelper
     public function apmExecutePurchase($order, $methodId)
     {
         $storeId = $order->getStoreId();
-        $merchant_terminal  = trim($this->getConfigData('merchant_terminal', $storeId));
-        $api_key            = trim($this->getEncryptedConfigData('api_key', $storeId));
+        $merchant_terminal  = trim((string) $this->getConfigData('merchant_terminal', $storeId));
+        $api_key            = trim((string) $this->getEncryptedConfigData('api_key', $storeId));
 
         $realOrderId = $order->getRealOrderId();
 
@@ -333,8 +333,8 @@ class Data extends AbstractHelper
     public function addUserToken($jetToken)
     {
 
-        $merchant_terminal  = trim($this->getConfigData('merchant_terminal'));
-        $api_key            = trim($this->getEncryptedConfigData('api_key'));
+        $merchant_terminal  = trim((string) $this->getConfigData('merchant_terminal'));
+        $api_key            = trim((string) $this->getEncryptedConfigData('api_key'));
 
             // Uso de Rest
         if ($api_key != "") {
@@ -389,12 +389,12 @@ class Data extends AbstractHelper
         $orderCurrencyCode = $order->getBaseCurrencyCode();
         $amount = $this->amountFromMagento($amount, $orderCurrencyCode);
         $AuthCode = $payment->getTransactionId();
-        $AuthCode = str_replace("-refund", "", $AuthCode);
+        $AuthCode = str_replace("-refund", "", $AuthCode ?? '');
         $AuthCode = str_replace("-capture", "", $AuthCode);
         $storeId = $order->getStoreId();
 
-        $merchant_terminal  = trim($this->getConfigData('merchant_terminal', $storeId));
-        $api_key            = trim($this->getEncryptedConfigData('api_key', $storeId));
+        $merchant_terminal  = trim((string) $this->getConfigData('merchant_terminal', $storeId));
+        $api_key            = trim((string) $this->getEncryptedConfigData('api_key', $storeId));
 
         // Uso de Rest
         if ($api_key != "") {
@@ -462,12 +462,12 @@ class Data extends AbstractHelper
 
         $amount = $this->amountFromMagento($order->getBaseGrandTotal(), $orderCurrencyCode);
         $AuthCode = $payment->getTransactionId();
-        $AuthCode = str_replace("-void", "", $payment->getTransactionId());
+        $AuthCode = str_replace("-void", "", $payment->getTransactionId() ?? '');
 
         $storeId = $order->getStoreId();
 
-        $merchant_terminal  = trim($this->getConfigData('merchant_terminal', $storeId));
-        $api_key            = trim($this->getEncryptedConfigData('api_key', $storeId));
+        $merchant_terminal  = trim((string) $this->getConfigData('merchant_terminal', $storeId));
+        $api_key            = trim((string) $this->getEncryptedConfigData('api_key', $storeId));
 
         $notifyDirectPayment = 2;
 
@@ -1171,7 +1171,7 @@ class Data extends AbstractHelper
             '84', '681', '969', '967', '260', '263', '1', '7'
         ];
         foreach ($prefix_array as $key => $prefix) {
-            if (substr($phone, 0, strlen($prefix)+1) == '+' . $prefix)
+            if (substr($phone ?? '', 0, strlen($prefix)+1) == '+' . $prefix)
                 return $prefix;
         }
     }
@@ -1305,7 +1305,7 @@ class Data extends AbstractHelper
         } else {
 
             $customer = $this->getCustomerById($order->getCustomerId());
-            $date_customer = new \DateTime($customer->getCreatedAt());
+            $date_customer = new \DateTime($customer->getCreatedAt() ?? '');
 
             $diff = $date_now->diff($date_customer);
             $dias = $diff->days;
@@ -1320,10 +1320,10 @@ class Data extends AbstractHelper
                 $acctInfoData["chAccAgeInd"] = "05";
             }
 
-            $accChange = new \DateTime($customer->getUpdatedAt());
+            $accChange = new \DateTime($customer->getUpdatedAt() ?? '');
             $acctInfoData["chAccChange"] = $accChange->format('Ymd');
 
-            $date_customer_upd = new \DateTime($customer->getUpdatedAt());
+            $date_customer_upd = new \DateTime($customer->getUpdatedAt() ?? '');
             $diff = $date_now->diff($date_customer_upd);
             $dias_upd = $diff->days;
 
@@ -1337,7 +1337,7 @@ class Data extends AbstractHelper
                 $acctInfoData["chAccChangeInd"] = "04";
             }
 
-            $chAccDate = new \DateTime($customer->getCreatedAt());
+            $chAccDate = new \DateTime($customer->getCreatedAt() ?? '');
             $acctInfoData["chAccDate"] = $chAccDate->format('Ymd');
 
             $acctInfoData["nbPurchaseAccount"] = $this->numPurchaseCustomer($order->getCustomerId(), 1, 6, "month");
@@ -1585,8 +1585,8 @@ class Data extends AbstractHelper
      */
     public function getAPMPaycometUrl($order, $methodId)
     {
-        $merchant_terminal  = trim($this->getConfigData('merchant_terminal'));
-        $api_key            = trim($this->getEncryptedConfigData('api_key'));
+        $merchant_terminal  = trim((string) $this->getConfigData('merchant_terminal'));
+        $api_key            = trim((string) $this->getEncryptedConfigData('api_key'));
 
         if ($api_key == "") {
             throw new \Magento\Framework\Exception\LocalizedException(__('PAYCOMET API KEY required'));
@@ -2269,8 +2269,8 @@ class Data extends AbstractHelper
             $IdUser = $response['IdUser'];
             $TokenUser = $response['TokenUser'];
 
-            $merchant_terminal  = trim($this->getConfigData('merchant_terminal', $storeId));
-            $api_key            = trim($this->getEncryptedConfigData('api_key', $storeId));
+            $merchant_terminal  = trim((string) $this->getConfigData('merchant_terminal', $storeId));
+            $api_key            = trim((string) $this->getEncryptedConfigData('api_key', $storeId));
 
             if ($api_key != "") {
                 $apiRest = new ApiRest($api_key);
@@ -2316,7 +2316,7 @@ class Data extends AbstractHelper
             $connection = $resource->getConnection();
 
             $card =  $response["DS_MERCHANT_PAN"];
-            $card = 'XXXX-XXXX-XXXX-' . substr($card, -4);
+            $card = 'XXXX-XXXX-XXXX-' . substr($card ?? '', -4);
             $card_brand =  $response["DS_CARD_BRAND"];
             $expiryDate = $response["DS_EXPIRYDATE"];
 
@@ -2359,8 +2359,8 @@ class Data extends AbstractHelper
         foreach ($arrData as $key => $tokenData) {
             if (empty($tokenData['expiry'])) {
 
-                $merchant_terminal  = trim($this->getConfigData('merchant_terminal', $storeId));
-                $api_key            = trim($this->getEncryptedConfigData('api_key', $storeId));
+                $merchant_terminal  = trim((string) $this->getConfigData('merchant_terminal', $storeId));
+                $api_key            = trim((string) $this->getEncryptedConfigData('api_key', $storeId));
 
                 if ($api_key != "") {
                     $apiRest = new ApiRest($api_key);
@@ -2391,7 +2391,7 @@ class Data extends AbstractHelper
             unset($tokenData['tokenuser']);
 
             // If not expired
-            if ((int)date("Ym") <= (int)str_replace("/", "", $tokenData['expiry'])) {
+            if ((int)date("Ym") <= (int)str_replace("/", "", $tokenData['expiry'] ?? '')) {
                 $arrDataValidated["valid"][] = $tokenData;
             } else {
                 if ($tokenData['expiry'] == "1900/01") {

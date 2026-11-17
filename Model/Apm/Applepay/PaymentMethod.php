@@ -117,10 +117,10 @@ class PaymentMethod extends \Paycomet\Payment\Model\Apm\PaymentMethod
 
         $order = $this->_session->getLastRealOrder();
 
-        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));
-        $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
+        $merchant_terminal  = trim((string) $this->_helper->getConfigData('merchant_terminal'));
+        $api_key            = trim((string) $this->_helper->getEncryptedConfigData('api_key'));
 
-        $payment_action     = trim($this->_helper->getConfigData('payment_action'));
+        $payment_action     = trim((string) $this->_helper->getConfigData('payment_action'));
 
         $dcc                = $this->_helper->getConfigData('dcc');
 
