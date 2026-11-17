@@ -295,8 +295,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         // Fin Pago mediante tarjeta tokenizada ------------------------------------------------------
         } if (isset($jetToken) && $jetToken!="") {
 
-            $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));
-            $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
+            $merchant_terminal  = trim((string) $this->_helper->getConfigData('merchant_terminal'));
+            $api_key            = trim((string) $this->_helper->getEncryptedConfigData('api_key'));
 
              // Uso de Rest
             if ($api_key != "") {
@@ -383,8 +383,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $TokenUser = $data["tokenuser"];
 
         $storeId = $order->getStoreId();
-        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal', $storeId));
-        $api_key            = trim($this->_helper->getEncryptedConfigData('api_key', $storeId));
+        $merchant_terminal  = trim((string) $this->_helper->getConfigData('merchant_terminal', $storeId));
+        $api_key            = trim((string) $this->_helper->getEncryptedConfigData('api_key', $storeId));
 
         $methodId = 1;
         $secure = 0;
@@ -493,8 +493,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
         $amount = $this->_helper->amountFromMagento($amount, $currencyCode);
 
         $storeId = $order->getStoreId();
-        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal', $storeId));
-        $api_key            = trim($this->_helper->getEncryptedConfigData('api_key', $storeId));
+        $merchant_terminal  = trim((string) $this->_helper->getConfigData('merchant_terminal', $storeId));
+        $api_key            = trim((string) $this->_helper->getEncryptedConfigData('api_key', $storeId));
 
         $TransactionType = $payment->getAdditionalInformation('TransactionType');
         switch ($TransactionType) {
@@ -505,7 +505,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                     try {
                         $apiRest = new ApiRest($api_key);
 
-                        $AuthCode = str_replace("-capture", "", $payment->getTransactionId());
+                        $AuthCode = str_replace("-capture", "", $payment->getTransactionId() ?? '');
 
                         $confirmPreautorization = $apiRest->confirmPreautorization(
                             $realOrderId,
@@ -805,10 +805,10 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
         $order = $this->_session->getLastRealOrder();
 
-        $merchant_terminal  = trim($this->_helper->getConfigData('merchant_terminal'));
-        $api_key            = trim($this->_helper->getEncryptedConfigData('api_key'));
+        $merchant_terminal  = trim((string) $this->_helper->getConfigData('merchant_terminal'));
+        $api_key            = trim((string) $this->_helper->getEncryptedConfigData('api_key'));
 
-        $payment_action     = trim($this->_helper->getConfigData('payment_action'));
+        $payment_action     = trim((string) $this->_helper->getConfigData('payment_action'));
 
         $dcc                = $this->_helper->getConfigData('dcc');
 

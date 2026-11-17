@@ -196,7 +196,7 @@ class Result extends Action implements CsrfAwareActionInterface
 
         switch ($transaction_type) {
             case 107: // add_user
-                $arrDatos = explode("_", $ref);
+                $arrDatos = explode("_", $ref ?? '');
                 $storeId = $arrDatos[1];
 
                 $merchant_code = $this->_helper->getConfigData('merchant_code', $storeId);
@@ -214,7 +214,7 @@ class Result extends Action implements CsrfAwareActionInterface
                     $ref.
                     $datetime.
                     // phpcs:ignore Magento2.Security.InsecureFunction
-                    md5($merchant_pass)
+                    md5($merchant_pass ?? '')
                 );
 
                 break;
@@ -241,7 +241,7 @@ class Result extends Action implements CsrfAwareActionInterface
                     $amount.
                     $currency.
                     // phpcs:ignore Magento2.Security.InsecureFunction
-                    md5($merchant_pass).
+                    md5($merchant_pass ?? '').
                     $bankdatetime.
                     $resp
                 );
@@ -250,7 +250,7 @@ class Result extends Action implements CsrfAwareActionInterface
         }
 
         //Check to see if hashes match or not
-        if (strcmp($sign, $local_sign) != 0) {
+        if (strcmp($sign ?? '', $local_sign) != 0) {
             return false;
         }
 

@@ -156,12 +156,17 @@ class PaycometPaymentManagement implements \Paycomet\Payment\Api\PaycometPayment
         if ($response == null ||
            !isset($response['Response']) ||
            !isset($response['Amount']) ||
-           $response['Response'] != 'OK' ||
-           !ctype_digit($response['Amount'])) {
+           $response['Response'] != 'OK') {
             return false;
         }
 
-        return true;
+        $amount = $response['Amount'];
+        if (is_int($amount)) {
+            // ctype_digit() read an int from 0 to 255 as an ASCII code; kept, as passing ints to it is deprecated.
+            $amount = ($amount >= 0 && $amount <= 255) ? chr($amount) : (string) $amount;
+        }
+
+        return is_string($amount) && ctype_digit($amount);
     }
 
     /**

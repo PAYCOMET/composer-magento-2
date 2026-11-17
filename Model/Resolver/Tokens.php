@@ -106,7 +106,7 @@ class Tokens implements ResolverInterface
 
                 if (!$Token["desc"]) $Token["desc"] = "";
 
-                $expiry_yyyymm  = str_replace("/","",$Token["expiry"]);
+                $expiry_yyyymm  = str_replace("/","",$Token["expiry"] ?? '');
                 $today_yyyymm   = date("Ym");
                 // Only not expired
                 if ($expiry_yyyymm >= $today_yyyymm) {
