@@ -29,11 +29,16 @@ class PaymentSaveCard implements ResolverInterface
     */
     private $_logger;
 
+    /** @var \Magento\Sales\Model\ResourceModel\Order */
+    private $orderResource;
+
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Paycomet\Payment\Logger\Logger $logger
+        \Paycomet\Payment\Logger\Logger $logger,
+        \Magento\Sales\Model\ResourceModel\Order $orderResource
 
     ) {
+        $this->orderResource = $orderResource;
         $this->_orderFactory = $orderFactory;
         $this->_logger = $logger;
     }
@@ -67,7 +72,7 @@ class PaymentSaveCard implements ResolverInterface
 
                     $payment = $order->getPayment();
                     $result = $payment->setAdditionalInformation(DataAssignObserver::PAYCOMET_SAVECARD, $save_card);
-                    $order->save();
+                    $this->orderResource->save($order);
 
                     $result['result'] = 1;
                 }
@@ -77,7 +82,7 @@ class PaymentSaveCard implements ResolverInterface
         } catch (NoSuchEntityException $exception) {
             throw new GraphQlNoSuchEntityException(__($exception->getMessage()));
         } catch (LocalizedException $exception) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()));
+            throw new GraphQlNoSuchEntityException(__($exception->getMessage()));
         }
     }
 

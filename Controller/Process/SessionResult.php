@@ -51,6 +51,9 @@ class SessionResult extends Action implements CsrfAwareActionInterface
     }
 
 
+    /** @var \Magento\Quote\Model\ResourceModel\Quote */
+    private $quoteResource;
+
     /**
      * Result constructor.
      *
@@ -65,8 +68,10 @@ class SessionResult extends Action implements CsrfAwareActionInterface
         \Paycomet\Payment\Helper\Data $helper,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Paycomet\Payment\Logger\Logger $logger,
-        \Magento\Checkout\Model\Session $session
+        \Magento\Checkout\Model\Session $session,
+        \Magento\Quote\Model\ResourceModel\Quote $quoteResource
     ) {
+        $this->quoteResource = $quoteResource;
         $this->_helper = $helper;
         $this->_orderFactory = $orderFactory;
         $this->_url = $context->getUrl();
@@ -88,17 +93,15 @@ class SessionResult extends Action implements CsrfAwareActionInterface
                 __('Your payment was unsuccessful. Please try again or use a different card / payment method.'),
                 'PAYCOMET_messages'
             );
-            $this->_redirect('checkout/cart');
-
-            return;
+            return $this->_redirect('checkout/cart');
         }
 
         $result = boolval($response['result']);
         if ($result) {
-            $this->_session->getQuote()
-                  ->setIsActive(false)
-                  ->save();
-            $this->_redirect('checkout/onepage/success');
+            $quote = $this->_session->getQuote();
+            $quote->setIsActive(false);
+            $this->quoteResource->save($quote);
+            return $this->_redirect('checkout/onepage/success');
         } else {
             $this->_cancel();
             $this->_session->setData(\Paycomet\Payment\Block\Process\Result\Observe::OBSERVE_KEY, '1');
@@ -106,7 +109,7 @@ class SessionResult extends Action implements CsrfAwareActionInterface
                 __('Your payment was unsuccessful. Please try again or use a different card / payment method.'),
                 'PAYCOMET_messages'
             );
-            $this->_redirect('checkout/cart');
+            return $this->_redirect('checkout/cart');
         }
     }
 

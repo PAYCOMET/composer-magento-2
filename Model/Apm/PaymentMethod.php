@@ -9,6 +9,12 @@ use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod implements GatewayInterface
 {
+    public const METHOD_ID = 0;
+    public const METHOD_CODE = '';
+
+    /** @var \Magento\Framework\App\RequestInterface */
+    protected $_request;
+
     /**
      * @var string
      */
@@ -266,6 +272,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      * Accept Payment
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
+     * @return null
      */
     public function acceptPayment(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -336,6 +343,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      *
      * @param DataObject      $request
      * @param ConfigInterface $config
+     * @return null
      */
     public function postRequest(DataObject $request, ConfigInterface $config)
     {

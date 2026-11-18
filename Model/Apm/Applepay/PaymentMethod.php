@@ -191,7 +191,7 @@ class PaymentMethod extends \Paycomet\Payment\Model\Apm\PaymentMethod
                 }
             } catch (\Exception $e) {
                 $dataResponse["success"]  = 0;
-                $dataResponse["error"]  = $response->errorCode;
+                $dataResponse["error"]  = $e->getCode();
             }
         } else {
             $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));

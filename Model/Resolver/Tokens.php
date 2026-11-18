@@ -74,7 +74,7 @@ class Tokens implements ResolverInterface
         } catch (NoSuchEntityException $exception) {
             throw new GraphQlNoSuchEntityException(__($exception->getMessage()));
         } catch (LocalizedException $exception) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()));
+            throw new GraphQlNoSuchEntityException(__($exception->getMessage()));
         }
     }
 
@@ -115,7 +115,7 @@ class Tokens implements ResolverInterface
 
             }
 
-            return isset($arrTokens)?$arrTokens:[];
+            return $arrTokens;
         } catch (NoSuchEntityException $e) {
            return [];
         } catch (LocalizedException $e) {

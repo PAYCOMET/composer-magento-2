@@ -122,6 +122,15 @@ class Data extends AbstractHelper
      */
     protected $_remoteAddress;
 
+    /** @var \Magento\Framework\DataObjectFactory */
+    private $objectFactory;
+
+    /** @var \Magento\Sales\Model\ResourceModel\Order\Status\History */
+    private $historyResource;
+
+    /** @var \Magento\Framework\App\ResourceConnection */
+    private $resourceConnection;
+
     /**
      * Data constructor.
      *
@@ -170,8 +179,14 @@ class Data extends AbstractHelper
         \Magento\Customer\Model\Session $session,
         RemoteAddress $remoteAddress,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Framework\ObjectManagerInterface $objectmanager
+        \Magento\Framework\ObjectManagerInterface $objectmanager,
+        \Magento\Framework\DataObjectFactory $objectFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Status\History $historyResource,
+        \Magento\Framework\App\ResourceConnection $resourceConnection
     ) {
+        $this->resourceConnection = $resourceConnection;
+        $this->historyResource = $historyResource;
+        $this->objectFactory = $objectFactory;
         $this->_context2 = $context2;
         parent::__construct($context);
         $this->_encryptor = $encryptor;
@@ -378,12 +393,13 @@ class Data extends AbstractHelper
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @param float                                $amount
      *
-     * @return $this
+     * @return void
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
+        $response = ['DS_RESPONSE' => 0, 'DS_ERROR_ID' => 1004];
         $order = $payment->getOrder();
         $realOrderId = $order->getRealOrderId();
         $orderCurrencyCode = $order->getBaseCurrencyCode();
@@ -448,12 +464,13 @@ class Data extends AbstractHelper
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
      *
-     * @return $this
+     * @return void
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
+        $response = ['DS_RESPONSE' => 0, 'DS_ERROR_ID' => 1004];
 
         $order = $payment->getOrder();
         $realOrderId = $order->getRealOrderId();
@@ -497,7 +514,7 @@ class Data extends AbstractHelper
 
             } catch (\Exception $e) {
                 $response["DS_RESPONSE"] = 0;
-                $response["DS_ERROR_ID"] = $cancelPreautorization->errorCode;
+                $response["DS_ERROR_ID"] = $e->getCode();
             }
 
         } else {
@@ -912,7 +929,6 @@ class Data extends AbstractHelper
             "AU" => "61",
             "AW" => "297",
             "AX" => "358",
-            "AZ" => "374",
             "AZ" => "994",
             "BA" => "387",
             "BB" => "246",
@@ -949,7 +965,6 @@ class Data extends AbstractHelper
             "CU" => "53",
             "CV" => "238",
             "CX" => "61",
-            "CY" => "392",
             "CY" => "357",
             "CZ" => "420",
             "DE" => "49",
@@ -1099,7 +1114,6 @@ class Data extends AbstractHelper
             "SM" => "378",
             "SN" => "221",
             "SO" => "252",
-            "SO" => "252",
             "SR"  > "597",
             "ST" => "239",
             "SV" => "503",
@@ -1204,6 +1218,7 @@ class Data extends AbstractHelper
             $order->getCustomerLastname():$billingAddressData->getLastname();
         $Merchant_EMV3DS["customer"]["email"] = $order->getCustomerEmail();
 
+        $street0 = $street1 = $street2 = "";
         $shippingAddressData = $order->getShippingAddress();
         if ($shippingAddressData) {
             $streetData = $shippingAddressData->getStreet();
@@ -1502,6 +1517,7 @@ class Data extends AbstractHelper
         $orderCurrencyCode = $order->getBaseCurrencyCode();
         $shoppingCartData = [];
         $amountAux = 0;
+        $key = null;
 
         try {
             foreach ($order->getAllItems() as $key => $item) {
@@ -2011,6 +2027,7 @@ class Data extends AbstractHelper
             //Set information
             $this->setAdditionalInfo($payment, $paymentData);
 
+            $message = null;
             switch ($type) {
                 case \Magento\Sales\Model\Order\Payment\Transaction::TYPE_CAPTURE:
                     $message = __(
@@ -2099,7 +2116,7 @@ class Data extends AbstractHelper
           ->setEntityName('order')
           ->setOrder($order);
 
-        $history->save();
+        $this->historyResource->save($history);
     }
 
     /**
@@ -2266,6 +2283,7 @@ class Data extends AbstractHelper
     public function _handleCardStorage($response, $customerId, $storeId = null)
     {
         try {
+            $resp = ['DS_ERROR_ID' => 1004];
             $IdUser = $response['IdUser'];
             $TokenUser = $response['TokenUser'];
 
@@ -2376,7 +2394,7 @@ class Data extends AbstractHelper
                         $tokenData['expiry'] = "1900/01";
                     }
 
-                    $update = new Update($this->_context2, $this->_session);
+                    $update = new Update($this->_context2, $this->_session, $this->resourceConnection);
                     $update->updatePaycometCardExpiryDate(
                         $tokenData['hash'],
                         $tokenData['customer_id'],
