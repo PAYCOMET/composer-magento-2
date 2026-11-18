@@ -262,6 +262,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     public function initialize($paymentAction, $stateObject)
     {
         $response = ["DS_IDUSER" => null, "DS_TOKEN_USER" => null];
+        $idUser = null;
+        $tokenUser = null;
         $payment = $this->getInfoInstance();
         $order = $payment->getOrder();
 
