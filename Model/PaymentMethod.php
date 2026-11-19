@@ -4,6 +4,8 @@ namespace Paycomet\Payment\Model;
 
 use Paycomet\Payment\Model\Config\Source\PaymentAction;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Model\Order;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 use Paycomet\Bankstore\ApiRest;
@@ -327,6 +329,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 }
             } else {
                 $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));
+                throw new LocalizedException(__('jetToken card failed'));
             }
 
             $idUser = $response["DS_IDUSER"];
