@@ -14,3 +14,15 @@ parameters:
         -
             message: '#^Attribute class PHPUnit\\Framework\\Attributes\\\w+ does not exist\.$#'
             path: Test/*
+        -
+            message: '#^Variable \$response might not be defined\.$#'
+            path: Model/PaymentMethod.php
+        -
+            message: '#^Variable \$idUser might not be defined\.$#'
+            path: Model/PaymentMethod.php
+        -
+            message: '#^Variable \$tokenUser might not be defined\.$#'
+            path: Model/PaymentMethod.php
+        -
+            message: '#^Class Paycomet\\Payment\\Controller\\Cards\\Update constructor invoked with 2 parameters, 3 required\.$#'
+            path: Helper/Data.php

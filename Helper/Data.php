@@ -128,9 +128,6 @@ class Data extends AbstractHelper
     /** @var \Magento\Sales\Model\ResourceModel\Order\Status\History */
     private $historyResource;
 
-    /** @var \Magento\Framework\App\ResourceConnection */
-    private $resourceConnection;
-
     /**
      * Data constructor.
      *
@@ -181,10 +178,8 @@ class Data extends AbstractHelper
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Framework\ObjectManagerInterface $objectmanager,
         \Magento\Framework\DataObjectFactory $objectFactory,
-        \Magento\Sales\Model\ResourceModel\Order\Status\History $historyResource,
-        \Magento\Framework\App\ResourceConnection $resourceConnection
+        \Magento\Sales\Model\ResourceModel\Order\Status\History $historyResource
     ) {
-        $this->resourceConnection = $resourceConnection;
         $this->historyResource = $historyResource;
         $this->objectFactory = $objectFactory;
         $this->_context2 = $context2;
@@ -2394,7 +2389,7 @@ class Data extends AbstractHelper
                         $tokenData['expiry'] = "1900/01";
                     }
 
-                    $update = new Update($this->_context2, $this->_session, $this->resourceConnection);
+                    $update = new Update($this->_context2, $this->_session);
                     $update->updatePaycometCardExpiryDate(
                         $tokenData['hash'],
                         $tokenData['customer_id'],
