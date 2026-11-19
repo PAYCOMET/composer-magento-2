@@ -18,11 +18,8 @@ parameters:
             message: '#^Variable \$response might not be defined\.$#'
             path: Model/PaymentMethod.php
         -
-            message: '#^Variable \$idUser might not be defined\.$#'
-            path: Model/PaymentMethod.php
-        -
-            message: '#^Variable \$tokenUser might not be defined\.$#'
-            path: Model/PaymentMethod.php
-        -
             message: '#^Class Paycomet\\Payment\\Controller\\Cards\\Update constructor invoked with 2 parameters, 3 required\.$#'
             path: Helper/Data.php
+        -
+            message: '#^Access to constant STATE_PENDING_PAYMENT on an unknown class Paycomet\\Payment\\Model\\Order\.$#'
+            path: Model/PaymentMethod.php

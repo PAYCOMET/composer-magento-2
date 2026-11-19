@@ -4,7 +4,6 @@ namespace Paycomet\Payment\Model;
 
 use Paycomet\Payment\Model\Config\Source\PaymentAction;
 use Magento\Framework\DataObject;
-use Magento\Sales\Model\Order;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 use Paycomet\Bankstore\ApiRest;
