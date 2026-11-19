@@ -3,6 +3,7 @@
 namespace Paycomet\Payment\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\ResourceConnection;
 use Paycomet\Payment\Observer\DataAssignObserver;
 use Paycomet\Payment\Model\Config\Source\PaymentAction;
 use Paycomet\Bankstore\ApiRest;
@@ -2376,7 +2377,11 @@ class Data extends AbstractHelper
                         $tokenData['expiry'] = "1900/01";
                     }
 
-                    $update = new Update($this->_context2, $this->_session);
+                    $update = new Update(
+                        $this->_context2,
+                        $this->_session,
+                        $this->_objectManager->get(ResourceConnection::class)
+                    );
                     $update->updatePaycometCardExpiryDate(
                         $tokenData['hash'],
                         $tokenData['customer_id'],
