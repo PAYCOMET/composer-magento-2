@@ -15,6 +15,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
     public const METHOD_ID = 1;
     public const METHOD_CODE = 'paycomet_payment';
 
+    /** @var \Magento\Framework\App\RequestInterface */
+    protected $_request;
+
     /**
      * @var string
      */
@@ -365,6 +368,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      */
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
+        $response = ['DS_RESPONSE' => 0, 'DS_ERROR_ID' => 1004];
         if ($amount <= 0) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid amount.'));
         }
@@ -437,7 +441,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
             } catch (\Exception $e) {
                 $response["DS_RESPONSE"] = 0;
-                $response["DS_ERROR_ID"] = $createPreauthorizationResponse->errorCode;
+                $response["DS_ERROR_ID"] = $e->getCode();
             }
 
         } else {
@@ -482,6 +486,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
+        $response = ['DS_RESPONSE' => 0, 'DS_ERROR_ID' => 1004];
         if ($amount <= 0) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid amount.'));
         }
@@ -527,7 +532,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
 
                     } catch (\Exception $e) {
                         $response["DS_RESPONSE"] = 0;
-                        $response["DS_ERROR_ID"] = $confirmPreautorization->errorCode;
+                        $response["DS_ERROR_ID"] = $e->getCode();
                     }
 
                 } else {
@@ -618,7 +623,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                         }
                     } catch (\Exception $e) {
                         $response["DS_RESPONSE"] = 0;
-                        $response["DS_ERROR_ID"] = $executePurchaseResponse->errorCode;
+                        $response["DS_ERROR_ID"] = $e->getCode();
                     }
 
                 } else {
@@ -687,6 +692,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      * Accept payment
      *
      * @param \Magento\Payment\Model\InfoInterface $payment
+     * @return null
      */
     public function acceptPayment(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -786,6 +792,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
      *
      * @param DataObject      $request
      * @param ConfigInterface $config
+     * @return null
      */
     public function postRequest(DataObject $request, ConfigInterface $config)
     {
@@ -899,8 +906,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\AbstractMethod impleme
                 $response->DS_ERROR_ID = $response->errorCode;
 
             } catch (\Exception $e) {
-                $response["url"] = "";
-                $response["error"]  = $response->errorCode;
+                $response = (object)["DS_ERROR_ID" => $e->getCode() ?: 1004];
             }
         } else {
             $this->_helper->logDebug(__("ERROR: PAYCOMET API KEY required"));

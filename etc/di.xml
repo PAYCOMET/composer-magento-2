@@ -9,13 +9,18 @@
     </type>
     <type name="Paycomet\Payment\Logger\Logger">
         <arguments>
+            <argument name="logger" xsi:type="object">PaycometPaymentLogger</argument>
+        </arguments>
+    </type>
+    <virtualType name="PaycometPaymentLogger" type="Monolog\Logger">
+        <arguments>
             <argument name="name" xsi:type="string">paycometLogger</argument>
             <argument name="handlers" xsi:type="array">
                 <item name="exception" xsi:type="object">Paycomet\Payment\Logger\Handler\Critical</item>
                 <item name="debug" xsi:type="object">Paycomet\Payment\Logger\Handler\Debug</item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
        
     <type name="Magento\Sales\Model\Order">
         <plugin name="paycomet_payment_order_plugin" type="Paycomet\Payment\Plugin\OrderPlugin" sortOrder="10" />

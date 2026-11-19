@@ -11,6 +11,9 @@ class Process extends \Magento\Payment\Block\Form
      */
     private $_checkoutSession;
 
+    /** @var \Magento\Sales\Model\OrderFactory */
+    private $_orderFactory;
+
     /**
      * @var \Magento\Checkout\Model\Order
      */

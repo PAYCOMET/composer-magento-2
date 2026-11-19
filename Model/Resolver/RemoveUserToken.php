@@ -68,7 +68,7 @@ class RemoveUserToken implements ResolverInterface
         } catch (NoSuchEntityException $exception) {
             throw new GraphQlNoSuchEntityException(__($exception->getMessage()));
         } catch (LocalizedException $exception) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()));
+            throw new GraphQlNoSuchEntityException(__($exception->getMessage()));
         }
 
         return $removed;

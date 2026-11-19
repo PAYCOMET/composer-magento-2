@@ -1,0 +1,25 @@
+parameters:
+    level: 1
+    paths:
+        - .
+    excludePaths:
+        analyseAndScan:
+            - vendor/* (?)
+            - node_modules/* (?)
+            - Test/*/_files/* (?)
+            - Test/Mftf/* (?)
+    treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        -
+            message: '#^Attribute class PHPUnit\\Framework\\Attributes\\\w+ does not exist\.$#'
+            path: Test/*
+        -
+            message: '#^Variable \$response might not be defined\.$#'
+            path: Model/PaymentMethod.php
+        -
+            message: '#^Class Paycomet\\Payment\\Controller\\Cards\\Update constructor invoked with 2 parameters, 3 required\.$#'
+            path: Helper/Data.php
+        -
+            message: '#^Access to constant STATE_PENDING_PAYMENT on an unknown class Paycomet\\Payment\\Model\\Order\.$#'
+            path: Model/PaymentMethod.php

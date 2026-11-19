@@ -115,6 +115,7 @@ class Result extends Action implements CsrfAwareActionInterface
         } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
+        return $this->getResponse();
     }
 
     /**
@@ -122,7 +123,7 @@ class Result extends Action implements CsrfAwareActionInterface
      *
      * @param array $response
      *
-     * @return bool
+     * @return bool|null
      */
     private function _handleResponse($response)
     {

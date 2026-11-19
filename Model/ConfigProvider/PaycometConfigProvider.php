@@ -90,6 +90,7 @@ class PaycometConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
+        $config = [];
 
         // Por cada metodo definimos las propiedades
         foreach ($this->_methodCodes as $code) {

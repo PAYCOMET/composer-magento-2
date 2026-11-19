@@ -57,16 +57,17 @@ class Process extends Action
             }
 
             if (!$order->getId()) {
-                return;
+                return $this->getResponse();
             }
 
             // End Token Payment verification
         } catch (\Exception $e) {
-            return;
+            return $this->getResponse();
         }
 
         $this->_view->loadLayout();
         $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
+        return $this->getResponse();
     }
 }
